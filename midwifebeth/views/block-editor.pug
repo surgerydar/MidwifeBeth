@@ -1,0 +1,54 @@
+mixin textBlockEditor( data ) 
+    #scrolling-container( style= 'min-height: 50vh;' )
+        div#block-content( style= 'color: black; background-color: white;' data-method= 'put' data-url= '/blocks/' + data._id) !{data.content}
+    script.
+        let toolbarOptions = [
+          ['bold', 'italic', 'underline', 'strike'],
+          ['link'],
+          [{ 'list': 'bullet' }],
+          [{ 'indent': '-1'}, { 'indent': '+1' }],
+
+          [{ 'size': ['small', false, 'large', 'huge'] }],
+          [{ 'header': [1, 2, 3, false] }],
+
+          [{ 'align': [] }],
+
+          ['clean']
+        ];
+        let quill = new Quill('#block-content', {
+          modules: {
+            toolbar: toolbarOptions
+          },
+          bounds: '#scrolling-container',
+          scrollingContainer: '#scrolling-container', 
+          placeholder: 'Compose page content...',
+          theme: 'snow'
+        }); 
+        quill.on( 'text-change', () => {
+            let blockContent = document.querySelector('#block-content');
+            if ( blockContent ) {
+                let method = blockContent.getAttribute('data-method');
+                let url = blockContent.getAttribute('data-url');
+                if ( url && method ) {
+                    let payload = {
+                        content: quill.container.firstChild.innerHTML
+                    };
+                    performAction( method, url, payload, true );
+                }
+            }
+            
+        });
+mixin imageBlockEditor( data )
+    input#upload( type= 'file' name= 'upload' accept='image/png, image/jpeg' data-target= '#block-content' )
+    img.block#block-content( src= data.content data-method= 'put' data-url= '/blocks/' + data._id )
+mixin videoBlockEditor( data )
+    input#upload( type= 'file' name= 'upload' accept='video/*' data-target= '#block-content' )
+    video.block#block-content( src= data.content controls data-method= 'put' data-url= '/blocks/' + data._id )
+mixin blockEditor( data )
+    .block-editor( style= 'min-height: 64px;' )
+        if data.type == 'text'
+            +textBlockEditor(data)
+        else if data.type == 'image'
+            +imageBlockEditor(data)
+        else if data.type == 'video'
+            +videoBlockEditor(data)

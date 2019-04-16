@@ -1,0 +1,17 @@
+mixin textBlock(data)
+    .text-block !{data.content}
+    
+mixin imageBlock(data)
+    img.block( src= data.content )
+    
+mixin videoBlock(data)
+    video.block( src= data.content  controls )
+    
+mixin block(data)
+    //.block( style='padding: 24px 8px;' )
+    if data.type === 'text'
+        +textBlock(data)
+    else if data.type === 'image'
+        +imageBlock(data)
+    else if data.type === 'video'
+        +videoBlock(data)

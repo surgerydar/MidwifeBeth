@@ -1,0 +1,10 @@
+include block-editor
+#listview-header( class= 'listviewheader border-top border-bottom')
+    .listviewheadergroup
+        img.imagebutton#button-back( data-method= 'get' data-url= backUrl src= '/images/icons/arrow-previous-01.png' )
+    .listviewheadergroup
+        h3( style= 'text-transform: capitalize;')= data.type
+form#block-form( action='/blocks/' + data._id method='put' enctype='application/x-www-form-urlencoded' )
+    .form-content
+        +blockEditor(data)
+        #progress

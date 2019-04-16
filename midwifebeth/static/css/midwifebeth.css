@@ -1,0 +1,506 @@
+/* 
+	global styling
+	
+ */
+:root {
+    --control-colour: darkgray;
+}
+
+body {
+	margin: 0;
+	color: darkgray;
+	background-color: lightgray;
+    font-family: sans-serif;
+}
+
+img {
+	border: none;
+}
+
+/* 
+	container
+ */
+#container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	overflow: hidden;
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+}
+
+/* 
+	title bar
+ */
+#title-bar {
+	height: 10vh;
+	padding: 0 10vw 0 10vw;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	
+}
+
+.title-bar-group {
+
+}
+
+#content {
+    padding: 0 10vw 0 10vw;
+	flex: 1 1 auto;
+	overflow-x: hidden;
+    overflow-y: auto;
+}
+/*
+    forms
+*/
+.form-content {
+    width: 75vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+div.form-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 76px;
+    margin-bottom: 16px;
+    /*border-bottom: 2px solid var( --control-colour );*/
+}
+
+label.form-item {
+    font-size: 24px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+input.form-item::placeholder { 
+    color: var( --control-colour ); 
+    font-style: italic; 
+    font-weight: lighter;
+}
+
+input[type=text].form-item, input[type=password].form-item, input[type=email].form-item, input[type=search].form-item {
+    -webkit-appearance: none;
+    height: 36px;
+    width: 100%;
+    font-size: 24px;
+    border-radius: 0;
+    border: none;
+    border-bottom: 2px solid var( --control-colour ); 
+    background-color: transparent;
+    color: var( --control-colour );
+}
+
+input[type=submit].form-item, input[type=button].form-item {
+   -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 36px;
+    font-size: 24px;    
+    color: white;
+    background-color: var(--control-colour);
+    border: none;
+    border-radius: 4px;
+}
+
+textarea.form-item {
+   -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 12vw;
+    width: 100%;
+    color: var(--control-colour);
+    /*
+    background-color: transparent;
+    border: solid 2px white;
+    border-radius: 2.5vw;
+    */
+    font-size: 24px;
+    line-height: 36px;
+    /*padding: 1.25vw;*/
+    
+    flex-grow: true;
+    resize: none;
+}
+
+div.ruled-field {
+    --line-height: 3.5vw;
+    min-height: calc( var(--line-height) * 4 );
+    width: 45vw;
+    color: var(--control-colour);
+
+    padding: .5vw 0 .5vw 0;
+    font-size: 2.5vw;
+    font-weight: 600;
+    line-height: var(--line-height);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;    
+    
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    -o-user-select: text;
+    user-select: text;
+
+}
+div.ruled-field:focus {
+    outline: 0;
+}
+.form-item:focus {
+    outline: 0;
+}
+
+img.form-item {
+    display: inline;
+    height: 36px;
+    border: none;
+    /*object-fit: contain;*/
+}
+
+a.button {
+    display: inline-block;
+    text-decoration: none;
+    padding: 4px;
+    color: white;
+    background-color: rgb( 9, 66, 125 );
+    border-radius: 4px;
+}
+/* 
+    list view 
+*/
+div.listview {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    overflow-y: auto;
+}
+
+div.flexlistview {
+    position: relative;
+    min-height: 75%;
+    flex-grow: 1;
+    align-self: stretch;
+    overflow-y: auto;
+}
+
+div.listviewheader {
+    height: 64px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--control-colour);
+    font-size: 24px;
+    vertical-align: middle;
+    margin-bottom: 16px;
+}
+
+div.listviewheader.border-top {
+    border-top: 2px solid darkgray;
+}
+
+div.listviewheader.border-bottom {
+    border-bottom: 2px solid darkgray;
+}
+
+div.listviewheadergroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 2vw 0 2vw;
+}
+
+img.listviewheader {
+    height: 3vw;
+    margin: 0 0.5vw 0 0.5vw;
+}
+
+label.listviewheader {
+    font-size: 2vw;
+    font-weight: 600;
+    vertical-align: middle;
+    margin-right: 0.5vw;
+}
+
+input[type=search].listviewheader {
+    -webkit-appearance: none;
+    height: 3vw;
+    /*width: 100%;*/
+    font-size: 2vw;
+    border-radius: 0;
+    border: none;
+    border-bottom: 2px solid white; 
+    background-color: transparent;
+    color: white;
+}
+
+input[type=search].listviewheader::placeholder {
+    color: white; 
+    font-style: italic; 
+    font-weight: lighter;    
+}
+
+div.listviewcontent {
+    min-height: 50%;
+    padding: 8px;
+    overflow-y: auto;
+    
+    flex: 1 1 auto;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+div.listitem {
+    height: 64px;
+    padding: 0px 32px 0px 32px;
+    color: var(--control-colour);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+div.listitem:not(:first-of-type) {
+    border-top: solid 2px var(--control-colour);
+}
+/*
+    generic buttons
+*/
+div.addbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+    div.addbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.addbutton.white {
+        background-image: url(../images/icons/add-01.png);
+        color: white;
+    }
+
+    div.addbutton.darkgrey {
+        background-image: url(../images/icons/add-02.png);
+        color: darkgray;
+    }
+
+    div.addbutton.top {
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.addbutton.bottom {
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.addbutton.left {
+        left: 8px;
+        right: auto;
+    }
+
+    div.addbutton.right {
+        left: auto;
+        right: 8px;
+    }
+
+    div.addbutton.label {
+        width:auto;
+        padding-left: 22px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background-position: left;
+    }
+
+div.deletebutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+    div.deletebutton:hover {
+        opacity: 0.5;
+    }
+
+    div.deletebutton.white {
+        background-image: url(../images/icons/delete-01.png);
+    }
+
+    div.deletebutton.darkgrey {
+        background-image: url(../images/icons/delete-06.png);
+    }
+
+    div.deletebutton.black {
+        background-image: url(../images/icons/delete-04.png);
+    }
+
+    div.deletebutton.top {
+        position: absolute;
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.deletebutton.bottom {
+        position: absolute;
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.deletebutton.left {
+        position: absolute;
+        left: 8px;
+        right: auto;
+    }
+
+    div.deletebutton.right {
+        position: absolute;
+        left: auto;
+        right: 8px;
+    }
+
+div.reorderbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+} 
+    div.reorderbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.reorderbutton.white {
+        background-image: url(../images/icons/reorder-white.png);
+    }
+
+    div.reorderbutton.darkgrey {
+        background-image: url(../images/icons/reorder-darkgrey.png);
+    }
+
+    div.reorderbutton.black {
+        background-image: url(../images/icons/reorder-black.png);
+    }
+
+div.flagbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+
+    div.flagbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.flagbutton.white {
+        background-image: url(../images/icons/flag-02.png);
+    }
+
+    div.flagbutton.darkgrey {
+        background-image: url(../images/icons/flag-01.png);
+    }
+
+    div.flagbutton.top {
+        position: absolute;
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.flagbutton.bottom {
+        position: absolute;
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.flagbutton.left {
+        position: absolute;
+        left: 8px;
+        right: auto;
+    }
+
+    div.flagbutton.right {
+        position: absolute;
+        left: auto;
+        right: 8px;
+    }
+/*
+    blocks
+*/
+.block {
+    position: relative;
+    /*min-height: 64px;*/
+    margin: 1em;
+    padding: 8px;
+    border-radius: 8px;
+    flex: 0 0 0;
+    background-color: #F5F7FA;
+    color: #202C35; 
+}
+
+video.block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    max-width: calc( 100% - 32px );
+}
+
+img.block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    max-width: calc( 100% - 32px );
+}
+
+.block-editor {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+#progress {
+    width: 100%;
+    height: 64px;
+    text-align: center;
+    vertical-align: middle;
+    background: rgba(0,0,0,0.75);
+    color: white;
+    margin: 8px;
+    visibility: collapse;
+}
+

@@ -1,0 +1,98 @@
+include block-listitem
+
+#listview-header( class= 'listviewheader border-top border-bottom')
+    .listviewheadergroup
+        img.imagebutton#button-back( data-method= 'get' data-url= backUrl src= '/images/icons/arrow-previous-01.png' )
+    div( style= 'flex-grow:1; flex-shrink:1; width: 16px;' )
+    .listviewheadergroup
+        - var pageTitle = title || 'Untitled';
+        h3= pageTitle
+form#page-form( action='/pages/' + _id method='put' enctype='application/x-www-form-urlencoded' )
+    .form-content
+        .form-item
+            label.form-item( for='title' ) Title
+            input.form-item#title( type='text' name='title' placeholder='page title' value= title )
+        .form-item
+            label.form-item( for='tags' ) Tags
+            input.form-item#tags( type='text' name='tags' placeholder='page tags' value= tags )
+        div( class= 'listviewheader border-top border-bottom')
+            .listviewheadergroup
+                h3 Blocks
+            div( style= 'flex-grow:1; flex-shrink:1; width: 16px;' )
+            .listviewheadergroup
+                - var textPayload = '{ \"type\": \"text\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
+                - var imagePayload = '{ \"type\": \"image\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
+                - var videoPayload = '{ \"type\": \"video\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
+                div( id= 'button-add-text' class= 'addbutton white label' style= 'margin-right: 16px' data-method= 'post' data-url= '/blocks/'  data-payload= textPayload ) Text
+                div( id= 'button-add-image' class= 'addbutton white label' style= 'margin-right: 16px' data-method= 'post' data-url= '/blocks/'  data-payload= imagePayload ) Image
+                div( id= 'button-add-video' class= 'addbutton white label' data-method= 'post' data-url= '/blocks/'  data-payload= videoPayload ) Video
+        .listviewcontent#block-list
+            each block in blocks
+                .block( data-method= 'get' data-url= '/blocks/' + block._id )
+                    .listviewheadergroup( style='justify-content: flex-end;' )
+                        div( id= 'button-delete-' + block._id class= 'deletebutton black' data-confirm= 'true'  )
+                        div( id= 'button-reorder-' + block._id class= 'reorderbutton black' )
+                    +block(block)
+        div( style="display: flex; flex-direction: row; justify-content: flex-end;" )
+            input.form-item( type='submit' value='Update' ) 
+script.
+    let blockList = content.querySelector('#block-list');
+    if ( blockList ) {
+        //
+        // hook blocks
+        //
+        console.log( 'hooking blocks' );
+        let blocks = blockList.querySelectorAll('div.block');
+        blocks.forEach( (block) => {
+            console.log( 'hooking block : ' + block._id );
+            let method = block.getAttribute('data-method');
+            let url = block.getAttribute('data-url');
+            if ( method && url ) {
+                block.addEventListener('click',(e) => {
+                    e.preventDefault();
+                    performAction(method,url);   
+                    return true;
+                });
+            }
+            let deleteButton = block.querySelector('.deletebutton');
+            if ( deleteButton ) {
+                console.log( 'hooking block delete : ' + block._id );
+                deleteButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if ( confirm('do you want to delete this item?') ) {
+                        performAction( 'delete', url );
+                    }
+                    return true;
+                });    
+            }
+        });
+        //
+        // block reordering
+        //
+        let updateBlockOrder = () => {
+            console.log( 'updating block order' );
+            let index = 0;
+            blocks = blockList.querySelectorAll('div.block');
+            blocks.forEach( (block) => {
+                let url = block.getAttribute('data-url');
+                if ( url ) {
+                    performAction( 'put', url, { index: index }, true);
+                }
+                index++;
+             });
+        };
+        const contentObserver = new MutationObserver(updateBlockOrder);
+        contentObserver.observe(blockList, { childList: true } );
+        //
+        //
+        let sortable = Sortable.create(blockList,{
+            dragable:   'div.block',
+            handle:     '.reorderbutton',
+            direction:  'vertical',
+            scroll: true
+        });
+        //
+        // sync block indicies
+        //
+        updateBlockOrder();
+    }

@@ -1,0 +1,13 @@
+// login form
+form#login-form( action='/local/login' method='post' enctype='application/x-www-form-urlencoded' )
+	.form-content
+		if error
+			h3#register-error( style='color: red' ) #{error}
+		.form-item
+			label.form-item( for='username' ) Username #[img.form-item(src='/images/icons/user.png')]
+			input.form-item#username( type='text' name='username' placeholder='enter your username or email' required minlength="6" )
+		.form-item
+			label.form-item( for='password' ) Password #[img.form-item(src='/images/icons/password.png')]
+			input.form-item#password( type='password' name='password' placeholder='enter your password'  required minlength="6" )
+		div( style="display: flex; flex-direction: row; justify-content: space-between;")
+			input.form-item( type='submit' value='Login' )

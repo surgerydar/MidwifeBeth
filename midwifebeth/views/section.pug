@@ -1,0 +1,61 @@
+#listview-header( class= 'listviewheader border-top border-bottom')
+    .listviewheadergroup
+        img.imagebutton#button-back( data-method= 'get' data-url= backUrl src= '/images/icons/arrow-previous-01.png' )
+    div( style= 'flex-grow:1; flex-shrink:1; width: 16px;' )
+    .listviewheadergroup
+        - var sectionTitle = title || 'Untitled';
+        h3= sectionTitle
+form#section-form( action='/sections/' + _id method='put' enctype='application/x-www-form-urlencoded' )
+    .form-content
+        .form-item
+            label.form-item( for='title' ) Title
+            input.form-item#title( type='text' name='title' placeholder='section title'  required minlength="6" value= title )
+        .form-item
+            label.form-item( for='tags' ) Tags
+            input.form-item#tags( type='text' name='tags' placeholder='section tags'  required minlength="6" value= tags )
+        #listview-header( class= 'listviewheader border-top border-bottom')
+            .listviewheadergroup
+                h3 Pages
+            div( style= 'flex-grow:1; flex-shrink:1; width: 16px;' )
+            .listviewheadergroup
+                - var payload = '{ \"title\":\"\", \"tags\":\"\", \"blocks\":[], \"section_id\":\"' + _id + '\", \"index\":' + ( pages.length + 1 ) + ' }';
+                div( id= 'button-add-page' class= 'addbutton white' data-method= 'post' data-url= '/pages' data-payload= payload )
+        .listviewcontent#page-list
+            each page in pages
+                .listitem( data-method= 'get' data-url= '/pages/' + page._id )
+                    h3= page.title
+                    .listviewheadergroup
+                        div( id= 'button-delete-' + page._id class= 'deletebutton white' data-method= 'delete' data-confirm= 'true' data-url= '/pages/' + page._id )
+                        div( id= 'button-reorder-' + page._id class= 'reorderbutton white' )
+        div( style="display: flex; flex-direction: row; justify-content: flex-end;" )
+            input.form-item( type='submit' value='Update' )  
+script.
+    const pageList = document.querySelector('#page-list');
+    if ( pageList ) {
+        let updatePageOrder = () => {
+            console.log( 'updating page order' );
+            const pages = pageList.querySelectorAll('div.listitem');
+            let index = 0;
+            pages.forEach( (page) => {
+                let url = page.getAttribute('data-url');
+                if ( url ) {
+                    performAction( 'put', url, { index: index }, true);
+                }
+                index++;
+             });
+        };
+        const contentObserver = new MutationObserver(updatePageOrder);
+        contentObserver.observe(pageList, { childList: true } );
+        //
+        //
+        let sortable = Sortable.create(pageList,{
+            dragable:   'div.listitem',
+            handle:     '.reorderbutton',
+            direction:  'vertical',
+            scroll:     true
+        });
+        //
+        // sync page indicies
+        //
+        updatePageOrder();
+    }
