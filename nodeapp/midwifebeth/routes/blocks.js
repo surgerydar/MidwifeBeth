@@ -7,24 +7,19 @@ module.exports = function( authentication, db ) {
     //
     // common functions
     //
-    /*
-    let renderPages = (res) => {
-		db.find('pages',{}).then((pages) => {
-            let data = pages.map( ( section ) => {
+    let renderBlocks = (res) => {
+		db.find('blocks',{}).then((blocks) => {
+            let data = blocks.map( ( block ) => {
                 return {
-                    _id : section._id,
-                    name: section.title,
-                    url: '/pages/' + section._id
+                    _id : block._id,
+                    name: block.title + ' : ' + block.content,
+                    url: '/blocks/' + block._id
                 };
             });
 			let param = {
-                title: 'Content',
+                title: 'Blocks',
 				backUrl: '/homepage',
-				baseUrl: '/pages',
-                newEntry: {
-                    title: '',
-                    tags: ''
-                },
+				baseUrl: '/blocks',
 				data: data
 			};
 			res.render('listview',param);
@@ -32,7 +27,6 @@ module.exports = function( authentication, db ) {
 			res.render('error',{message:error});
 		});
     };
-    */
     let renderBlock = ( _id, res ) => {
         db.findOne('blocks', {_id:_id}).then( (block) => {
             let param = {
@@ -48,11 +42,33 @@ module.exports = function( authentication, db ) {
     // routes
     //
     console.log( 'setting blocks routes' );
-    /*
-    router.get('/', authentication, (req, res) => {
-        renderPages(res);
+    router.get('/', (req, res) => {
+        if ( req.query.format === 'json' ) {
+            db.find('blocks',{}).then((blocks) => {
+                /*
+                res.json({
+                    status: 'OK',
+                    data: blocks
+                });
+                */
+                res.json(blocks);
+            }).catch( (error) => {
+                /*
+                res.json({
+                    status: 'ERROR',
+                    error: error
+                });
+                */
+                res.json([]);
+            });
+        } else {
+            if( req.user && req.isAuthenticated() ) {
+                renderBlocks(res);
+            } else {
+                res.status(401).render('error',{message:'You have to be logged in to access this resource'});
+            }
+        }
     });
-    */
     router.post('/', authentication, (req, res) => {
 		let block = req.body;
 		block.date = Date.now();

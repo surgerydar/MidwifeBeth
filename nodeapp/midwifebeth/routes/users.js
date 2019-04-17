@@ -52,14 +52,32 @@ module.exports = ( authentication, db, mailer ) => {
     //
     console.log( 'setting users routes' );
     router.get('/', authentication, (req, res) => {
-        renderUsers(res);
+        if ( req.query.format === 'json' ) {
+            db.find('users',{},{password:0}).then((users) => {
+                res.json({
+                    status: 'OK',
+                    data: users
+                });
+            }).catch( (error) => {
+                res.json({
+                    status: 'ERROR',
+                    error: error
+                });
+            });
+        } else {
+            renderUsers(res);
+        }
     });
     router.post('/', authentication, (req, res) => {
-		let user = req.body;
-		user.date = Date.now();
+        let user = {
+            username: req.body.username,
+            email: req.body.email,
+            password: bcrypt.hashSync( req.body.password, 10),
+            date: Date.now()
+        };
         db.findOne('users', { $or: [ {username: user.username}, {email: user.email} ]} ).then( ( result ) => {
             if( result ) {
-                res.render('new-user', {error: 'a user with that name or email already registered'});
+                res.render('new-user', {error: 'a user has already registered that name or email'});
             } else {
                 db.insert('users', user).then( () => {
                     renderUsers(res);
@@ -82,16 +100,29 @@ module.exports = ( authentication, db, mailer ) => {
 	router.put('/:id', authentication, (req, res) => {
         let _id = db.ObjectId(req.params.id);
         let user = {
+            username: req.body.username,
+            email: req.body.email,
             date: Date.now()
         };
+        //
+        // optional password
+        //
         if ( req.body.password ) {
             user.password = bcrypt.hashSync( req.body.password, 10);
         }
-        if ( req.body.email ) {
-            user.email = req.body.email;    
-        }
-        db.updateOne('users', {_id:_id}, {$set:user}).then( (result) => {
-            renderUser(_id,res);
+        db.findOne('users', { $and: [ { _id: { $ne: _id } }, { $or: [ {username: user.username}, {email: user.email} ] } ] } ).then( ( result ) => {
+            if( result ) {
+                let param = {
+                    backUrl: '/users',
+                    user: req.body,
+                    error: 'a user has already registered that name or email'
+                };
+                res.render('user', param);
+            } else {
+                db.updateOne('users', {_id:_id}, {$set:user}).then( (result) => {
+                    renderUser(_id,res);
+                });
+            }
         }).catch((error) => {
             res.render('error',{message:error});
         });

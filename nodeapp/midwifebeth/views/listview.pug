@@ -1,0 +1,55 @@
+#listview-header( class= 'listviewheader border-top border-bottom')
+    .listviewheadergroup
+        img.imagebutton( id= 'button-back' data-method= 'get' data-url= backUrl src= '/images/icons/arrow-previous-01.png' )
+    .listviewheadergroup
+        h3= title
+    div( style= 'flex-grow:1; flex-shrink:1; width: 16px;' )
+    .listviewheadergroup
+        // this allows for a get to display form before post
+        - var _newMethod = newMethod || 'post';
+        - var _newUrl = newUrl || baseUrl;
+        div( id= 'button-add' class= 'addbutton white' data-method= _newMethod data-url= _newUrl data-payload= newEntry )
+.listviewcontent#item-list
+    each item in data
+        .listitem( data-method= 'get' data-url= item.url )
+            - var name = item.name || 'Untitled';
+            h2= name
+            .listviewheadergroup
+                div( id= 'button-delete-' + item._id class= 'deletebutton white' data-method= 'delete' data-confirm= 'true' data-url= item.url )
+                if sortable
+                    div( id= 'button-reorder-' + item._id class= 'reorderbutton white' )
+if sortable
+    script.
+        const list = document.querySelector('#item-list');
+        if ( list ) {
+            let updateListOrder = () => {
+                console.log( 'updating list order' );
+                const items = list.querySelectorAll('div.listitem');
+                let index = 0;
+                items.forEach( (item) => {
+                    let url = item.getAttribute('data-url');
+                    if ( url ) {
+                        performAction( 'put', url, { index: index }, true);
+                    }
+                    index++;
+                 });
+            };
+            const contentObserver = new MutationObserver(updateListOrder);
+            contentObserver.observe(list, { childList: true } );
+            //
+            //
+            let sortable = Sortable.create(list,{
+                dragable:   'div.listitem',
+                handle:     '.reorderbutton',
+                direction:  'vertical',
+                scroll:     true
+            });
+            //
+            // sync item indicies
+            //
+            updateListOrder();
+        }
+    
+
+            
+

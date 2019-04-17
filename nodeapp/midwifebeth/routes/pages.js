@@ -53,8 +53,32 @@ module.exports = function( authentication, db ) {
     // routes
     //
     console.log( 'setting pages routes' );
-    router.get('/', authentication, (req, res) => {
-        renderPages(res);
+    router.get('/', (req, res) => {
+        if ( req.query.format === 'json' ) {
+            db.find('pages',{}).then((pages) => {
+                /*
+                res.json({
+                    status: 'OK',
+                    data: pages
+                });
+                */
+                res.json(pages);
+            }).catch( (error) => {
+                /*
+                res.json({
+                    status: 'ERROR',
+                    error: error
+                });
+                */
+                res.json([]);
+            });
+        } else {
+            if( req.user && req.isAuthenticated() ) {
+                renderPages(res);
+            } else {
+                res.status(401).render('error',{message:'You have to be logged in to access this resource'});
+            }
+        }  
     });
     router.post('/', authentication, (req, res) => {
 		let page = req.body;

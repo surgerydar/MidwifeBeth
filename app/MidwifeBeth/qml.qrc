@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>colours.js</file>
+        <file>controls/Background.qml</file>
+        <file>controls/Block.qml</file>
+        <file>controls/BusyIndicator.qml</file>
+        <file>controls/Button.qml</file>
+        <file>controls/CheckBox.qml</file>
+        <file>controls/ComboBox.qml</file>
+        <file>controls/ConfirmDialog.qml</file>
+        <file>controls/DatePicker.qml</file>
+        <file>controls/DateSlider.qml</file>
+        <file>controls/EditableList.qml</file>
+        <file>controls/EditableListItem.qml</file>
+        <file>controls/ErrorDialog.qml</file>
+        <file>controls/Fonts.qml</file>
+        <file>controls/Header.qml</file>
+        <file>controls/ImageBlock.qml</file>
+        <file>controls/Label.qml</file>
+        <file>controls/More.qml</file>
+        <file>controls/Page.qml</file>
+        <file>controls/PageIndicator.qml</file>
+        <file>controls/ScrollableTextArea.qml</file>
+        <file>controls/Slider.qml</file>
+        <file>controls/SpinBox.qml</file>
+        <file>controls/Switch.qml</file>
+        <file>controls/TagTextField.qml</file>
+        <file>controls/TextArea.qml</file>
+        <file>controls/TextBlock.qml</file>
+        <file>controls/TextEntryDialog.qml</file>
+        <file>controls/TextField.qml</file>
+        <file>controls/TokenisedTextField.qml</file>
+        <file>controls/VideoBlock.qml</file>
+        <file>Pages.qml</file>
+        <file>Page.qml</file>
+        <file>styles.js</file>
+        <file>icons/left_arrow.png</file>
+        <file>Sections.qml</file>
+        <file>icons/right_arrow.png</file>
+        <file>SectionsGrid.qml</file>
+        <file>controls/GridLayout.qml</file>
+    </qresource>
+</RCC>

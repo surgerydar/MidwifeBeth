@@ -9,7 +9,7 @@ module.exports = function( authentication, db ) {
     // common functions
     //
     let renderSections = (res) => {
-		db.find('sections',{}).then((sections) => {
+		db.find('sections',{},{},{index:1}).then((sections) => {
             let data = sections.map( ( section ) => {
                 return {
                     _id : section._id,
@@ -18,13 +18,14 @@ module.exports = function( authentication, db ) {
                 };
             });
 			let param = {
-                title: 'Content',
+                title: 'Sections',
 				backUrl: '/homepage',
 				baseUrl: '/sections',
                 newEntry: {
                     title: '',
                     tags: ''
                 },
+                sortable: true,
 				data: data
 			};
 			res.render('listview',param);
@@ -53,8 +54,32 @@ module.exports = function( authentication, db ) {
     // routes
     //
     console.log( 'setting sections routes' );
-    router.get('/', authentication, (req, res) => {
-        renderSections(res);
+    router.get('/', (req, res) => {
+        if ( req.query.format === 'json' ) {
+            db.find('sections',{}).then((sections) => {
+                /*
+                res.json({
+                    status: 'OK',
+                    data: sections
+                });
+                */
+                res.json(sections);
+            }).catch( (error) => {
+                /*
+                res.json({
+                    status: 'ERROR',
+                    error: error
+                });
+                */
+                res.json([]);
+            });
+        } else {
+            if( req.user && req.isAuthenticated() ) {
+                renderSections(res);
+            } else {
+                res.status(401).render('error',{message:'You have to be logged in to access this resource'});
+            }
+        }
     });
     router.post('/', authentication, (req, res) => {
 		let section = req.body;

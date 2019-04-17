@@ -9,10 +9,10 @@ form#section-form( action='/sections/' + _id method='put' enctype='application/x
     .form-content
         .form-item
             label.form-item( for='title' ) Title
-            input.form-item#title( type='text' name='title' placeholder='section title'  required minlength="6" value= title )
+            input.form-item#title( type='text' name='title' placeholder='section title' value= title )
         .form-item
             label.form-item( for='tags' ) Tags
-            input.form-item#tags( type='text' name='tags' placeholder='section tags'  required minlength="6" value= tags )
+            input.form-item#tags( type='text' name='tags' placeholder='section tags' value= tags )
         #listview-header( class= 'listviewheader border-top border-bottom')
             .listviewheadergroup
                 h3 Pages

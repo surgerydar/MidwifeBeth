@@ -203,7 +203,7 @@ Db.prototype.find = function( collection, query, projection, order, offset, limi
                     console.log( 'find : ' + collection + ' : error : ' + err );
                     reject( err );
                 } else {
-                     resolve( result );
+                    resolve( result );
                 }
             });  
         } catch( err ) {
