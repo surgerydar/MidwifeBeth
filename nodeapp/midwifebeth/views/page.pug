@@ -7,6 +7,7 @@ include block-listitem
     .listviewheadergroup
         - var pageTitle = title || 'Untitled';
         h3= pageTitle
+        #link-button( class= 'linkbutton white' data-link= 'link://pages/' + _id )
 form#page-form( action='/pages/' + _id method='put' enctype='application/x-www-form-urlencoded' )
     .form-content
         .form-item
@@ -20,15 +21,17 @@ form#page-form( action='/pages/' + _id method='put' enctype='application/x-www-f
                 h3 Blocks
             div( style= 'flex-grow:1; flex-shrink:1; width: 16px;' )
             .listviewheadergroup
-                - var textPayload = '{ \"type\": \"text\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
-                - var imagePayload = '{ \"type\": \"image\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
-                - var videoPayload = '{ \"type\": \"video\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
+                - var textPayload   = '{ \"type\": \"text\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
+                - var imagePayload  = '{ \"type\": \"image\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
+                - var videoPayload  = '{ \"type\": \"video\", \"content\": \"\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
+                - var linkPayload   = '{ \"type\": \"links\", \"content\": \"[]\", \"page_id\": \"' + _id + '\",\"index\":' + ( blocks.length + 1 ) + '}';
                 div( id= 'button-add-text' class= 'addbutton white label' style= 'margin-right: 16px' data-method= 'post' data-url= '/blocks/'  data-payload= textPayload ) Text
                 div( id= 'button-add-image' class= 'addbutton white label' style= 'margin-right: 16px' data-method= 'post' data-url= '/blocks/'  data-payload= imagePayload ) Image
-                div( id= 'button-add-video' class= 'addbutton white label' data-method= 'post' data-url= '/blocks/'  data-payload= videoPayload ) Video
+                div( id= 'button-add-video' class= 'addbutton white label' style= 'margin-right: 16px' data-method= 'post' data-url= '/blocks/'  data-payload= videoPayload ) Video
+                div( id= 'button-add-links' class= 'addbutton white label' data-method= 'post' data-url= '/blocks/'  data-payload= linkPayload ) Links
         .listviewcontent#block-list
             each block in blocks
-                .block( data-method= 'get' data-url= '/blocks/' + block._id )
+                .block( data-type= block.type data-method= 'get' data-url= '/blocks/' + block._id )
                     .listviewheadergroup( style='justify-content: flex-end;' )
                         div( id= 'button-delete-' + block._id class= 'deletebutton black' data-confirm= 'true'  )
                         div( id= 'button-reorder-' + block._id class= 'reorderbutton black' )
@@ -64,6 +67,28 @@ script.
                     }
                     return true;
                 });    
+            }
+            let type = block.getAttribute('data-type');
+            if ( type === 'links' ) {
+                //
+                // render links
+                //
+                let linksBlock = block.querySelector('.links-block');
+                if ( linksBlock ) {
+                    let linksData = linksBlock.getAttribute('data-links');
+                    if ( linksData ) {
+                        let links = JSON.parse( linksData );
+                        links.forEach( (link) => {
+                            let linkButton = document.createElement('div');
+                            linkButton.innerHTML = link.title;
+                            linkButton.setAttribute('data-url', link.url);
+                            linkButton.addEventListener( 'click', (e) => {
+                                alert( link.url );
+                            });
+                            linksBlock.appendChild(linkButton);
+                        });
+                    }
+                }
             }
         });
         //

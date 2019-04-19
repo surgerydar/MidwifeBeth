@@ -5,6 +5,7 @@
     .listviewheadergroup
         - var sectionTitle = title || 'Untitled';
         h3= sectionTitle
+        #link-button( class= 'linkbutton white' data-link= 'link://sections/' + _id )
 form#section-form( action='/sections/' + _id method='put' enctype='application/x-www-form-urlencoded' )
     .form-content
         .form-item

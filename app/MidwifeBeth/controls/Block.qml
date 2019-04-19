@@ -35,6 +35,13 @@ Item {
             anchors.right: parent.right
         }
     }
+    Component {
+        id: links
+        LinksBlock {
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+    }
     Loader {
         id: blockLoader
         //anchors.fill: parent
@@ -50,13 +57,13 @@ Item {
     //
     //
     Component.onCompleted: {
-        blockLoader.sourceComponent = type === "video" ? video : type === "image" ? image : text;
+        blockLoader.sourceComponent = type === "video" ? video : type === "image" ? image : type === "links" ? links : text;
     }
     //
     //
     //
     onTypeChanged: {
-        blockLoader.sourceComponent = type === "video" ? video : type === "image" ? image : text;
+        blockLoader.sourceComponent = type === "video" ? video : type === "image" ? image : type === "links" ? links : text;
     }
     onMediaChanged: {
         if ( blockLoader.status === Loader.Ready ) {
@@ -71,7 +78,7 @@ Item {
     //
     //
     //
-    property string type: "text" // "text" | "image" | "video"
+    property string type: "text" // "text" | "image" | "video" | "links"
     property string media: ""
     property alias content: blockLoader.item
 }

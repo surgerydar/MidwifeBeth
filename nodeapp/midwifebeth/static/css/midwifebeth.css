@@ -38,8 +38,8 @@ img {
 	title bar
  */
 #title-bar {
-	height: 10vh;
-	padding: 0 10vw 0 10vw;
+	height: 64px;
+	padding: 0 64px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -52,7 +52,7 @@ img {
 }
 
 #content {
-    padding: 0 10vw 0 10vw;
+    padding: 0 64px;
 	flex: 1 1 auto;
 	overflow-x: hidden;
     overflow-y: auto;
@@ -452,6 +452,59 @@ div.flagbutton {
         left: auto;
         right: 8px;
     }
+
+div.linkbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+    div.linkbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.linkbutton.white {
+        background-image: url(../images/icons/link-white.png);
+        color: white;
+    }
+
+    div.linkbutton.darkgrey {
+        background-image: url(../images/icons/link-black.png);
+        color: darkgray;
+    }
+
+    div.linkbutton.top {
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.linkbutton.bottom {
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.linkbutton.left {
+        left: 8px;
+        right: auto;
+    }
+
+    div.linkbutton.right {
+        left: auto;
+        right: 8px;
+    }
+
+    div.addbutton.label {
+        width:auto;
+        padding-left: 22px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background-position: left;
+    }
+
 /*
     blocks
 */
@@ -484,6 +537,35 @@ img.block {
     max-width: calc( 100% - 32px );
 }
 
+.links-block {
+    min-height: 72px;
+    max-width: calc( 100% - 32px );
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 16px; 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 2px;
+    background-color: white;
+}
+
+.links-block > div {
+    display: inline-block;
+    min-height: 64px;
+    min-width: calc( 50% - 8px );
+    margin: 2px; 
+    color: white;
+    background-color: lightgray;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 400;
+    line-height: 64px;
+    flex: 1 1 auto;
+}
+
 .block-editor {
     flex: 1 1 auto;
     display: flex;
@@ -492,6 +574,43 @@ img.block {
     align-items: stretch;
     overflow: hidden;
 }
+
+.block-editor-header {
+    height: 64px;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.block-editor-header > * {
+    margin-left: 8px;
+}
+
+.block-link-editor {
+    min-height: 72px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 2px;
+    background-color: white;
+}
+
+.block-link-editor > div {
+    min-height: 64px;
+    flex: 1 1 auto;
+    min-width: calc( 50% - 8px );
+    margin: 2px; 
+    color: white;
+    background-color: lightgray;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 400;
+    line-height: 32px;
+ }
 
 #progress {
     width: 100%;

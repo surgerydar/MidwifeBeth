@@ -59,8 +59,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    pages.setFilter( {section_id:model._id} );
-                    stack.push("qrc:///Pages.qml", {title: model.title});
+                    stack.push("qrc:///Pages.qml", {title: model.title},{section_id:model._id});
                 }
             }
         }

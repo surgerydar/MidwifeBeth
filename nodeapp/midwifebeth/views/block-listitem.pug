@@ -7,6 +7,9 @@ mixin imageBlock(data)
 mixin videoBlock(data)
     video.block( src= data.content  controls )
     
+mixin linksBlock(data)
+    .links-block( data-links= data.content )
+    
 mixin block(data)
     //.block( style='padding: 24px 8px;' )
     if data.type === 'text'
@@ -14,4 +17,6 @@ mixin block(data)
     else if data.type === 'image'
         +imageBlock(data)
     else if data.type === 'video'
-        +videoBlock(data)
+        +videoBlock(data)    
+    else if data.type === 'links'
+        +linksBlock(data)

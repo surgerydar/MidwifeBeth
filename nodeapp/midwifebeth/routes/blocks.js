@@ -43,7 +43,7 @@ module.exports = function( authentication, db ) {
     //
     console.log( 'setting blocks routes' );
     router.get('/', (req, res) => {
-        if ( req.query.format === 'json' ) {
+        if ( req.query.format === 'json' ) { 
             db.find('blocks',{}).then((blocks) => {
                 /*
                 res.json({

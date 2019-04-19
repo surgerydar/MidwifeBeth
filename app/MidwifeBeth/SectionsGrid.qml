@@ -48,8 +48,7 @@ Item {
             anchors.right: parent.right
             model: sections
             onClicked: {
-                pages.setFilter( {section_id:item_id} );
-                stack.push("qrc:///Pages.qml", {title: model.title});
+                stack.push("qrc:///Pages.qml", {title:item.title,filter:{section_id:item._id}});
             }
         }
     }

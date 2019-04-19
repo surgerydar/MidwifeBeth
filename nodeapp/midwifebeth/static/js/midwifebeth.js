@@ -258,6 +258,24 @@ const midwifebeth = (() => {
                     });
                 });
                 //
+                // hook resource link
+                //
+                const linkButton = content.querySelector('#link-button');
+                if ( linkButton ) {
+                    let link = linkButton.getAttribute('data-link');
+                    if ( link ) {
+                        linkButton.addEventListener('click', () => {
+                            let textArea = document.createElement("textarea");
+                            textArea.value = link;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            document.execCommand("Copy");
+                            textArea.remove();  
+                            alert( link + '\ncopied to clipboard')
+                        });
+                    }
+                }
+                //
                 // execute any scripts
                 // TODO: security risk, should validate all scripts
                 //

@@ -106,6 +106,33 @@ Window {
     //
     //
     //
+    Rectangle {
+        id: refresh
+        width: 64
+        height: 64
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: 4
+        radius: 32
+        color: Colours.darkOrange
+        opacity: .8
+        visible: stack.depth === 1
+        Image {
+            anchors.fill: parent
+            anchors.margins: 8
+            fillMode: Image.PreserveAspectFit
+            source:  'icons/refresh.png'
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                refreshData();
+            }
+        }
+    }
+    //
+    //
+    //
     Connections {
         target: Downloader
         //
@@ -123,7 +150,7 @@ Window {
                     console.log( 'unable to find About' );
                 }
                 */
-                //stack.push("qrc:///Sections.qml");
+                stack.clear();
                 stack.push("qrc:///SectionsGrid.qml");
             } else if( destination.indexOf( 'pages' ) >= 0 ) {
                 pages.load();
@@ -138,14 +165,45 @@ Window {
     //
     Component.onCompleted: {
         //
+        //
+        //
+        refreshData();
+    }
+    //
+    //
+    //
+    function refreshData() {
+        //
         // download latest from admin
         //
         Downloader.download('https://aftertrauma.uk:8080/blocks?format=json',SystemUtils.documentPath('blocks.json'));
         Downloader.download('https://aftertrauma.uk:8080/pages?format=json',SystemUtils.documentPath('pages.json'));
         Downloader.download('https://aftertrauma.uk:8080/sections?format=json',SystemUtils.documentPath('sections.json'));
-        //
-        //
-        //
-
+    }
+    function processLink( url ) {
+        console.log( 'link clicked : ' + url  );
+        if ( url.startsWith('link://') ) {
+            var components = url.substring('link://'.length).split('/');
+            if ( components.length === 2 ) {
+                var database = components[ 0 ];
+                var _id = components[ 1 ];
+                switch( database ) {
+                case 'sections' :
+                    var section = sections.findOne({_id:_id});
+                    if ( section ) {
+                        stack.push("qrc:///Pages.qml", {title:section.title,filter:{section_id:_id}});
+                    }
+                    break;
+                case 'pages' :
+                    var page = pages.findOne({_id:_id});
+                    if ( page ) {
+                        stack.push("qrc:///Page.qml", {title:page.title,filter:{page_id:_id}});
+                    }
+                    break;
+                }
+            }
+        } else {
+            Qt.openUrlExternally(url);
+        }
     }
 }

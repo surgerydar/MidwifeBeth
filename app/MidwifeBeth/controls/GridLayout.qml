@@ -27,12 +27,22 @@ Item {
                 color: Colours.almostBlack
                 text: model.title
             }
+
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    container.clicked(model._id);
+                    container.clicked(model);
                 }
             }
+        }
+        //
+        // layout as model changes
+        //
+        onItemAdded: {
+            container.layout();
+        }
+        onItemRemoved: {
+            container.layout();
         }
     }
     //
@@ -42,7 +52,7 @@ Item {
         var x = spacing;
         var y = spacing;
         var itemWidth = ( container.width - ( spacing * 3 ) ) / 2;
-        var rowCount = 0;
+        var rowCount = 1;
         var colCount = 0;
         for ( var i = 0; i < container.children.length - 1; i++ ) {
             container.children[ i ].x = x;
@@ -50,15 +60,17 @@ Item {
             container.children[ i ].width = itemWidth;
             container.children[ i ].height = itemHeight;
             colCount++;
-            x += itemWidth + spacing;
-            if ( x + itemWidth > container.width - spacing ) {
-                x = spacing;
-                y += itemHeight + spacing;
-                colCount = 0;
-                rowCount++;
+            if ( i < container.children.length - 2 ) { // not last item
+                x += itemWidth + spacing;
+                if ( x + itemWidth > container.width - spacing ) {
+                    x = spacing;
+                    y += itemHeight + spacing;
+                    colCount = 0;
+                    rowCount++;
+                }
             }
         }
-        if ( colCount == 1 ) {
+        if ( colCount === 1 ) {
             container.children[ container.children.length - 2 ].width = ( container.width - 8 );
         }
         container.implicitHeight = container.height = ( ( itemHeight + spacing ) * rowCount ) + ( spacing * 2 );
@@ -66,7 +78,7 @@ Item {
     //
     //
     //
-    signal clicked( string item_id );
+    signal clicked( var item );
     //
     //
     //

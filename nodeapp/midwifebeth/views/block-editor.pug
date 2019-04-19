@@ -39,11 +39,112 @@ mixin textBlockEditor( data )
             
         });
 mixin imageBlockEditor( data )
-    input#upload( type= 'file' name= 'upload' accept='image/png, image/jpeg' data-target= '#block-content' )
+    .block-editor-header
+        input#upload( type= 'file' name= 'upload' accept='image/png, image/jpeg' data-target= '#block-content' )
     img.block#block-content( src= data.content data-method= 'put' data-url= '/blocks/' + data._id )
 mixin videoBlockEditor( data )
-    input#upload( type= 'file' name= 'upload' accept='video/*' data-target= '#block-content' )
+    .block-editor-header
+        input#upload( type= 'file' name= 'upload' accept='video/*' data-target= '#block-content' )
     video.block#block-content( src= data.content controls data-method= 'put' data-url= '/blocks/' + data._id )
+mixin linkBlockEditor( data )
+    .block-editor-header
+        input#link-title( type= 'text' placeholder= 'title' )
+        input#link-url( type= 'text' placeholder= 'link' )
+        #add-link( class= 'addbutton white' )
+    - var links = data.content || '[]';
+    .block-link-editor( data-links= links data-method= 'put' data-url= '/blocks/' + data._id )
+    script.
+        const linkEditor = document.querySelector( '.block-link-editor' );
+        let links = JSON.parse(linkEditor.getAttribute('data-links'));
+        const saveChanges = () => {
+            const method = linkEditor.getAttribute('data-method');
+            const url = linkEditor.getAttribute('data-url');
+            if ( method && url ) {
+                let payload = {
+                    content: JSON.stringify(links)
+                };
+                performAction( method, url, payload, true );
+            }
+        };
+        const updateLinks = () => {
+            //
+            // regenerate indicies
+            //
+            for ( let index = 0; index < links.length; index++ ) {
+                links[ index ].index = index;
+            }
+            linkEditor.innerHTML = '';
+            links.forEach( (link) => {
+                let linkBlock = document.createElement('div');
+                let linkBlockLabel = document.createElement('h3');
+                linkBlockLabel.innerHTML = link.title;
+                linkBlock.appendChild(linkBlockLabel);
+                let linkBlockTitle = document.createElement('input');
+                linkBlockTitle.id = 'block-title-' + link.index;
+                linkBlockTitle.type = 'text';
+                linkBlockTitle.value = link.title;
+                linkBlockTitle.addEventListener( 'input', (e) => {
+                    linkBlockLabel.innerHTML = linkBlockTitle.value;
+                    links[ link.index ].title = linkBlockTitle.value;
+                    saveChanges();
+                });
+                linkBlock.appendChild(linkBlockTitle);
+                let linkBlockUrl = document.createElement('input');
+                linkBlockUrl.id = 'block-url-' + link.index;
+                linkBlockUrl.type = 'text';
+                linkBlockUrl.value = link.url;
+                linkBlockUrl.addEventListener( 'input', (e) => {
+                    links[ link.index ].url = linkBlockUrl.value;
+                    saveChanges();
+                });
+                linkBlock.appendChild(linkBlockUrl);
+                let linkBlockIndex = document.createElement('input');
+                linkBlockIndex.id = 'block-index-' + link.index;
+                linkBlockIndex.type = 'number';
+                linkBlockIndex.value = link.index;
+                linkBlockIndex.addEventListener('input', (e) => {
+                    let newIndex = Math.max(0,Math.min( links.length, parseInt(linkBlockIndex.value) ) );
+                    //
+                    // move link in array
+                    //
+                    links.splice(newIndex, 0, links.splice(link.index, 1)[0]);
+                    updateLinks();
+                    saveChanges();
+                });
+                linkBlock.appendChild(linkBlockIndex);
+                let linkBlockDelete = document.createElement('div');
+                linkBlockDelete.classList.add('deletebutton');
+                linkBlockDelete.classList.add('white');
+                linkBlockDelete.addEventListener('click', (e) => {
+                    links.splice(link.index, 1); 
+                    updateLinks();
+                });
+                linkEditor.appendChild(linkBlock);
+            });
+        };
+        //
+        //
+        //
+        updateLinks();
+        //
+        //
+        //
+        const addLink   = document.querySelector('#add-link');
+        const linkTitle = document.querySelector('#link-title');
+        const linkUrl   = document.querySelector('#link-url');
+        addLink.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log('addLink : ' + linkTitle.value + ' : ' + linkUrl.value );
+            if ( linkTitle.value && linkUrl.value ) {
+                links.push({
+                    title:  linkTitle.value,
+                    url:    linkUrl.value,
+                    index:  links.length
+                }); 
+                updateLinks();
+            }
+            return true;
+        });
 mixin blockEditor( data )
     .block-editor( style= 'min-height: 64px;' )
         if data.type == 'text'
@@ -51,4 +152,6 @@ mixin blockEditor( data )
         else if data.type == 'image'
             +imageBlockEditor(data)
         else if data.type == 'video'
-            +videoBlockEditor(data)
+            +videoBlockEditor(data)        
+        else if data.type == 'links'
+            +linkBlockEditor(data)

@@ -53,6 +53,15 @@ Item {
     //
     //
     //
+    Stack.onStatusChanged: {
+        if ( Stack.status === Stack.Activating) {
+            console.log( 'Page setting filter to : ' + JSON.stringify(filter));
+            blocks.setFilter(filter);
+        }
+    }
+    //
+    //
+    //
     property alias title: subtitle.text
-
+    property var filter: ({})
 }

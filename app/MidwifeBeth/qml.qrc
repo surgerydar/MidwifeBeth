@@ -40,5 +40,7 @@
         <file>icons/right_arrow.png</file>
         <file>SectionsGrid.qml</file>
         <file>controls/GridLayout.qml</file>
+        <file>icons/refresh.png</file>
+        <file>controls/LinksBlock.qml</file>
     </qresource>
 </RCC>

@@ -60,8 +60,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    blocks.setFilter( {page_id:model._id} );
-                    stack.push("qrc:///Page.qml", {title: model.title});
+                    stack.push("qrc:///Page.qml", {title: model.title,filter:{page_id:model._id}});
                 }
             }
         }
@@ -69,5 +68,14 @@ Item {
     //
     //
     //
+    Stack.onStatusChanged: {
+        if ( Stack.status === Stack.Activating) {
+            pages.setFilter(filter);
+        }
+    }
+    //
+    //
+    //
     property alias title: subtitle.text
+    property var filter: ({})
 }
