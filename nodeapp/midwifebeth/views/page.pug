@@ -10,6 +10,8 @@ include block-listitem
         #link-button( class= 'linkbutton white' data-link= 'link://pages/' + _id )
 form#page-form( action='/pages/' + _id method='put' enctype='application/x-www-form-urlencoded' )
     .form-content
+        div( style="display: flex; flex-direction: row; justify-content: flex-end;" )
+            input.form-item( type='submit' value='Update' ) 
         .form-item
             label.form-item( for='title' ) Title
             input.form-item#title( type='text' name='title' placeholder='page title' value= title )
@@ -83,7 +85,8 @@ script.
                             linkButton.innerHTML = link.title;
                             linkButton.setAttribute('data-url', link.url);
                             linkButton.addEventListener( 'click', (e) => {
-                                alert( link.url );
+                                e.stopPropagation();
+                                alert( 'linked to :\n' + link.url );
                             });
                             linksBlock.appendChild(linkButton);
                         });

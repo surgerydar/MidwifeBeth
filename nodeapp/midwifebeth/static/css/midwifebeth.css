@@ -39,6 +39,7 @@ img {
  */
 #title-bar {
 	height: 64px;
+    min-height: 64px;
 	padding: 0 64px;
 	display: flex;
 	flex-direction: row;
@@ -456,6 +457,7 @@ div.flagbutton {
 div.linkbutton {
     width: 22px;
     height: 22px;
+    margin-left: 4px;
     opacity: 1.0;
     cursor: pointer;
     background-repeat: no-repeat;
@@ -503,6 +505,100 @@ div.linkbutton {
         flex-direction: row;
         align-items: center;
         background-position: left;
+    }
+
+div.previousbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left;
+}
+
+    div.previousbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.previousbutton.white {
+        background-image: url(../images/icons/arrow-previous-02.png);
+        color: white;
+    }
+
+    div.previousbutton.top {
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.previousbutton.bottom {
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.previousbutton.left {
+        left: 8px;
+        right: auto;
+    }
+
+    div.previousbutton.right {
+        left: auto;
+        right: 8px;
+    }
+
+    div.previousbutton.label {
+        width:auto;
+        padding-left: 22px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+div.nextbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+}
+
+    div.nextbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.nextbutton.white {
+        background-image: url(../images/icons/arrow-next-02.png);
+        color: white;
+    }
+
+    div.nextbutton.top {
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.nextbutton.bottom {
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.nextbutton.left {
+        left: 8px;
+        right: auto;
+    }
+
+    div.nextbutton.right {
+        left: auto;
+        right: 8px;
+    }
+
+    div.nextbutton.label {
+        width:auto;
+        padding-right: 22px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 
 /*
@@ -575,6 +671,13 @@ img.block {
     overflow: hidden;
 }
 
+.block-editor input[type=text] {
+    height: 22px;
+    padding: 0 11px 0 11px;
+    border-radius: 11px;
+    border: none;
+}
+
 .block-editor-header {
     height: 64px;
     flex: 0 0 auto;
@@ -622,4 +725,22 @@ img.block {
     margin: 8px;
     visibility: collapse;
 }
+
+.links-list {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow-x: hidden;
+    overflow-y: auto;
+    visibility: collapse;
+}
+
+.links-list-item {
+    padding: 4px;
+    border-bottom: 1px solid white;  
+    text-align: right;
+}
+
 

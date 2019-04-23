@@ -6,5 +6,6 @@ include block-editor
         h3( style= 'text-transform: capitalize;')= data.type
 form#block-form( action='/blocks/' + data._id method='put' enctype='application/x-www-form-urlencoded' )
     .form-content
+        .link-list
         +blockEditor(data)
         #progress

@@ -35,7 +35,7 @@ function upload( file ) {
     var guid = pad(Date.now(),16,'0');
     var filename = file.name;
     var filesize = file.size;
-    var ws = new WebSocket('ws://aftertrauma.uk:8080');
+    var ws = new WebSocket('wss://app.midwifebeth.com:8080');
     ws.binaryType = 'arraybuffer';
     ws.pendingCommands = [];
 	ws.waiting = false;

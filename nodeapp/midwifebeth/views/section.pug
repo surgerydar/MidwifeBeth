@@ -8,6 +8,8 @@
         #link-button( class= 'linkbutton white' data-link= 'link://sections/' + _id )
 form#section-form( action='/sections/' + _id method='put' enctype='application/x-www-form-urlencoded' )
     .form-content
+        div( style="display: flex; flex-direction: row; justify-content: flex-end;" )
+            input.form-item( type='submit' value='Update' ) 
         .form-item
             label.form-item( for='title' ) Title
             input.form-item#title( type='text' name='title' placeholder='section title' value= title )

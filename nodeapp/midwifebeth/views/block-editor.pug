@@ -49,11 +49,13 @@ mixin videoBlockEditor( data )
 mixin linkBlockEditor( data )
     .block-editor-header
         input#link-title( type= 'text' placeholder= 'title' )
-        input#link-url( type= 'text' placeholder= 'link' )
+        input#link-url( type= 'text' placeholder= 'link' readonly )
         #add-link( class= 'addbutton white' )
     - var links = data.content || '[]';
+    .links-list
     .block-link-editor( data-links= links data-method= 'put' data-url= '/blocks/' + data._id )
     script.
+        // TODO: move this to external file
         const linkEditor = document.querySelector( '.block-link-editor' );
         let links = JSON.parse(linkEditor.getAttribute('data-links'));
         const saveChanges = () => {
@@ -75,10 +77,43 @@ mixin linkBlockEditor( data )
             }
             linkEditor.innerHTML = '';
             links.forEach( (link) => {
+                //
+                // TODO: render from template using pug
+                //
                 let linkBlock = document.createElement('div');
                 let linkBlockLabel = document.createElement('h3');
+                //
+                //
+                //
                 linkBlockLabel.innerHTML = link.title;
                 linkBlock.appendChild(linkBlockLabel);
+                //
+                //
+                //
+                let setIndex = (newIndex) => {
+                    //
+                    // move link in array
+                    //
+                    links.splice(newIndex, 0, links.splice(link.index, 1)[0]);
+                    updateLinks();
+                    saveChanges();
+                };
+                //
+                //
+                //
+                let moveLeft = document.createElement('div');
+                moveLeft.classList.add('previousbutton');
+                moveLeft.classList.add('white');
+                moveLeft.style.display = 'inline-block';
+                moveLeft.addEventListener('click',(e) => {
+                    if ( link.index > 0 ) {
+                        setIndex(link.index - 1);
+                    }
+                });
+                linkBlock.appendChild(moveLeft);
+                //
+                //
+                //
                 let linkBlockTitle = document.createElement('input');
                 linkBlockTitle.id = 'block-title-' + link.index;
                 linkBlockTitle.type = 'text';
@@ -86,18 +121,50 @@ mixin linkBlockEditor( data )
                 linkBlockTitle.addEventListener( 'input', (e) => {
                     linkBlockLabel.innerHTML = linkBlockTitle.value;
                     links[ link.index ].title = linkBlockTitle.value;
+                    filterLinks( linkBlockTitle.value.toLowerCase(), (title, url) => {
+                        linkBlockTitle.value = title;
+                        linkBlockUrl.value = url;
+                        links[ link.index ].title = title;
+                        links[ link.index ].url = url;
+                        saveChanges();
+                    });
+                    linksList.style.visibility = 'visible';
                     saveChanges();
                 });
+                linkBlockTitle.addEventListener('focus', (e) => {
+                    filterLinks( linkBlockTitle.value.toLowerCase(), (title, url) => {
+                        linkBlockTitle.value = title;
+                        linkBlockUrl.value = url;
+                        links[ link.index ].title = title;
+                        links[ link.index ].url = url;
+                        saveChanges();
+                    });
+                    linksList.style.visibility = 'visible';
+                });
                 linkBlock.appendChild(linkBlockTitle);
+                //
+                //
+                //
                 let linkBlockUrl = document.createElement('input');
                 linkBlockUrl.id = 'block-url-' + link.index;
                 linkBlockUrl.type = 'text';
+                linkBlockUrl.setAttribute('readonly', true);
                 linkBlockUrl.value = link.url;
-                linkBlockUrl.addEventListener( 'input', (e) => {
-                    links[ link.index ].url = linkBlockUrl.value;
-                    saveChanges();
+                linkBlockUrl.addEventListener( 'click', (e) => {
+                     filterLinks( linkBlockTitle.value.toLowerCase(), (title, url) => {
+                        linkBlockTitle.value = title;
+                        linkBlockUrl.value = url;
+                        links[ link.index ].title = title;
+                        links[ link.index ].url = url;
+                        saveChanges();
+                    });
+                    linksList.style.visibility = 'visible';
                 });
                 linkBlock.appendChild(linkBlockUrl);
+                //
+                //
+                //
+                /*
                 let linkBlockIndex = document.createElement('input');
                 linkBlockIndex.id = 'block-index-' + link.index;
                 linkBlockIndex.type = 'number';
@@ -112,6 +179,20 @@ mixin linkBlockEditor( data )
                     saveChanges();
                 });
                 linkBlock.appendChild(linkBlockIndex);
+                */
+                let moveRight = document.createElement('div');
+                moveRight.classList.add('nextbutton');
+                moveRight.classList.add('white');
+                moveRight.style.display = 'inline-block';
+                moveRight.addEventListener('click',(e) => {
+                    if ( link.index < links.length - 1 ) {
+                        setIndex(link.index + 1);
+                    }
+                });
+                linkBlock.appendChild(moveRight);
+                //
+                //
+                //
                 let linkBlockDelete = document.createElement('div');
                 linkBlockDelete.classList.add('deletebutton');
                 linkBlockDelete.classList.add('white');
@@ -145,6 +226,91 @@ mixin linkBlockEditor( data )
             }
             return true;
         });
+        //
+        //
+        //
+        let filterLinks = ( filter, saveCallback ) => {
+            console.log( 'filtering links : ' + filter );
+            linksList.innerHTML = '';
+            if ( filter ) {
+                let appendLink = ( type, item ) => {
+                    let linkItem = document.createElement('div');
+                    linkItem.classList.add( 'links-list-item' );
+                    linkItem.innerHTML = item.title + ' (' + type + ')';
+                    linkItem.addEventListener( 'click', (e) => {
+                        console.log('selected : ' + item.title );
+                        if ( saveCallback ) {
+                            saveCallback( item.title, 'link://' + type + '/' + item._id );
+                        }
+                        linksList.style.visibility = 'collapse';
+                    });
+                    linksList.appendChild( linkItem );
+                };
+                fetch( '/pages?format=json' ).then( (response) => {
+                    console.log( 'got pages : ' + response );
+                    response.json().then((pages) => {
+                        if ( pages ) {
+                            console.log( 'PAGES' );
+                            pages.forEach( (page) => {
+                                if ( page.title.toLowerCase().startsWith(filter) ) {
+                                    appendLink( 'pages', page );           
+                                }
+                            });
+                        }
+                    }).catch( (error) => {
+                        console.error( 'ERROR: parsing pages : ' + error );
+                    });
+                }).catch( (error) => {
+                    console.error( 'ERROR: fetching pages : ' + error );
+                });
+                fetch( '/sections?format=json' ).then( (response) => {
+                    console.log( 'got sections : ' + response );
+                    response.json().then((sections) => {
+                        if ( sections ) {
+                            console.log( 'SECTIONS' );
+                            sections.forEach( (section) => {
+                                if ( section.title.toLowerCase().startsWith(filter) ) {
+                                    appendLink( 'sections', section );           
+                                }
+                            });
+                        }
+                    }).catch( (error) => {
+                        console.error( 'ERROR: fetching sections : ' + error );
+                    });
+                });
+            }
+        };
+        //
+        //
+        //
+        const linksList = document.querySelector( '.links-list' );
+        if ( linksList ) {
+            console.log( 'hooking links list');
+            //
+            //
+            //
+            linkTitle.addEventListener('focus', (e) => {
+                filterLinks( linkTitle.value.toLowerCase(), (title,url) => {
+                    linkTitle.value = title;
+                    linkUrl.value = url;
+                });
+                linksList.style.visibility = 'visible';
+            });
+            linkTitle.addEventListener( 'input', (e) => {
+                filterLinks( linkTitle.value.toLowerCase(), (title,url) => {
+                    linkTitle.value = title;
+                    linkUrl.value = url;
+                });
+                linksList.style.visibility = 'visible';
+            });
+            linkUrl.addEventListener('click',(e)=>{
+                filterLinks( linkTitle.value.toLowerCase(), (title,url) => {
+                    linkTitle.value = title;
+                    linkUrl.value = url;
+                });
+                linksList.style.visibility = 'visible';
+            });
+        }
 mixin blockEditor( data )
     .block-editor( style= 'min-height: 64px;' )
         if data.type == 'text'
