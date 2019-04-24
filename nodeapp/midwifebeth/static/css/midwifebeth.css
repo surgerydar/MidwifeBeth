@@ -521,8 +521,13 @@ div.previousbutton {
         opacity: 0.5;
     }
 
+    div.previousbutton.black {
+        background-image: url(../images/icons/arrow-prev-black.png);
+        color: white;
+    }
+
     div.previousbutton.white {
-        background-image: url(../images/icons/arrow-previous-02.png);
+        background-image: url(../images/icons/arrow-prev-white.png);
         color: white;
     }
 
@@ -568,8 +573,13 @@ div.nextbutton {
         opacity: 0.5;
     }
 
+    div.nextbutton.black {
+        background-image: url(../images/icons/arrow-next-black.png);
+        color: white;
+    }
+
     div.nextbutton.white {
-        background-image: url(../images/icons/arrow-next-02.png);
+        background-image: url(../images/icons/arrow-next-white.png);
         color: white;
     }
 
@@ -594,6 +604,110 @@ div.nextbutton {
     }
 
     div.nextbutton.label {
+        width:auto;
+        padding-right: 22px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+div.upbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+}
+
+    div.upbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.upbutton.white {
+        background-image: url(../images/icons/arrow-up-white.png);
+        color: white;
+    }
+
+    div.upbutton.black {
+        background-image: url(../images/icons/arrow-up-black.png);
+        color: white;
+    }
+
+    div.upbutton.top {
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.upbutton.bottom {
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.upbutton.left {
+        left: 8px;
+        right: auto;
+    }
+
+    div.upbutton.right {
+        left: auto;
+        right: 8px;
+    }
+
+    div.upbutton.label {
+        width:auto;
+        padding-right: 22px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+div.downbutton {
+    width: 22px;
+    height: 22px;
+    opacity: 1.0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+}
+
+    div.downbutton:hover {
+        opacity: 0.5;
+    }
+
+    div.downbutton.white {
+        background-image: url(../images/icons/arrow-down-white.png);
+        color: white;
+    }
+
+    div.downbutton.black {
+        background-image: url(../images/icons/arrow-down-black.png);
+        color: white;
+    }
+
+    div.downbutton.top {
+        top: 8px;
+        bottom: auto;
+    }
+
+    div.downbutton.bottom {
+        top: auto;
+        bottom: 8px;
+    }
+
+    div.downbutton.left {
+        left: 8px;
+        right: auto;
+    }
+
+    div.downbutton.right {
+        left: auto;
+        right: 8px;
+    }
+
+    div.downbutton.label {
         width:auto;
         padding-right: 22px;
         display: flex;

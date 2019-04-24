@@ -35,8 +35,10 @@ form#page-form( action='/pages/' + _id method='put' enctype='application/x-www-f
             each block in blocks
                 .block( data-type= block.type data-method= 'get' data-url= '/blocks/' + block._id )
                     .listviewheadergroup( style='justify-content: flex-end;' )
-                        div( id= 'button-delete-' + block._id class= 'deletebutton black' data-confirm= 'true'  )
-                        div( id= 'button-reorder-' + block._id class= 'reorderbutton black' )
+                        div( id= 'delete-' + block._id class= 'deletebutton black' data-confirm= 'true'  )
+                        div( id= 'move-up-' + block._id class= 'upbutton black' )
+                        div( id= 'move-down-' + block._id class= 'downbutton black' )
+                        div( id= 'reorder-' + block._id class= 'reorderbutton black' )
                     +block(block)
         div( style="display: flex; flex-direction: row; justify-content: flex-end;" )
             input.form-item( type='submit' value='Update' ) 
@@ -66,6 +68,30 @@ script.
                     e.stopPropagation();
                     if ( confirm('do you want to delete this item?') ) {
                         performAction( 'delete', url );
+                    }
+                    return true;
+                });    
+            }
+            let upButton = block.querySelector('.upbutton');
+            if ( upButton ) {
+                console.log( 'hooking block up : ' + block._id );
+                upButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if( block.previousSibling ) {
+                        blockList.insertBefore(block,block.previousSibling);
+                        updateBlockOrder();
+                    }
+                    return true;
+                });    
+            }
+            let downButton = block.querySelector('.downbutton');
+            if ( downButton ) {
+                console.log( 'hooking block down : ' + block._id );
+                downButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if ( block.nextSibling ) {
+                        blockList.insertBefore(block.nextSibling,block);
+                        updateBlockOrder();
                     }
                     return true;
                 });    
@@ -109,6 +135,23 @@ script.
                 index++;
              });
         };
+        //
+        // hook block up/down buttons
+        //
+        let blockMoveButtons = blockList.querySelectorAll('.upbutton,.downbutton');
+        blockMoveButtons.forEach((button)=>{
+            if ( button.classList.contains('upbutton') ) {
+                button.addEventListener('click',(e)=>{
+                    e.stopPropagation();
+                    
+                });
+            } else {
+            
+            }  
+        });
+        //
+        // handle sortable block drag'n'drop
+        //
         const contentObserver = new MutationObserver(updateBlockOrder);
         contentObserver.observe(blockList, { childList: true } );
         //
