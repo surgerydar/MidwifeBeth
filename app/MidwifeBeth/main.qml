@@ -1,12 +1,13 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.5
 
 import SodaControls 1.0
 import "colours.js" as Colours
 import "controls" as MWB
 
-Window {
+ApplicationWindow {
+    id: applicationWindow
     visible: true
     width: 480
     height: 640
@@ -31,15 +32,38 @@ Window {
     DatabaseList {
         id: blocks
         collection: 'blocks'
-        roles: [ '_id', 'page_id', 'type', 'content' ]
+        roles: [ '_id', 'page_id', 'type', 'title', 'content', 'width', 'height' ]
+        sort: { "index": 1 }
+    }
+    DatabaseList {
+        id: tags
+        collection: 'tags'
+        roles: [ 'tag', 'count' ]
+        function addTag( tag ) {
+            var existing = findOne({tag:tag});
+            if ( existing ) {
+                existing.count += 1
+                update( {_id:existing._id},{count:(existing.count+1)});
+            } else {
+                add( { tag: tag, count: 1 } );
+            }
+        }
+    }
+    DatabaseList {
+        id: babies
+        collection: 'babies'
+        roles: [ '_id', 'firstName', 'middleNames', 'lastName', 'dob', 'tob', 'birthweight', 'gender', 'profilePhoto', 'photos', 'notes', 'data' ]
+        sort: { "name": 1 }
     }
     //
     //
     //
     StackView {
         id: stack
-        anchors.fill: parent
-        anchors.topMargin: 64
+        anchors.top: title.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
     }
     //
     //
@@ -49,8 +73,18 @@ Window {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: 64
+        height: stack.depth <= 1 ? 64 : 0
         color: Colours.lightGreen
+        clip: true
+        //
+        //
+        //
+        Behavior on height {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.InCubic
+            }
+        }
         //
         //
         //
@@ -103,6 +137,34 @@ Window {
             }
         }
     }
+    /*
+    //
+    //
+    //
+    Rectangle {
+        id: search
+        width: 64
+        height: 64
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.margins: 4
+        radius: 32
+        color: Colours.darkOrange
+        opacity: .8
+        visible: stack.depth === 1
+        Image {
+            anchors.fill: parent
+            anchors.margins: 8
+            fillMode: Image.PreserveAspectFit
+            source:  'icons/search.png'
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                stack.push("qrc:///Search.qml")
+            }
+        }
+    }
     //
     //
     //
@@ -130,6 +192,16 @@ Window {
             }
         }
     }
+    */
+    //
+    //
+    //
+    Rectangle {
+        id: fullscreenContainer
+        anchors.fill: parent
+        color: "black"
+        visible: false
+    }
     //
     //
     //
@@ -151,9 +223,58 @@ Window {
                 }
                 */
                 stack.clear();
-                stack.push("qrc:///SectionsGrid.qml");
+                /*
+                var mainMenu = pages.findOne({title:"Main Menu"});
+                //var mainMenu = pages.findOne({title:"Test Page"});
+                if ( mainMenu ) {
+                    var param = {filter:{page_id:mainMenu._id}};
+                    console.log( 'home screen = ' + JSON.stringify(param) ) ;
+                    stack.push("qrc:///Page.qml", param);
+                } else {
+                    stack.push("qrc:///SectionsGrid.qml");
+                }
+                */
+                //stack.push("qrc:///SectionsGrid.qml");
+                stack.push("qrc:///MyBabies.qml");
             } else if( destination.indexOf( 'pages' ) >= 0 ) {
                 pages.load();
+                //
+                // extract tags
+                //
+                tags.clear();
+                for ( var i = 0; i < pages.count; ++i ) {
+                    var page = pages.get(i);
+                    //
+                    // TODO: consider moving this serverside
+                    //
+                    //
+                    // convert string into array
+                    //
+                    var newTags = pages.get(i).tags.split(',');
+                    //
+                    // remove trailing spaces and convert to lowercase
+                    //
+                    var sanitisedTags = [];
+                    newTags.forEach( (tag)=>{
+                                        var sanitisedTag = tag.trim().toLowerCase();
+                                        if ( sanitisedTag.length > 0 ) {
+                                            sanitisedTags.push(sanitisedTag);
+                                        }
+                                    });
+                    //
+                    // add tags to tag db
+                    //
+                    sanitisedTags.forEach( (tag)=>{
+                                              console.log( 'adding tag : ' + tag );
+                                              tags.addTag(tag);
+                                          });
+                    //
+                    // replace page tags with array
+                    //
+                    pages.update({_id:page._id},{tags:sanitisedTags});
+                }
+                tags.save();
+                pages.save();
             } else if( destination.indexOf( 'blocks') >= 0 ) {
                 blocks.load();
             }
@@ -168,6 +289,7 @@ Window {
         //
         //
         refreshData();
+        stack.push("qrc:///MyBabies.qml");
     }
     //
     //
@@ -176,33 +298,36 @@ Window {
         //
         // download latest from admin
         //
-        Downloader.download('https://aftertrauma.uk:8080/blocks?format=json',SystemUtils.documentPath('blocks.json'));
-        Downloader.download('https://aftertrauma.uk:8080/pages?format=json',SystemUtils.documentPath('pages.json'));
-        Downloader.download('https://aftertrauma.uk:8080/sections?format=json',SystemUtils.documentPath('sections.json'));
+        Downloader.download('https://app.midwifebeth.com:8080/blocks?format=json',SystemUtils.documentPath('blocks.json'));
+        Downloader.download('https://app.midwifebeth.com:8080/pages?format=json',SystemUtils.documentPath('pages.json'));
+        Downloader.download('https://app.midwifebeth.com:8080/sections?format=json',SystemUtils.documentPath('sections.json'));
     }
-    function processLink( url ) {
+    function processLink( url, title ) {
         console.log( 'link clicked : ' + url  );
         if ( url.startsWith('link://') ) {
             var components = url.substring('link://'.length).split('/');
             if ( components.length === 2 ) {
-                var database = components[ 0 ];
+                var category = components[ 0 ];
                 var _id = components[ 1 ];
-                switch( database ) {
+                switch( category ) {
                 case 'sections' :
                     var section = sections.findOne({_id:_id});
                     if ( section ) {
-                        stack.push("qrc:///Pages.qml", {title:section.title,filter:{section_id:_id}});
+                        stack.push("qrc:///Pages.qml", {title:title||section.title,filter:{section_id:_id}});
                     }
                     break;
                 case 'pages' :
                     var page = pages.findOne({_id:_id});
                     if ( page ) {
-                        stack.push("qrc:///Page.qml", {title:page.title,filter:{page_id:_id}});
+                        stack.push("qrc:///Page.qml", {title:title||page.title,filter:{page_id:_id}});
                     }
+                    break;
+                case 'profile' :
+                    stack.push("qrc:///Profile.qml");
                     break;
                 }
             }
-        } else {
+        } else if ( url.startsWith('http://') || url.startsWith('https://') ) {
             Qt.openUrlExternally(url);
         }
     }

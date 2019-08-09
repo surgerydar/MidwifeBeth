@@ -63,6 +63,7 @@ Item {
                 console.log( 'resizing ImageBlock to ' + container.height );
                 */
                 //console.log('ImageBlock : loaded image : ' + source );
+                updateContentDimensions();
                 mediaReady();
             }
         }
@@ -74,9 +75,27 @@ Item {
     //
     //
     onMediaChanged: {
-        content.source = "image://cached/" + 'https://aftertrauma.uk:8080' + media;
+        content.source = "image://cached/" + 'https://app.midwifebeth.com:8080' + media;
         console.log( 'ImageBlock : loading media : ' + content.source );
     }
+    //
+    //
+    //
+    function updateContentDimensions() {
+        if ( contentWidth && contentHeight ) {
+            content.height = content.width * ( contentHeight / contentWidth );
+        } else {
+            content.height = Math.min(width * ( content.sourceSize.height / content.sourceSize.width ), content.sourceSize.height)
+        }
+    }
+
+    onContentWidthChanged: {
+        updateContentDimensions();
+    }
+    onContentHeightChanged: {
+        updateContentDimensions();
+    }
+
     //
     //
     //
@@ -87,4 +106,7 @@ Item {
     //
     property bool redirected: false
     property string media: ""
+    property string title: ""
+    property int contentWidth: 0
+    property int contentHeight: 0
 }

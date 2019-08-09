@@ -43,6 +43,7 @@ Item {
         spacing: 4
         clip: true
         model: pages
+        bottomMargin: 72
         delegate: Rectangle {
             width: content.width
             height: 64

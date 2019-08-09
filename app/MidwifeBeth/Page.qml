@@ -6,7 +6,6 @@ import "controls" as MWB
 
 Item {
     id: container
-    //anchors.fill: parent
     //
     //
     //
@@ -24,13 +23,14 @@ Item {
             id: subtitle
             anchors.fill: parent
             anchors.margins: 4
-            font.pixelSize: 64
+            font.pixelSize: 48
             font.weight: Font.Bold
             fontSizeMode: Label.Fit
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
             color: Colours.almostWhite
-            text: "Page"
+            text: ""
+            visible: text.length > 0
         }
     }
     //
@@ -39,15 +39,23 @@ Item {
     ListView {
         id: content
         anchors.fill: parent
-        anchors.topMargin: subtitleContainer.height + 4
+        anchors.topMargin: subtitle.visible ? subtitleContainer.height + 4 : 4
         spacing: 4
         clip: true
         model: blocks
+        bottomMargin: 72
         delegate: MWB.Block {
             anchors.left: parent.left
             anchors.right: parent.right
             type: model.type
             media: model.content
+            title: model.title || ""
+            /*
+            contentWidth: model.width || ( model.type === 'video ' ) ? 1920 : 0
+            contentHeight: model.height || ( model.type === 'video ' ) ? 1080 : 0
+            */
+            contentWidth: model.width || ( model.type === 'video ' ) ? 1080 : 0
+            contentHeight: model.height || ( model.type === 'video ' ) ? 1920 : 0
         }
     }
     //

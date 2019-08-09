@@ -6,7 +6,7 @@ import "../colours.js" as Colours
 TextField {
     id: container
     height: 48
-    color: Colours.veryDarkSlate
+    color: Colours.almostBlack
     font.pixelSize: 24
     echoMode: TextInput.NoEcho
     //
@@ -21,7 +21,7 @@ TextField {
             width: 2
             height: parent.height - 4
             anchors.verticalCenter: parent.verticalCenter
-            color: Colours.darkSlate
+            color: Colours.darkGrey
             visible: container.focus
             PropertyAnimation on opacity {
                 duration: 500
@@ -38,7 +38,7 @@ TextField {
         id: background
         anchors.fill: parent
         radius: 4
-        color: Colours.veryLightSlate
+        color: Colours.almostWhite
         border.color: "transparent"
         Row {
             id: tagContainer
@@ -90,7 +90,7 @@ TextField {
                 anchors.fill: parent
                 anchors.margins: 4
                 font: container.font
-                color: Colours.lightSlate
+                color: Colours.darkGrey
                 verticalAlignment: Text.AlignVCenter
                 text: model.text
             }
@@ -147,9 +147,8 @@ TextField {
         suggestionList.model.clear();
         if ( tokenised.length > 0 ) {
             var tag = tokenised[ tokenised.length-1 ];
-            //suggestions = tagsModel.find({ tag: { "$startswith" : tag } } );
-            suggestions = tagsModel.find({ tag: new RegExp( '^' + tag + '[a-z,0-9]*' ) } );
-            suggestions.sort( function( a, b) {
+            suggestions = tags.find({ tag: new RegExp( '^' + tag + '[a-z,0-9]*' ) } );
+            suggestions.sort( function( a, b ) {
                 if ( a.tag.length > b.tag.length ) return 1;
                 if ( a.tag.length < b.tag.length ) return -1;
                 return 0;

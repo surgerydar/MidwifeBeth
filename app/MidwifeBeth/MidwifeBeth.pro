@@ -13,6 +13,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+HEADERS += \
+    databaselist.h \
+    systemutils.h \
+    downloader.h \
+    cachedimageprovider.h \
+    cachedmediasource.h \
+    cachedtee.h \
+    networkaccess.h
+
 SOURCES += \
     main.cpp \
     databaselist.cpp \
@@ -23,7 +32,7 @@ SOURCES += \
     cachedtee.cpp \
     networkaccess.cpp
 
-RESOURCES += qml.qrc
+RESOURCES = midwifebeth.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -36,11 +45,25 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    databaselist.h \
-    systemutils.h \
-    downloader.h \
-    cachedimageprovider.h \
-    cachedmediasource.h \
-    cachedtee.h \
-    networkaccess.h
+
+ios {
+    QMAKE_INFO_PLIST = ios/Info.plist
+
+    ios_icon.files = $$files($$PWD/ios/icons/Icon-App*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
+
+    ios_launch.files = $$PWD/ios/Launch.storyboard $$PWD/ios/LaunchBackground.png $$PWD/ios/LaunchLogo.png
+    QMAKE_BUNDLE_DATA += ios_launch
+
+    # QMAKE_ASSET_CATALOGS += ios/Images.xcassets
+}
+
+# Android OpenSSL
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL/1.0.2j/arch-armeabi-v7a/lib/libcrypto.so
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL/1.0.2j/arch-armeabi-v7a/lib/libssl.so
+}
+contains(ANDROID_TARGET_ARCH,arm64-v8a) {
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL-for-Android-Prebuilt-master/openssl-1.1.1/arm64-v8a/lib/libcrypto.so
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL-for-Android-Prebuilt-master/openssl-1.1.1/arm64-v8a/lib/libssl.so
+}

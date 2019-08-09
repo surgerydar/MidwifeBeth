@@ -141,9 +141,10 @@ QVariant DatabaseList::add(QVariant o) {
     endResetModel();
     //emit dataChanged(createIndex(0,0),createIndex(m_objects.size()-1,0));
     //emit countChanged();
-    QVariantMap id;
-    id["_id"] = object["_id"];
-    return QVariant(id);
+    //QVariantMap id;
+    //id["_id"] = object["_id"];
+    //return QVariant(id);
+    return object["_id"];
 }
 
 QVariant DatabaseList::update(QVariant q,QVariant u, bool upsert) {
@@ -504,7 +505,7 @@ inline bool DatabaseList::_matchValue( QVariant& value, QVariant& condition ) {
         }
         return false;
     } else if ( condition.canConvert<QRegExp>() ) {
-        qDebug() << "matching regexp : " << condition;
+        //qDebug() << "matching regexp : " << condition;
         QRegExp _condition = condition.toRegExp();
         QString _value = value.toString();
         return _condition.exactMatch(_value);

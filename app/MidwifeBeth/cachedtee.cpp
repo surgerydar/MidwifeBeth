@@ -80,13 +80,13 @@ void CachedTee::close() {
 
 qint64 CachedTee::readData(char *data, qint64 maxlen) {
     qDebug() << "CachedTee::readData";
-    qint64 bytesToRead = qMin( (qint64)m_buffer.size(), maxlen );
+    qint64 bytesToRead = qMin( static_cast<qint64>(m_buffer.size()), maxlen );
     m_bufferGuard.lock();
-    memcpy(data,m_buffer.data(),bytesToRead);
+    memcpy(data,m_buffer.data(),static_cast<size_t>(bytesToRead));
     if ( bytesToRead == m_buffer.size() ) {
         m_buffer.clear();
     } else {
-        m_buffer = m_buffer.right(m_buffer.size()-bytesToRead);
+        m_buffer = m_buffer.right(m_buffer.size()-static_cast<int>(bytesToRead));
     }
     m_bufferGuard.unlock();
     return bytesToRead;
@@ -106,12 +106,12 @@ void CachedTee::processInput() {
     //
     // read data from input
     //
-    int bytesAvailable = m_input->bytesAvailable();
+    qint64 bytesAvailable = m_input->bytesAvailable();
     if ( bytesAvailable > 0 ) {
         qDebug() << "CachedTee::processInput : " << bytesAvailable << " bytes";
 
-        QByteArray buffer(bytesAvailable,0);
-        int bytesRead = m_input->read( buffer.data(), bytesAvailable );
+        QByteArray buffer(static_cast<int>(bytesAvailable),0);
+        qint64 bytesRead = m_input->read( buffer.data(), bytesAvailable );
         //
         // write data to output
         //
@@ -121,7 +121,7 @@ void CachedTee::processInput() {
         //
         // append to internal buffer
         //
-        buffer.resize(bytesRead);
+        buffer.resize(static_cast<int>(bytesRead));
         m_bufferGuard.lock();
         m_buffer.append(buffer);
         m_bufferGuard.unlock();

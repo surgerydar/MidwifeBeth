@@ -71,4 +71,7 @@ Item {
     //
     //
     property alias media: content.text
+    property string title: ""
+    property int contentWidth: 0
+    property int contentHeight: 0
 }

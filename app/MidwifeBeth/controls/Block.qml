@@ -8,9 +8,8 @@ Item {
     //
     //
     //
-    //height: Math.max(64,childrenRect.height)
-    height: blockLoader.item ? Math.max(64,blockLoader.item.height) : 64
-    implicitHeight: blockLoader.item ? Math.max(64,blockLoader.item.height) : 64
+    height: calculateHeight()
+    implicitHeight: calculateHeight()
     //
     //
     //
@@ -50,7 +49,9 @@ Item {
         onLoaded: {
             item.mediaReady.connect(mediaReady);
             item.media = container.media;
-
+            item.title = container.title;
+            item.contentWidth = container.contentWidth;
+            item.contentHeight = container.contentHeight;
         }
     }
     //
@@ -70,6 +71,26 @@ Item {
             blockLoader.item.media = media;
         }
     }
+    onContentWidthChanged: {
+        if ( blockLoader.status === Loader.Ready ) {
+            blockLoader.item.contentWidth = contentWidth;
+        }
+    }
+    onContentHeightChanged: {
+        if ( blockLoader.status === Loader.Ready ) {
+            blockLoader.item.contentHeight = contentHeight;
+        }
+    }
+    //
+    //
+    //
+    function calculateHeight() {
+        //console.log( 'Block : calculating height using width/height=' + ( contentHeight && contentWidth ) );
+        if ( contentHeight && contentWidth ) {
+            return width * ( contentHeight / contentWidth ) + 16;
+        }
+        return blockLoader.item ? Math.max(64,blockLoader.item.height) : 64
+    }
     //
     //
     //
@@ -80,5 +101,8 @@ Item {
     //
     property string type: "text" // "text" | "image" | "video" | "links"
     property string media: ""
+    property string title: ""
     property alias content: blockLoader.item
+    property int contentWidth: 0
+    property int contentHeight: 0
 }

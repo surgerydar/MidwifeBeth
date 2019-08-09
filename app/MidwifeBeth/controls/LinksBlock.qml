@@ -9,7 +9,7 @@ Item {
     //
     //
     //
-    height: Math.max(64,content.height + 16)
+    height: Math.max(64,contentContainer.height + 16)
     //
     //
     //
@@ -21,15 +21,39 @@ Item {
     //
     //
     //
-    GridLayout {
-        id: content
-        anchors.verticalCenter: parent.verticalCenter
+    Item {
+        id: contentContainer
+        height: ( titleLabel.visible ? titleLabel.height + 8: 0 ) + content.height
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: 8
-        model: ListModel {}
-        onClicked: {
-            processLink(item.url);
+        Label {
+            id: titleLabel
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 8
+            font.pixelSize: 32
+            fontSizeMode: Label.Fit
+            horizontalAlignment: Label.AlignHCenter
+            wrapMode: Label.WordWrap
+            color: Colours.almostWhite
+            visible: text.length > 0
+        }
+        //
+        //
+        //
+        GridLayout {
+            id: content
+            anchors.top: titleLabel.visible ? titleLabel.bottom : parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 8
+            spacing: 8
+            model: ListModel {}
+            onClicked: {
+                processLink(item.url,item.title);
+            }
         }
     }
     //
@@ -58,9 +82,11 @@ Item {
             mediaError( 'Invalid links data : ' + media );
         }
     }
-
     //
     //
     //
     property string media: ""
+    property alias title: titleLabel.text
+    property int contentWidth: 0
+    property int contentHeight: 0
 }

@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
-
 import SodaControls 1.0
+
 import "../colours.js" as Colours
 import "../controls" as MWB
 
@@ -19,7 +19,7 @@ Item {
             Label {
                 anchors.fill: parent
                 anchors.margins: 4
-                font.pixelSize: 64
+                font.pixelSize: ( height - 8 ) / 2
                 fontSizeMode: Label.Fit
                 horizontalAlignment: Label.AlignHCenter
                 verticalAlignment: Label.AlignVCenter

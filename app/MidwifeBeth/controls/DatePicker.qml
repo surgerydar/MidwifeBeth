@@ -27,7 +27,7 @@ Item {
             //
             background: Rectangle {
                 anchors.fill: parent
-                color: Colours.veryDarkSlate
+                color: Colours.almostBlack
             }
             //
             //
@@ -39,7 +39,6 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 opacity: 0.4 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: Colours.almostWhite
-                font.family: fonts.light
                 font.pointSize: 18
                 text: index + 1
             }
@@ -72,7 +71,7 @@ Item {
             //
             background: Rectangle {
                 anchors.fill: parent
-                color: Colours.veryDarkSlate
+                color: Colours.almostBlack
             }
             //
             //
@@ -84,7 +83,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 opacity: 0.4 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: Colours.almostWhite
-                font.family: fonts.light
+                //font.family: fonts.light
                 font.pointSize: 18
                 text: textMonth ? Utils.longMonth(index) : index + 1
             }
@@ -122,7 +121,7 @@ Item {
             //
             background: Rectangle {
                 anchors.fill: parent
-                color: Colours.veryDarkSlate
+                color: Colours.almostBlack
             }
             //
             //
@@ -134,7 +133,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 opacity: 0.4 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: Colours.almostWhite
-                font.family: fonts.light
+                //font.family: fonts.light
                 font.pointSize: 18
                 //text: value
                 text: index >= minimumDate.getFullYear() ? index <= maximumDate.getFullYear() ? index : "" : ""
@@ -238,6 +237,6 @@ Item {
     property bool blockUpdate: false
     property bool textMonth: false
     property date currentDate: new Date()
-    property date minimumDate: globalMinimumDate || new Date()
-    property date maximumDate: globalMaximumDate || new Date()
+    property date minimumDate: new Date(Date.now()-(7*24*60*60*1000))
+    property date maximumDate: new Date()
 }

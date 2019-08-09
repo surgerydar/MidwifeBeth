@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.12
+//import QtQuick.Layouts 1.12
 
 import "colours.js" as Colours
 import "controls" as MWB
@@ -41,6 +41,7 @@ Item {
         anchors.topMargin: subtitleContainer.height + 4
         contentHeight: content.height
         clip: true
+        bottomMargin: 72
         MWB.GridLayout {
             id: content
             anchors.top: parent.top

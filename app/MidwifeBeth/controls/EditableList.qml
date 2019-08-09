@@ -1,8 +1,8 @@
-import QtQuick 2.6
+import QtQuick 2.13
 import QtQuick.Controls 2.1
 
 import "../colours.js" as Colours
-import "../controls" as AfterTrauma
+import "../controls" as MWB
 
 Item {
     id: container
@@ -14,11 +14,26 @@ Item {
         anchors.fill: parent
         clip: true
         spacing: 4
+        footerPositioning: ListView.OverlayFooter
+        footer: MWB.EditableListToolbar {
+            editable: container.editable
+            onAdd: {
+                addItem();
+            }
+            onEditingChanged: {
+                for ( var i = 0; i < listView.count; i++ ) {
+                    var item = listView.itemAtIndex(i);
+                    if ( item ) {
+                        item.swipeEnabled = editing;
+                    }
+                }
+            }
+        }
     }
     //
     //
     //
-    AfterTrauma.Label {
+    MWB.Label {
         id: emptyPromptLabel
         anchors.verticalCenter: listView.verticalCenter
         anchors.left: listView.left
@@ -31,6 +46,10 @@ Item {
         color: Colours.almostWhite
         text: "No Data"
     }
+    //
+    //
+    //
+    signal addItem();
     //
     //
     //

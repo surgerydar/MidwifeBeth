@@ -89,7 +89,7 @@ void CachedMediaSource::setMediaSource() {
                             //
                             tee->close();
                             //
-                            // delete local file
+                            // delete temporary local file
                             //
                             QFile::remove(temporaryPath);
                         });
@@ -97,7 +97,7 @@ void CachedMediaSource::setMediaSource() {
                             qDebug() << "QNetworkReply::finished";
                             tee->close();
                             //
-                            //
+                            // move temporary local file to final location
                             //
                             QFile::rename(temporaryPath,localPath);
                         });
