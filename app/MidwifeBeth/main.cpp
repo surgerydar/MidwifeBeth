@@ -8,6 +8,8 @@
 #include "databaselist.h"
 #include "cachedmediasource.h"
 #include "cachedimageprovider.h"
+#include "rangemodel.h"
+#include "datemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +20,8 @@ int main(int argc, char *argv[])
     // register custon controls
     //
     qmlRegisterType<DatabaseList>("SodaControls", 1, 0, "DatabaseList");
+    qmlRegisterType<RangeModel>("SodaControls", 1, 0, "RangeModel");
+    qmlRegisterType<DateModel>("SodaControls", 1, 0, "DateModel");
     qmlRegisterType<CachedMediaSource>("SodaControls", 1, 0, "CachedMediaSource");
     //
     // register global objects

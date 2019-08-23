@@ -236,6 +236,7 @@ ApplicationWindow {
                 */
                 //stack.push("qrc:///SectionsGrid.qml");
                 stack.push("qrc:///MyBabies.qml");
+                //stack.push("qrc:///MeasureFieldBuilder.qml");
             } else if( destination.indexOf( 'pages' ) >= 0 ) {
                 pages.load();
                 //
@@ -289,7 +290,6 @@ ApplicationWindow {
         //
         //
         refreshData();
-        stack.push("qrc:///MyBabies.qml");
     }
     //
     //

@@ -101,11 +101,12 @@ Item {
     //
     signal mediaReady();
     signal mediaError( string error );
+    signal updateContent();
     //
     //
     //
     property bool redirected: false
-    property string media: ""
+    property var media: ""
     property string title: ""
     property int contentWidth: 0
     property int contentHeight: 0

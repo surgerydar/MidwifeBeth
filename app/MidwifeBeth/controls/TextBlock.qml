@@ -61,6 +61,7 @@ Item {
     //
     signal mediaReady();
     signal mediaError( string error );
+    signal updateContent();
     //
     //
     //

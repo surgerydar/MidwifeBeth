@@ -69,41 +69,27 @@ Rectangle {
             placeholderText: "Surname"
             labelText: "Surname"
         }
-        MWB.DatePicker {
+        MWB.TextField {
             id: birthDateTime
             width: parent.width
-            height: 128
+            placeholderText: "Date of birth"
+            labelText: "Date of birth"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    stack.push("qrc:///controls/DateTimePicker.qml", { date: birthDateTime.value, cancel: ()=>{stack.pop();}, save: (date)=>{birthDateTime.value=date; stack.pop();} } );
+                }
+            }
+            onValueChanged: {
+                text = Qt.formatDateTime(value,'MMMM dd yyyy hh:mm ap')
+            }
+            property var value: null
         }
-        MWB.TextField {
+        MWB.WeightField {
             id: birthWeightField
             width: parent.width
             placeholderText: "Birth weight"
             labelText: "Birth weight"
-            inputMask: unit.units[unit.currentUnit].template
-            //
-            //
-            //
-            Label {
-                id: unit
-                anchors.right:  parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: 8
-                text: units[currentUnit].label
-                color: Colours.almostBlack
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        var newUnit = unit.currentUnit+1;
-                        if ( newUnit >= unit.units.length ) {
-                            unit.currentUnit = 0;
-                        } else {
-                            unit.currentUnit = newUnit;
-                        }
-                    }
-                }
-                property int currentUnit: 0
-                property var units: [{label:'lb',template:'09 l\b 09 oz;0'},{label:'oz',template:'0099 oz;0'},{label:'kg',template:'09.99 kg;0'},{label:'g',template:'0099 g;0'}]
-            }
         }
     }
     FileDialog {
@@ -127,7 +113,7 @@ Rectangle {
     property alias firstName: firstNameField.text
     property alias middleNames: middleNamesField.text
     property alias surname: surnameField.text
-    property alias birthDate: birthDateTime.currentDate
-    property alias birthWeight: birthWeightField.text
+    property alias birthDateTime: birthDateTime.value
+    property alias birthWeight: birthWeightField.value
     property bool editable: true
 }

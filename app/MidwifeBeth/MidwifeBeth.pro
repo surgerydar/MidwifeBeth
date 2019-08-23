@@ -15,6 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     databaselist.h \
+    datemodel.h \
+    rangemodel.h \
     systemutils.h \
     downloader.h \
     cachedimageprovider.h \
@@ -23,8 +25,10 @@ HEADERS += \
     networkaccess.h
 
 SOURCES += \
+    datemodel.cpp \
     main.cpp \
     databaselist.cpp \
+    rangemodel.cpp \
     systemutils.cpp \
     downloader.cpp \
     cachedimageprovider.cpp \

@@ -38,7 +38,6 @@ Popup {
     //
     //
     function offsetX() {
-        console.log( 'pin.x: ' + pin.x + ' pinEdge: ' + pinEdge );
         switch( pinEdge ) {
         case PinnedPopup.PinEdge.Top :
         case PinnedPopup.PinEdge.Bottom :
@@ -51,7 +50,6 @@ Popup {
         return 8;
     }
     function offsetY() {
-        console.log( 'pin.y: ' + pin.y + ' pinEdge: ' + pinEdge );
         switch( pinEdge ) {
         case PinnedPopup.PinEdge.Left :
         case PinnedPopup.PinEdge.Right :

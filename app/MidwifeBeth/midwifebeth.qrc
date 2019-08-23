@@ -69,5 +69,18 @@
         <file>icons/flash_on.png</file>
         <file>controls/CameraInput.qml</file>
         <file>controls/PhotoChooser.qml</file>
+        <file>controls/NumberDial.qml</file>
+        <file>controls/DateDisplay.qml</file>
+        <file>DiaryEntry.qml</file>
+        <file>controls/GrowthBlock.qml</file>
+        <file>controls/WeightField.qml</file>
+        <file>controls/LengthField.qml</file>
+        <file>MeasureFieldBuilder.qml</file>
+        <file>controls/TemplatedField.qml</file>
+        <file>controls/MeasurementField.qml</file>
+        <file>controls/FeedBlock.qml</file>
+        <file>controls/SleepBlock.qml</file>
+        <file>controls/PhotoBlock.qml</file>
+        <file>controls/NoteBlock.qml</file>
     </qresource>
 </RCC>

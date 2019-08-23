@@ -210,6 +210,7 @@ Item {
     //
     signal mediaReady();
     signal mediaError( string error );
+    signal updateContent();
     //
     //
     //
@@ -243,7 +244,7 @@ Item {
     //
     //
     //
-    property string media: ""
+    property var media: ""
     property string title: ""
     property int contentWidth: 0
     property int contentHeight: 0

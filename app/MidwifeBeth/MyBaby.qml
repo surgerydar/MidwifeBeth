@@ -50,8 +50,8 @@ Item {
                 firstName: baby.firstName ? baby.firstName : ""
                 middleNames: baby.middleNames ? baby.middleNames : ""
                 surname: baby.surname ? baby.surname : ""
-                birthDate: baby.birthDate ? new Date(baby.birthDate) : new Date()
-                birthWeight: baby.birthWeight ? baby.birthWeight : ""
+                birthDateTime: baby.birthDate ? new Date(baby.birthDate) : new Date()
+                birthWeight: baby.birthWeight ? baby.birthWeight : 0.
             }
             MWB.HorizontalListView {
                 id: photoList
@@ -92,6 +92,54 @@ Item {
                 id: diaryList
                 width: content.width
                 labelText: "diary"
+                onAdd: {
+                    stack.push("qrc:///DiaryEntry.qml", { baby: baby, date: new Date() });
+                }
+                model: ListModel {}
+                delegate: Item {
+                    height: parent.height
+                    width: height
+                    Image {
+                        fillMode: Image.PreserveAspectCrop
+                        source: firstImage();
+                    }
+                    Label {
+                        anchors.fill: parent
+                        color: Colours.almostWhite
+                        text: formatDate(model.date);
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            stack.push("qrc:///DiaryEntry.qml", { baby: baby, date: new Date( model.date ) });
+                        }
+                    }
+
+                    function formatDate( d ) {
+                        let date = new Date( d );
+                        let formatted = '<h1>' + Qt.formatDate(date,'d') + '</h1>';
+
+                        return formatted + Qt.formatDate(date,'MMM');
+                    }
+                    function firstImage() {
+                        if ( baby.diary[ index ].blocks ) {
+                            for ( let i = 0; i < baby.diary[ index ].blocks.length; i++ ) {
+                                if ( baby.diary[ index ].blocks[ i ].type === 'image' ) return baby.diary[ index ].blocks[ i ].content;
+                            }
+                        }
+                        return "";
+                    }
+                }
+                Component.onCompleted: {
+                    if ( baby.diary ) {
+                        console.log('diary: ' + JSON.stringify(baby.diary) );
+                        for ( var i = 0; i < baby.diary.length; i++ ) {
+                            var d = baby.diary[ i ];
+                            console.log( 'appending diary entry : ' + JSON.stringify(d) );
+                            model.append(d);
+                        }
+                    }
+                }
             }
         }
         footerPositioning: ListView.OverlayFooter
@@ -172,7 +220,7 @@ Item {
         baby.firstName = info.firstName;
         baby.middleNames = info.middleNames;
         baby.surname = info.surname;
-        baby.birthDate = info.birthDate.getTime();
+        baby.birthDate = info.birthDateTime.getTime();
         baby.birthWeight = info.birthWeight;
         baby.photos = [];
         for ( var i = 0; i < photoList.model.count; i++ ) {

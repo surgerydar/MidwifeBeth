@@ -1,57 +1,111 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.5
+import SodaControls 1.0
 import "../colours.js" as Colours
-import "../controls" as MWB
+
 Item {
     id: container
+    //
+    //
+    //
     Rectangle {
-        width: Math.min( container.width, container.height )
-        height: width
-        anchors.centerIn: parent
-        radius: width / 2
-        color: Colours.almostBlack
-        PathView {
-            id: picker
-            anchors.fill: parent
-            anchors.margins: 12
-            interactive: false
-            model: 12
-            delegate: Rectangle {
-                width: 24
-                height: 24
-                radius: 12
-                color: PathView.isCurrentItem ? Colours.almostWhite : "transparent"
-                Label {
-                    anchors.centerIn: parent
-                    font.pointSize: 18
-                    color: parent.PathView.isCurrentItem ? Colours.almostBlack : Colours.almostWhite
-                    text: model.index
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        picker.currentIndex = model.index
-                    }
-                }
+        anchors.fill: parent
+        color: Colours.midGreen
+    }
+
+    Component {
+        id: numberDelegate
+        Label {
+            text: modelData.toString().length < 2 ? "0" + modelData : modelData
+            opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.pointSize: 24
+            color: Colours.almostBlack
+        }
+    }
+
+    Row {
+        anchors.fill: parent
+        spacing: 4
+        Tumbler {
+            id: hourPicker
+            width: ( parent.width - 8 ) / 3
+            height: parent.height
+            model: [12,1,2,3,4,5,6,7,8,9,10,11]
+            //
+            //
+            //
+            background: Rectangle {
+                anchors.fill: parent
+                color: Colours.almostWhite
             }
-            path: Path {
-                startX: picker.width / 2
-                startY: 0
-                PathArc {
-                    x: picker.width / 2
-                    y: picker.height
-                    radiusX: picker.width / 2
-                    radiusY: picker.height / 2
-                    useLargeArc: true
-                }
-                PathArc {
-                    x: picker.width / 2
-                    y: 0
-                    radiusX: picker.width / 2
-                    radiusY: picker.height / 2
-                    useLargeArc: true
+            delegate: numberDelegate
+            onCurrentIndexChanged: {
+                if ( !moving ) return;
+                dateModel.hour = currentIndex + ( ampmPicker.currentIndex === 1 ? 12 : 0 );
+            }
+        }
+        Tumbler {
+            id: minutePicker
+            width: ( parent.width - 8 ) / 3
+            height: parent.height
+            model: 60
+            //
+            //
+            //
+            background: Rectangle {
+                anchors.fill: parent
+                color: Colours.almostWhite
+            }
+            delegate: numberDelegate
+            onCurrentIndexChanged: {
+                if ( !moving ) return;
+                dateModel.minute = currentIndex;
+            }
+        }
+        Tumbler {
+            id: ampmPicker
+            width: ( parent.width - 8 ) / 3
+            height: parent.height
+            model: ["AM","PM"]
+            //
+            //
+            //
+            background: Rectangle {
+                anchors.fill: parent
+                color: Colours.almostWhite
+            }
+            delegate: numberDelegate
+            onCurrentIndexChanged: {
+                if ( !moving ) return;
+                if ( currentIndex === 1  ) {
+                    if ( dateModel.hour < 11 ) {
+                        dateModel.hour = dateModel.hour + 12;
+                    }
+                } else {
+                    if ( dateModel.hour > 11 ){
+                        dateModel.hour = dateModel.hour - 12;
+                    }
                 }
             }
         }
     }
+    //
+    //
+    //
+    function resetDisplay() {
+        hourPicker.currentIndex = dateModel.hour >= 11 ? dateModel.hour - 12 : dateModel.hour;
+        minutePicker.currentIndex = dateModel.minute;
+        ampmPicker.currentIndex = dateModel.hour >= 11 ? 1 : 0
+    }
+
+    onDateModelChanged: {
+        resetDisplay();
+    }
+    Component.onCompleted: {
+        resetDisplay();
+    }
+    property bool blockUpdate: false
+    property DateModel dateModel: DateModel {}
 }
