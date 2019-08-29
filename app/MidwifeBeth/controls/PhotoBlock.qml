@@ -15,6 +15,7 @@ MWB.HorizontalListView {
         height: parent.height
         width: height
         Image {
+            anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
             source: model.image
         }
@@ -31,8 +32,7 @@ MWB.HorizontalListView {
                            console.log( 'adding photo : ' + source );
                            let image = {image:source.toString(),caption:""};
                            model.append(image);
-                           if ( !Array.isArray(media) ) media = [];
-                           media.push(image);
+                           media.photos.push(image);
                            console.log( 'PhotoBlock.media=' + JSON.stringify(media));
                            container.updateContent();
                            listView.positionViewAtEnd();
@@ -49,12 +49,10 @@ MWB.HorizontalListView {
     onMediaChanged: {
         try {
             model.clear();
-            if ( Array.isArray(media) ) {
-                media.forEach( function(image) {
-                    model.append(image);
-                });
+            if ( media.photos ) {
+                media.photos.forEach((photo)=>{model.append(photo)});
             } else {
-                media = [];
+                media.photos = [];
             }
         } catch ( error ) {
             console.log( 'PhotoBlock.onMediaChanged : error : ' + error + ' : media=' + JSON.stringify(media));
@@ -72,7 +70,7 @@ MWB.HorizontalListView {
     //
     //
     //
-    property var media: []
+    property var media: ({})
     property string title: ""
     property int contentWidth: 0
     property int contentHeight: 0

@@ -109,9 +109,11 @@ Item {
     }
 
     function editContent() {
-        if ( blockLoader.status === Loader.Ready ) {
+        if ( blockLoader.status === Loader.Ready && blockLoader.item.editContent ) {
             blockLoader.item.editContent();
+            return true;
         }
+        return false;
     }
 
     //

@@ -78,9 +78,23 @@
         <file>MeasureFieldBuilder.qml</file>
         <file>controls/TemplatedField.qml</file>
         <file>controls/MeasurementField.qml</file>
-        <file>controls/FeedBlock.qml</file>
+        <file>controls/ToiletBlock.qml</file>
         <file>controls/SleepBlock.qml</file>
         <file>controls/PhotoBlock.qml</file>
         <file>controls/NoteBlock.qml</file>
+        <file>controls/ToiletEditor.qml</file>
+        <file>icons/bottle.png</file>
+        <file>icons/breast.png</file>
+        <file>icons/solids.png</file>
+        <file>controls/SleepEditor.qml</file>
+        <file>controls/TitleBox.qml</file>
+        <file>icons/sleep.png</file>
+        <file>controls/ToiletBlock.qml</file>
+        <file>controls/ToiletEditor.qml</file>
+        <file>controls/FeedBlock.qml</file>
+        <file>controls/FeedEditor.qml</file>
+        <file>icons/toilet.png</file>
+        <file>icons/nappy.png</file>
+        <file>icons/potty.png</file>
     </qresource>
 </RCC>

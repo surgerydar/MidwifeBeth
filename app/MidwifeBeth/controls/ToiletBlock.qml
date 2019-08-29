@@ -7,7 +7,7 @@ import "../controls" as MWB
 
 MWB.HorizontalListView {
     id: container
-    labelText: "Sleep"
+    labelText: "Toilet"
     //
     //
     //
@@ -18,35 +18,19 @@ MWB.HorizontalListView {
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectFit
-            source: "/icons/sleep.png"
+            source: toiletIcon(model.type);
         }
-        Column {
+        Label {
+            id: time
+            anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            anchors.margins: 4
-            spacing: 4
-            MWB.TitleBox {
-                id: startTime
-                anchors.right: parent.right
-                text: formatTime(model.startTime)
-            }
-            MWB.TitleBox {
-                id: duration
-                color: Colours.almostBlack
-                text: Utils.formatDuration(model.startTime,model.endTime)
-            }
-            Image {
-                anchors.right: parent.right
-                source: "/icons/timer.png"
-                visible: !( model.startTime && model.endTime && model.startTime < model.endTime )
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        media.sleep[ index ].endTime = new Date();
-                        container.model.set(index,media.sleep[ index ]);
-                    }
-                }
-            }
+            padding: 4
+            color: Colours.almostBlack
+            font.pointSize: 18
+            font.bold: true
+            horizontalAlignment: Label.AlignRight
+            text: formatTime(model.time)
         }
         MouseArea {
             anchors.fill: parent
@@ -62,15 +46,15 @@ MWB.HorizontalListView {
     //
     //
     function editContent(index) {
-        stack.push("qrc:///controls/SleepEditor.qml", {
-                       sleep: index !== undefined ? media.sleep[index] : {},
-                       save: function ( sleep ) {
+        stack.push("qrc:///controls/ToiletEditor.qml", {
+                       toilet: index !== undefined ? media.toilet[index] : {},
+                       save: function ( toilet ) {
                            if ( index !== undefined ) {
-                               model.set(index,sleep);
-                               media.sleep[index] = sleep;
+                               model.set(index,toilet);
+                               media.toilet[index] = toilet;
                            } else {
-                               model.append(sleep);
-                               media.sleep.push(sleep);
+                               model.append(toilet);
+                               media.toilet.push(toilet);
                            }
                            container.updateContent();
                            if ( index !== undefined ) {
@@ -91,13 +75,13 @@ MWB.HorizontalListView {
     onMediaChanged: {
         try {
             model.clear();
-            if ( media.sleep ) {
-                media.sleep.forEach((sleep)=>{model.append(sleep)});
+            if ( media.toilet ) {
+                media.toilet.forEach((toilet)=>{model.append(toilet)});
             } else {
-                media.sleep = [];
+                media.toilet = [];
             }
         } catch ( error ) {
-            console.log( 'SleepBlock.onMediaChanged : error : ' + error + ' : media=' + JSON.stringify(media));
+            console.log( 'toiletBlock.onMediaChanged : error : ' + error + ' : media=' + JSON.stringify(media));
         }
     }
     //
@@ -109,10 +93,15 @@ MWB.HorizontalListView {
     //
     //
     //
+    //
+    //
+    //
+    function toiletIcon(type) {
+        return '/icons/' + type + '.png';
+    }
     function formatTime(time) {
         return Qt.formatTime(new Date(time),'hh:mm ap');
     }
-
     //
     //
     //

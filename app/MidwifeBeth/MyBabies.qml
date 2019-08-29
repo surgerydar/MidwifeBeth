@@ -29,7 +29,7 @@ Item {
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
             color: Colours.almostWhite
-            text: "My Bab" + ( babies.count > 1 ? "ies" : "y" )
+            text: "My Family"
         }
     }
     //
@@ -64,7 +64,8 @@ Item {
                     anchors.left: icon.right
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: 18
+                    anchors.margins: 16
+                    font.pointSize: 24
                     color: Colours.almostWhite
                     text: model.firstName ? model.firstName : ""
                 }

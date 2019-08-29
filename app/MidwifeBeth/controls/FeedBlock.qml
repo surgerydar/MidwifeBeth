@@ -6,7 +6,7 @@ import "../controls" as MWB
 
 MWB.HorizontalListView {
     id: container
-    labelText: "Feed"
+    labelText: "feed"
     //
     //
     //
@@ -15,29 +15,73 @@ MWB.HorizontalListView {
         height: parent.height
         width: height
         Image {
-            fillMode: Image.PreserveAspectCrop
-            //source: // feed icon bottle, breast solid
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+            source: feedIcon(model.type);
+        }
+        Label {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            padding: 4
+            color: Colours.almostBlack
+            font.pointSize: 18
+            font.bold: true
+            horizontalAlignment: Label.AlignRight
+            text: formatTime(model.time);
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                container.editContent(index);
+            }
         }
     }
     onAdd: {
-        // push feed editor
+        editContent();
     }
+    //
+    //
+    //
+    function editContent(index) {
+        stack.push("qrc:///controls/FeedEditor.qml", {
+                       feed: index !== undefined ? media.feeds[index] : {},
+                       save: function ( feed ) {
+                           if ( index !== undefined ) {
+                               model.set(index,feed);
+                               media.feeds[index] = feed;
+                           } else {
+                               model.append(feed);
+                               media.feeds.push(feed);
+                           }
+                           container.updateContent();
+                           if ( index !== undefined ) {
+                               listView.positionViewAtIndex(index, ListView.Contain);
+                           } else {
+                               listView.positionViewAtEnd();
+                           }
 
+                           stack.pop();
+                       },
+                       cancel: function() {
+                           stack.pop();
+                       }
+                   });
+    }
     //
     //
     //
     onMediaChanged: {
-        /*
-          {
-            time: time,
-            type: breast|bottle|solids
-            info: feed specific info
-            note: extra note
-          }
-          info:
-            breast: duration,left|right|both
-            bottle: quantity
-          */
+        try {
+            model.clear();
+            if ( media.feeds ) {
+                media.feeds.forEach((feed)=>{model.append(feed)});
+            } else {
+                media.feeds = [];
+            }
+        } catch ( error ) {
+            console.log( 'feedBlock.onMediaChanged : error : ' + error + ' : media=' + JSON.stringify(media));
+        }
     }
     //
     //
@@ -45,6 +89,16 @@ MWB.HorizontalListView {
     signal mediaReady();
     signal mediaError( string error );
     signal updateContent();
+    //
+    //
+    //
+    function feedIcon(type) {
+        return '/icons/' + type + '.png';
+    }
+    function formatTime(time) {
+        return Qt.formatTime(new Date(time),'hh:mm ap');
+    }
+
     //
     //
     //

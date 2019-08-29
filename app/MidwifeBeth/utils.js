@@ -62,6 +62,17 @@ function getEndOfWeek( start ) {
     return temp;
 }
 
+function formatDuration( start, end ) {
+    if ( start && end && start < end ) {
+        let ms  = ( end - start );
+        let sec = Math.floor((ms / 1000) % 60);
+        let min = Math.floor(((ms / (1000*60)) % 60));
+        let hr  = Math.floor((ms / (1000*60*60)) % 24);
+        return ( hr > 0 ? hr + 'h ' : '' ) + ( min > 0 ? min + 'm ' : '' ) + ( sec > 0 ? sec + 's' : '' );
+    }
+    return '';
+}
+
 function formatAgeAndGender( profile ) {
     console.log( 'Utils.formatAgeAndGender(' + JSON.stringify(profile) + ')' );
     return ( profile.age ?  profile.age + ' ' : '' ) + ( profile.gender === 'male' || profile.gender === 'female' ? profile.gender : '' );

@@ -96,7 +96,7 @@ Item {
     MWB.PinnedPopup {
         id: addPopup
         pinEdge: MWB.PinnedPopup.PinEdge.Bottom
-        model: ["Growth","Feed","Sleep","Toilet","Medication","Note","Photo"]
+        model: ["Growth","Feed","Sleep","Toilet","Medication","Appointments","Note","Photo"]
         delegate: Rectangle {
             height: 64
             width: container.width / 3
@@ -200,6 +200,10 @@ Item {
         for ( let i = 0; i < contentView.model.count; i++ ) {
             if ( contentView.model.get(i).type === type ) {
                 // add entry
+                console.log( 'found block: ' + contentView.itemAtIndex(i) );
+                if ( !contentView.itemAtIndex(i).editContent() ) {
+                    contentView.positionViewAtIndex(i,ListView.Beginning);
+                }
 
                 return;
             }

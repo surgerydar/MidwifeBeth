@@ -182,7 +182,7 @@ Item {
     MWB.PinnedPopup {
         id: addPopup
         pinEdge: MWB.PinnedPopup.PinEdge.Bottom
-        model: ["Weight","Height","Feeding","Sleep","Vaccination"]
+        model: ["Weight","Height","Toileting","Sleep","Vaccination"]
         delegate: Rectangle {
             height: 64
             width: container.width / 3
