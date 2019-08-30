@@ -205,6 +205,12 @@ ApplicationWindow {
     //
     //
     //
+    MWB.ConfirmDialog {
+        id: confirmDialog
+    }
+    //
+    //
+    //
     Connections {
         target: Downloader
         //

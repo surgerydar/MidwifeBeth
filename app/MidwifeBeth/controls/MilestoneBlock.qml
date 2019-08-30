@@ -2,11 +2,12 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 
 import "../colours.js" as Colours
+import "../utils.js" as Utils
 import "../controls" as MWB
 
 MWB.HorizontalListView {
     id: container
-    labelText: "Feed"
+    labelText: "Milestone"
     //
     //
     //
@@ -14,16 +15,19 @@ MWB.HorizontalListView {
     delegate: Item {
         height: parent.height
         width: height
-        Image {
+        Rectangle {
             anchors.fill: parent
-            fillMode: Image.PreserveAspectFit
-            source: feedIcon(model.type);
+            color: Colours.almostWhite
         }
-        MWB.TitleBox {
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.margins: 4
-            text: formatTime(model.time);
+        Text {
+            anchors.fill: parent
+            padding: 4
+            wrapMode: Text.WordWrap
+            elide: Text.ElideRight
+            fontSizeMode: Label.Fit
+            minimumPointSize: 18
+            font.pointSize: 48
+            text: model.description
         }
         MouseArea {
             anchors.fill: parent
@@ -39,19 +43,14 @@ MWB.HorizontalListView {
             anchors.right: parent.right
             anchors.margins: 4
             action: function() {
-                container.media.feeds.splice(index,1);
+                container.media.milestone.splice(index,1);
                 container.updateContent();
             }
         }
     }
-    //
-    //
-    //
     section.property: "date"
     section.delegate: MWB.DateSectionDelegate {}
-    //
-    //
-    //
+
     onAdd: {
         editContent();
     }
@@ -59,17 +58,18 @@ MWB.HorizontalListView {
     //
     //
     function editContent(index) {
-        stack.push("qrc:///controls/FeedEditor.qml", {
-                       feed: index !== undefined ? media.feeds[index] : {},
-                       save: function ( feed ) {
-                           let date = new Date(feed.time);
-                           feed.date = Qt.formatDate(date,'yyyy-MMM-dd');
+        stack.push("qrc:///controls/MilestoneEditor.qml", {
+                       milestone: index !== undefined ? media.milestone[index] : {},
+                       save: function ( milestone ) {
                            if ( index !== undefined ) {
-                               model.set(index,feed);
-                               media.feeds[index] = feed;
+                               model.set(index,milestone);
+                               media.milestone[index] = milestone;
                            } else {
-                               model.append(feed);
-                               media.feeds.push(feed);
+                               let date = new Date();
+                               milestone.time = date.getTime();
+                               milestone.date = Qt.formatDate(date,'yyyy-MMM-dd');
+                               model.append(milestone);
+                               media.milestone.push(milestone);
                            }
                            container.updateContent();
                            if ( index !== undefined ) {
@@ -77,7 +77,6 @@ MWB.HorizontalListView {
                            } else {
                                listView.positionViewAtEnd();
                            }
-
                            stack.pop();
                        },
                        cancel: function() {
@@ -91,13 +90,13 @@ MWB.HorizontalListView {
     onMediaChanged: {
         try {
             model.clear();
-            if ( media.feeds ) {
-                media.feeds.forEach((feed)=>{model.append(feed)});
+            if ( media.milestone ) {
+                media.milestone.forEach((milestone)=>{model.append(milestone)});
             } else {
-                media.feeds = [];
+                media.milestone = [];
             }
         } catch ( error ) {
-            console.log( 'feedBlock.onMediaChanged : error : ' + error + ' : media=' + JSON.stringify(media));
+            console.log( 'milestoneBlock.onMediaChanged : error : ' + error + ' : media=' + JSON.stringify(media));
         }
     }
     //
@@ -109,9 +108,6 @@ MWB.HorizontalListView {
     //
     //
     //
-    function feedIcon(type) {
-        return '/icons/' + type + '.png';
-    }
     function formatTime(time) {
         return Qt.formatTime(new Date(time),'hh:mm ap');
     }

@@ -20,16 +20,11 @@ MWB.HorizontalListView {
             fillMode: Image.PreserveAspectFit
             source: toiletIcon(model.type);
         }
-        Label {
+        MWB.TitleBox {
             id: time
-            anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            padding: 4
-            color: Colours.almostBlack
-            font.pointSize: 18
-            font.bold: true
-            horizontalAlignment: Label.AlignRight
+            anchors.margins: 4
             text: formatTime(model.time)
         }
         MouseArea {
@@ -38,7 +33,27 @@ MWB.HorizontalListView {
                 container.editContent(index);
             }
         }
+        //
+        //
+        //
+        MWB.BlockDeleteButton {
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 4
+            action: function() {
+                container.media.toilet.splice(index,1);
+                container.updateContent();
+            }
+        }
     }
+    //
+    //
+    //
+    section.property: "date"
+    section.delegate: MWB.DateSectionDelegate {}
+    //
+    //
+    //
     onAdd: {
         editContent();
     }
@@ -49,6 +64,8 @@ MWB.HorizontalListView {
         stack.push("qrc:///controls/ToiletEditor.qml", {
                        toilet: index !== undefined ? media.toilet[index] : {},
                        save: function ( toilet ) {
+                           let date = new Date(toilet.time);
+                           toilet.date = Qt.formatDate(date,'yyyy-MMM-dd');
                            if ( index !== undefined ) {
                                model.set(index,toilet);
                                media.toilet[index] = toilet;

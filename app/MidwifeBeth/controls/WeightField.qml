@@ -11,12 +11,19 @@ MWB.TextField {
     //
     //
     //
+    MouseArea {
+        anchors.fill: parent
+        onClicked: editor.open(true);
+    }
+    //
+    //
+    //
     MWB.MeasurementField {
         id: editor
         height: field.height - field.topPadding;
         anchors.top: field.bottom
         anchors.left: field.left
-        anchors.right: confirmButton.left
+        anchors.right: field.right
         anchors.topMargin: field.topPadding
         //
         //
@@ -38,28 +45,20 @@ MWB.TextField {
                 toDisplay: function(b) { let lb = b * 2.2046; fields[0].text = Math.floor(lb); fields[ 1 ].text = Math.round(16.0 * (lb-Math.floor(lb))); }
             }
         ]
+        onFieldFocusChanged: function(hasFocus) {
+            if ( !hasFocus ) open(false);
+        }
         function open(show) {
             editing = show;
             if ( show ) {
                 editor.anchors.top = field.top;
+                Qt.callLater(()=>{editor.grabFocus();})
             } else {
                 editor.anchors.top = field.bottom;
             }
         }
         property bool editing: false
     }
-    RoundButton {
-        id: confirmButton
-        anchors.right: parent.right
-        anchors.verticalCenter: editor.verticalCenter
-        visible: editor.editing
-        text: "\u2713" // Unicode Character 'CHECK MARK'
-        onClicked: editor.open(false);
-    }
-    //
-    //
-    //
-    onPressed: editor.open(true);
     //
     //
     //

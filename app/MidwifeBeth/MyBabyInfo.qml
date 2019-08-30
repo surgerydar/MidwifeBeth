@@ -7,12 +7,13 @@ import "controls" as MWB
 
 Rectangle {
     width: parent.width
-    height: childrenRect.height + 16
+    height: childrenRect.y + childrenRect.height
     color: Colours.midGreen
     //
     //
     //
     Column {
+        id: content
         x: 8
         y: 8
         width: parent.width - 16
@@ -92,6 +93,15 @@ Rectangle {
             labelText: "Birth weight"
         }
     }
+    Rectangle {
+        height: 4
+        anchors.top: content.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.topMargin: 4
+        color: Colours.lightGreen
+    }
+
     FileDialog {
         id: imageChooser
         folder: shortcuts.pictures

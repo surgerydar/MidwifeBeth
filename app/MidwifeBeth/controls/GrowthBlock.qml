@@ -4,99 +4,135 @@ import QtQuick.Controls 2.5
 import "../colours.js" as Colours
 import "../controls" as MWB
 
-Item {
+MWB.HorizontalListView {
     id: container
+    labelText: "Growth"
     //
     //
     //
-    height: content.childrenRect.y + content.childrenRect.height + 32
-    //
-    //
-    //
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        anchors.topMargin: labelBackground.visible ? labelBackground.height / 2 : 0
-        radius: 4
-        color: Colours.midGreen
+    model: ListModel {}
+    delegate: Item {
+        height: parent.height
+        width: height
+        Image {
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+            source: "/icons/growth.png"
+        }
+        Column {
+            anchors.fill: parent
+            anchors.margins: 4
+            Label {
+                id: day
+                width: parent.width / 2
+                height: contentHeight
+                font.pointSize: 48
+                fontSizeMode: Label.HorizontalFit
+                lineHeight: .8
+                color: Colours.almostBlack
+                text: model.date.split('-')[2]
+            }
+            Label {
+                id: month
+                width: parent.width / 2
+                height: contentHeight
+                font.pointSize: 48
+                fontSizeMode: Label.HorizontalFit
+                lineHeight: .9
+                color: Colours.almostBlack
+                text: model.date.split('-')[1]
+            }
+            Label {
+                id: year
+                width: parent.width / 2
+                height: contentHeight
+                font.pointSize: 48
+                fontSizeMode: Label.HorizontalFit
+                lineHeight: .9
+                color: Colours.almostBlack
+                text: model.date.split('-')[0]
+            }
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                container.editContent(index);
+            }
+        }
+        //
+        //
+        //
+        MWB.BlockDeleteButton {
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 4
+            action: function() {
+                container.media.growth.splice(index,1);
+                container.updateContent();
+            }
+        }
     }
     //
     //
     //
-    Column {
-        id: content
-        anchors.top: labelBackground.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        padding: 8
-        spacing: 4
-        MWB.LengthField {
-            id: height
-            width: parent.width - 16
-            labelText: "Height"
-            placeholderText: "Height"
-            onValueChanged: {
-                media.height = value;
-                container.updateContent();
-            }
-        }
-        MWB.WeightField {
-            id: weight
-            width: parent.width - 16
-            labelText: "Weight"
-            placeholderText: "Weight"
-            onValueChanged: {
-                media.weight = value;
-                container.updateContent();
-            }
-        }
-        MWB.LengthField {
-            id: head
-            width: parent.width - 16
-            labelText: "Head Diameter"
-            placeholderText: "Diameter"
-            onValueChanged: {
-                media.headDiameter = value;
-                container.updateContent();
-            }
-        }
+    onAdd: {
+        editContent();
     }
     //
     //
     //
-    Rectangle {
-        id: labelBackground
-        height: label.contentHeight + 4
-        width: label.contentWidth + radius
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.leftMargin: background.radius
-        radius: ( label.contentHeight + 4 ) / 2 // JONS: setting this to height / 2 fails ( subtle binding loop I think )
-        visible: label.text.length > 0
-        color: Colours.almostBlack
-        Label {
-            id: label
-            anchors.centerIn: parent
-            color: Colours.almostWhite
-            font.pointSize: 14
-            text: "Growth"
-        }
+    function editContent(index) {
+        stack.push("qrc:///controls/GrowthEditor.qml", {
+                       growth: index !== undefined ? media.growth[index] : {},
+                       save: function ( growth ) {
+                           if ( index !== undefined ) {
+                               model.set(index,growth);
+                               media.growth[index] = growth;
+                           } else {
+                               let date = new Date();
+                               growth.time = date.getTime();
+                               growth.date = Qt.formatDate(date,'yyyy-MMM-dd');
+                               model.append(growth);
+                               media.growth.push(growth);
+                           }
+                           container.updateContent();
+                           if ( index !== undefined ) {
+                               listView.positionViewAtIndex(index, ListView.Contain);
+                           } else {
+                               listView.positionViewAtEnd();
+                           }
+
+                           stack.pop();
+                       },
+                       cancel: function() {
+                           stack.pop();
+                       }
+                   });
     }
     //
     //
     //
     onMediaChanged: {
-        height.value    = media.height || 0.;
-        weight.value    = media.weight || 0.;
-        head.value      = media.headDiameter || 0.;
+        try {
+            model.clear();
+            if ( media.growth ) {
+                media.growth.forEach((growth)=>{model.append(growth)});
+            } else {
+                media.growth = [];
+            }
+        } catch ( error ) {
+            console.log( 'growthBlock.onMediaChanged : error : ' + error + ' : media=' + JSON.stringify(media));
+        }
     }
-
     //
     //
     //
     signal mediaReady();
     signal mediaError( string error );
     signal updateContent();
+    //
+    //
+    //
     //
     //
     //

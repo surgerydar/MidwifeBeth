@@ -14,7 +14,6 @@ Item {
         id: background
         anchors.fill: parent
         anchors.topMargin: labelBackground.visible ? labelBackground.height / 2 : 0
-        radius: 4
         color: Colours.midGreen
     }
     //
@@ -87,5 +86,6 @@ Item {
     property alias labelText: label.text
     property alias model: content.model
     property alias delegate: content.delegate
+    property alias section: content.section
     property alias listView: content
 }

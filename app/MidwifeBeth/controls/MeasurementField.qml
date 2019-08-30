@@ -31,6 +31,7 @@ MWB.TemplatedField {
                 } else {
                     currentUnit = nextUnit;
                 }
+                grabFocus();
             }
         }
     }

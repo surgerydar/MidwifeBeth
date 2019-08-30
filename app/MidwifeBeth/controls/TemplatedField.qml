@@ -1,6 +1,7 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.5
 import "../colours.js" as Colours
+
 Item {
     id: container
     height: 60
@@ -85,6 +86,16 @@ Item {
                         //console.log( 'TemplatedField.textChanged(' + fieldIndex + ',' + newField.text );
                         container.textChanged(fieldIndex,newField.text);
                     });
+                    newField.onFocusChanged.connect(function() {
+                        let hasFocus = false;
+                        for ( let i = 0; i < fields.length; i++ ) {
+                            if ( fields[i].activeFocus ) {
+                                hasFocus = true;
+                                break;
+                            }
+                        }
+                        fieldFocusChanged(hasFocus);
+                    });
                     fields.push(newField);
                     start = end;
                 }
@@ -105,6 +116,10 @@ Item {
     //
     //
     //
+    signal fieldFocusChanged(bool focus)
+    //
+    //
+    //
     function clear() {
         //
         // clear ui
@@ -113,6 +128,9 @@ Item {
         for( let i = 0; i  < layout.children.length; i++ ) {
             layout.children[ i ].destroy();
         }
+    }
+    function grabFocus() {
+        if ( fields.length > 0 ) fields[0].forceActiveFocus();
     }
     property var fields: []
     property string template: ""

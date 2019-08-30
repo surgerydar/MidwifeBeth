@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.9.2, 2019-08-24T12:11:09. -->
+<!-- Written by QtCreator 4.9.2, 2019-08-30T20:02:58. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -1477,8 +1477,8 @@
      <value type="QString" key="identifier"></value>
      <value type="int" key="type">0</value>
     </valuemap>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run on Jonathan Jones-morris’s iPhone</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Run MidwifeBeth on Jonathan Jones-morris’s iPhone</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run on Jons’ iPad</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Run  on Jons’ iPad</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.IosRunConfiguration:/Users/jonathanjones-morris/Documents/MidwifeBeth/app/MidwifeBeth/MidwifeBeth.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>

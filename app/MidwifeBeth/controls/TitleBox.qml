@@ -5,7 +5,7 @@ import "../colours.js" as Colours
 
 Rectangle {
     id: background
-    width: label.contentWidth + radius
+    width: Math.max(height,label.contentWidth + radius)
     height: label.contentHeight + 4
     radius: height / 2
     visible: label.text.length > 0

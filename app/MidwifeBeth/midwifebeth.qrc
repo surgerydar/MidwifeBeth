@@ -78,11 +78,9 @@
         <file>MeasureFieldBuilder.qml</file>
         <file>controls/TemplatedField.qml</file>
         <file>controls/MeasurementField.qml</file>
-        <file>controls/ToiletBlock.qml</file>
         <file>controls/SleepBlock.qml</file>
         <file>controls/PhotoBlock.qml</file>
         <file>controls/NoteBlock.qml</file>
-        <file>controls/ToiletEditor.qml</file>
         <file>icons/bottle.png</file>
         <file>icons/breast.png</file>
         <file>icons/solids.png</file>
@@ -96,5 +94,15 @@
         <file>icons/toilet.png</file>
         <file>icons/nappy.png</file>
         <file>icons/potty.png</file>
+        <file>icons/timer.png</file>
+        <file>controls/DateSectionDelegate.qml</file>
+        <file>controls/GrowthEditor.qml</file>
+        <file>icons/growth.png</file>
+        <file>controls/MilestoneBlock.qml</file>
+        <file>controls/MilestoneEditor.qml</file>
+        <file>controls/BlockDeleteButton.qml</file>
+        <file>controls/AppointmentBlock.qml</file>
+        <file>controls/AppointmentEditor.qml</file>
+        <file>controls/SortableListModel.qml</file>
     </qresource>
 </RCC>

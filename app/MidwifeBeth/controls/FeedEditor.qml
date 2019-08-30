@@ -281,7 +281,6 @@ Item {
             feed.time = feedTimeModel.date.getTime();
         }
     }
-
     //
     //
     //

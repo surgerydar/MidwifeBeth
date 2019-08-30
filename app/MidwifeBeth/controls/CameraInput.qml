@@ -140,10 +140,12 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             color: Colours.darkOrange
-            Image {
+
+            Rectangle {
                 anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                source: "../icons/aperture.png"
+                anchors.margins: 8
+                radius: width / 2
+                color: Colours.almostWhite
             }
 
             MouseArea {

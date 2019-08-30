@@ -20,6 +20,12 @@ MWB.HorizontalListView {
             fillMode: Image.PreserveAspectFit
             source: "/icons/sleep.png"
         }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                container.editContent(index);
+            }
+        }
         Column {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
@@ -42,19 +48,29 @@ MWB.HorizontalListView {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        media.sleep[ index ].endTime = new Date();
+                        media.sleep[ index ].endTime = Date.now();
                         container.model.set(index,media.sleep[ index ]);
+                        container.updateContent();
                     }
                 }
             }
         }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                container.editContent(index);
+        //
+        //
+        //
+        MWB.BlockDeleteButton {
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 4
+            action: function() {
+                container.media.sleep.splice(index,1);
+                container.updateContent();
             }
         }
     }
+    section.property: "date"
+    section.delegate: MWB.DateSectionDelegate {}
+
     onAdd: {
         editContent();
     }
@@ -65,6 +81,8 @@ MWB.HorizontalListView {
         stack.push("qrc:///controls/SleepEditor.qml", {
                        sleep: index !== undefined ? media.sleep[index] : {},
                        save: function ( sleep ) {
+                           let date = new Date(sleep.startTime);
+                           sleep.date = Qt.formatDate(date,'yyyy-MMM-dd');
                            if ( index !== undefined ) {
                                model.set(index,sleep);
                                media.sleep[index] = sleep;

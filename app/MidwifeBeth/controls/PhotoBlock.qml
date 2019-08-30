@@ -12,12 +12,41 @@ MWB.HorizontalListView {
     //
     model: ListModel {}
     delegate: Item {
+        id: photoDelegate
         height: parent.height
         width: height
         Image {
+            id: image
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
             source: model.image
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if ( image.parent === photoDelegate ) {
+                        fullscreenContainer.visible = true;
+                        image.fillMode = Image.PreserveAspectFit;
+                        image.parent = fullscreenContainer;
+                    } else {
+                        fullscreenContainer.visible = false;
+                        image.fillMode = Image.PreserveAspectCrop;
+                        image.parent = photoDelegate;
+                    }
+                }
+            }
+        }
+        //
+        //
+        //
+        MWB.BlockDeleteButton {
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 4
+            action: function() {
+                SystemUtils.removeFile(model.image.substring('file://'.length));
+                container.media.photos.splice(index,1);
+                container.updateContent();
+            }
         }
     }
     onAdd: {
@@ -26,11 +55,21 @@ MWB.HorizontalListView {
     //
     //
     //
+    section.property: "date"
+    section.delegate: MWB.DateSectionDelegate {}
+    //
+    //
+    //
     function editContent() {
         stack.push("qrc:///controls/PhotoChooser.qml", {
                        save: function ( source ) {
                            console.log( 'adding photo : ' + source );
-                           let image = {image:source.toString(),caption:""};
+                           let sourceFile = source.toString().substring('file://'.length);
+                           let targetFile = SystemUtils.documentDirectory() + '/' + Date.now() + sourceFile.substring(sourceFile.lastIndexOf('.'));
+                           console.log('PhotoBlock : moving photo from : ' + sourceFile + ' to : ' + targetFile );
+                           SystemUtils.copyFile(sourceFile,targetFile);
+                           let date = new Date();
+                           let image = {image:'file://' + targetFile,caption:"", date: Qt.formatDate(date,'yyyy-MMM-dd'), time: date.getTime()};
                            model.append(image);
                            media.photos.push(image);
                            console.log( 'PhotoBlock.media=' + JSON.stringify(media));
