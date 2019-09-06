@@ -72,6 +72,52 @@ MWB.HorizontalListView {
             }
         }
     }
+    tools: [
+        Rectangle {
+            width: 32
+            height: width
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 8
+            radius: width / 2
+            color: Colours.darkOrange
+            Image {
+                anchors.fill: parent
+                anchors.margins: 4
+                fillMode: Image.PreserveAspectFit
+                source: "../icons/chart.png"
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    stack.push("qrc:///controls/DataChart.qml", {
+                                   title: "Growth",
+                                   dataSets: [ {key:"height",label:"Height", units: "cm", min: 44.0, max: 84.0 }, {key:"weight",label:"Weight", units: "kg", min: 0.5, max: 14.0 }, {key:"headDiameter",label:"Head Diameter", units: "cm", min: 31.0, max: 50.0 } ], // TODO: the min/max values derived from centiles for age range
+                                   chartData: media.growth
+                               });
+                }
+            }
+        },
+        Rectangle {
+            width: 32
+            height: width
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            radius: width / 2
+            color: Colours.darkOrange
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                source: "../icons/add.png"
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    add();
+                }
+            }
+        }
+    ]
     //
     //
     //

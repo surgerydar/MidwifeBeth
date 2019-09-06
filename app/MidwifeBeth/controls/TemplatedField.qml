@@ -27,6 +27,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             background: Rectangle {
                 anchors.fill: parent
+                anchors.bottomMargin: 4
                 radius: 2
                 color: Colours.lightGreen
             }

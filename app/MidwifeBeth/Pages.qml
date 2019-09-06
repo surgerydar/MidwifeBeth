@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.4
+import QtQuick 2.13
+import QtQuick.Controls 2.1
 
 import "colours.js" as Colours
 import "controls" as MWB
@@ -69,10 +69,9 @@ Item {
     //
     //
     //
-    Stack.onStatusChanged: {
-        if ( Stack.status === Stack.Activating) {
-            pages.setFilter(filter);
-        }
+    StackView.onActivating: {
+        console.log('Pages : filter= ' + JSON.stringify(filter));
+        pages.setFilter(filter);
     }
     //
     //

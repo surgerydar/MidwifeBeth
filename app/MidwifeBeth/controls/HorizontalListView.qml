@@ -88,4 +88,5 @@ Item {
     property alias delegate: content.delegate
     property alias section: content.section
     property alias listView: content
+    property alias tools: toolbar.children
 }

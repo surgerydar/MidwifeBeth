@@ -18,4 +18,6 @@ Rectangle {
     }
     property alias text: label.text
     property alias font: label.font
+    property alias backgroundColour: background.color
+    property alias textColour: label.color
 }

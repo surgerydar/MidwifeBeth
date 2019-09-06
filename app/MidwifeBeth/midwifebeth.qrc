@@ -53,7 +53,6 @@
         <file>icons/add.png</file>
         <file>controls/EditableListToolbar.qml</file>
         <file>MyBaby.qml</file>
-        <file>MyBabies.qml</file>
         <file>MyBabyInfo.qml</file>
         <file>icons/profile.png</file>
         <file>utils.js</file>
@@ -104,5 +103,8 @@
         <file>controls/AppointmentBlock.qml</file>
         <file>controls/AppointmentEditor.qml</file>
         <file>controls/SortableListModel.qml</file>
+        <file>MyFamily.qml</file>
+        <file>icons/chart.png</file>
+        <file>controls/DataChart.qml</file>
     </qresource>
 </RCC>

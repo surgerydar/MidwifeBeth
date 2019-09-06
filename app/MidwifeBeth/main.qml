@@ -229,7 +229,6 @@ ApplicationWindow {
                 }
                 */
                 stack.clear();
-                /*
                 var mainMenu = pages.findOne({title:"Main Menu"});
                 //var mainMenu = pages.findOne({title:"Test Page"});
                 if ( mainMenu ) {
@@ -239,9 +238,8 @@ ApplicationWindow {
                 } else {
                     stack.push("qrc:///SectionsGrid.qml");
                 }
-                */
                 //stack.push("qrc:///SectionsGrid.qml");
-                stack.push("qrc:///MyBabies.qml");
+                //stack.push("qrc:///MyBabies.qml");
                 //stack.push("qrc:///MeasureFieldBuilder.qml");
             } else if( destination.indexOf( 'pages' ) >= 0 ) {
                 pages.load();
@@ -312,9 +310,9 @@ ApplicationWindow {
         console.log( 'link clicked : ' + url  );
         if ( url.startsWith('link://') ) {
             var components = url.substring('link://'.length).split('/');
-            if ( components.length === 2 ) {
+            if ( components.length >= 1) {
                 var category = components[ 0 ];
-                var _id = components[ 1 ];
+                var _id = components.length > 1 ? components[ 1 ] : undefined;
                 switch( category ) {
                 case 'sections' :
                     var section = sections.findOne({_id:_id});
@@ -328,8 +326,8 @@ ApplicationWindow {
                         stack.push("qrc:///Page.qml", {title:title||page.title,filter:{page_id:_id}});
                     }
                     break;
-                case 'profile' :
-                    stack.push("qrc:///Profile.qml");
+                case 'myfamily' :
+                    stack.push("qrc:///MyFamily.qml");
                     break;
                 }
             }

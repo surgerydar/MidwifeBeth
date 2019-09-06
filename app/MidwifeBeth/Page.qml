@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.4
+import QtQuick 2.13
+import QtQuick.Controls 2.1
 
 import "colours.js" as Colours
 import "controls" as MWB
@@ -50,22 +50,16 @@ Item {
             type: model.type
             media: model.content
             title: model.title || ""
-            /*
-            contentWidth: model.width || ( model.type === 'video ' ) ? 1920 : 0
-            contentHeight: model.height || ( model.type === 'video ' ) ? 1080 : 0
-            */
-            contentWidth: model.width || ( model.type === 'video ' ) ? 1080 : 0
-            contentHeight: model.height || ( model.type === 'video ' ) ? 1920 : 0
+            contentWidth: model.width || ( model.type === 'video' ) ? 1080 : 0
+            contentHeight: model.height || ( model.type === 'video' ) ? 1920 : 0
         }
     }
     //
     //
     //
-    Stack.onStatusChanged: {
-        if ( Stack.status === Stack.Activating) {
-            console.log( 'Page setting filter to : ' + JSON.stringify(filter));
-            blocks.setFilter(filter);
-        }
+    StackView.onActivating: {
+        console.log( 'Page : filter= ' + JSON.stringify(filter));
+        blocks.setFilter(filter);
     }
     //
     //
