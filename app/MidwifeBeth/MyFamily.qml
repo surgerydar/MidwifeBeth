@@ -58,7 +58,10 @@ Item {
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
                     anchors.margins: 4
-                    source: model.profilePhoto ? model.profilePhoto : "icons/profile.png"
+                    source: model.profilePhoto ? model.profilePhoto : "/icons/profile.png"
+                    onStatusChanged: {
+                        if ( status === Image.Error ) source = "/icons/profile.png";
+                    }
                 }
                 Label {
                     anchors.left: icon.right
@@ -88,7 +91,7 @@ Item {
                 if ( baby ) {
                     stack.push("qrc:///MyBaby.qml",{baby:baby});
                 } else {
-                    console.log( 'MyBabies : unable to find baby : ' + model._id );
+                    console.log( 'MyFamily : unable to find child : ' + model._id );
                 }
             }
 

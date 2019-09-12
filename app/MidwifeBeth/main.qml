@@ -55,6 +55,12 @@ ApplicationWindow {
         roles: [ '_id', 'firstName', 'middleNames', 'lastName', 'dob', 'tob', 'birthweight', 'gender', 'profilePhoto', 'photos', 'notes', 'data' ]
         sort: { "name": 1 }
     }
+    DatabaseList {
+        id: bookmarks
+        collection: "bookmarks"
+        roles: [ '_id', 'title', 'link' ]
+        sort: { 'title': 1 }
+    }
     //
     //
     //
@@ -113,6 +119,59 @@ ApplicationWindow {
 
     }
     */
+    Rectangle {
+        id: home
+        width: 64
+        height: 64
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 4
+        radius: 32
+        color: "transparent"
+        opacity: .4
+        //visible: stack.depth > 1
+        Image {
+            anchors.fill: parent
+            anchors.margins: 8
+            fillMode: Image.PreserveAspectFit
+            source:  'icons/main_menu.png'
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                stack.pop(null);
+            }
+        }
+        state: stack.depth > 1 ? "visible" : "hidden"
+        states: [
+            State {
+                name: "visible"
+                AnchorChanges {
+                    target: home
+                    anchors.bottom: undefined
+                    anchors.top: home.parent.top
+                }
+            },
+            State {
+                name: "hidden"
+                AnchorChanges {
+                    target: home
+                    anchors.bottom: home.parent.top
+                    anchors.top: undefined
+                }
+            }
+        ]
+        transitions: Transition {
+            AnchorAnimation {
+                duration: 500
+                easing.type: Easing.InCubic
+            }
+        }
+        onStateChanged: {
+            console.log( "home.state= " + state );
+        }
+    }
+
     Rectangle {
         id: back
         width: 64
@@ -232,7 +291,7 @@ ApplicationWindow {
                 var mainMenu = pages.findOne({title:"Main Menu"});
                 //var mainMenu = pages.findOne({title:"Test Page"});
                 if ( mainMenu ) {
-                    var param = {filter:{page_id:mainMenu._id}};
+                    var param = {filter:{page_id:mainMenu._id},hideToolbar:true};
                     console.log( 'home screen = ' + JSON.stringify(param) ) ;
                     stack.push("qrc:///Page.qml", param);
                 } else {
@@ -328,6 +387,9 @@ ApplicationWindow {
                     break;
                 case 'myfamily' :
                     stack.push("qrc:///MyFamily.qml");
+                    break;
+                case 'bookmarks' :
+                    stack.push("qrc:///Bookmarks.qml");
                     break;
                 }
             }

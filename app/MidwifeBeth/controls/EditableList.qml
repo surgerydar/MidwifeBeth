@@ -14,6 +14,7 @@ Item {
         anchors.fill: parent
         clip: true
         spacing: 4
+        /*
         footerPositioning: ListView.OverlayFooter
         footer: MWB.EditableListToolbar {
             editable: container.editable
@@ -29,6 +30,7 @@ Item {
                 }
             }
         }
+        */
     }
     //
     //
@@ -58,6 +60,8 @@ Item {
     property alias model: listView.model
     property alias delegate: listView.delegate
     property alias spacing: listView.spacing
+    property alias topMargin: listView.topMargin
+    property alias bottomMargin: listView.bottomMargin
     property alias section: listView.section
     property alias emptyPrompt: emptyPromptLabel.text
     property bool editable: listView.count > 0

@@ -71,7 +71,7 @@ Item {
             }
         }
         if ( colCount === 1 ) {
-            container.children[ container.children.length - 2 ].width = ( container.width - 8 );
+            container.children[ container.children.length - 2 ].width = ( container.width - (spacing*2) );
         }
         container.implicitHeight = container.height = ( ( itemHeight + spacing ) * rowCount ) + ( spacing * 2 );
     }

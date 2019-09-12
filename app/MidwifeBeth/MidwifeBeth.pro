@@ -1,4 +1,4 @@
-QT += quick multimedia websockets
+QT += quick multimedia websockets networkauth
 
 CONFIG += c++11
 
@@ -17,6 +17,7 @@ HEADERS += \
     databaselist.h \
     datemodel.h \
     rangemodel.h \
+    storage.h \
     systemutils.h \
     downloader.h \
     cachedimageprovider.h \
@@ -29,6 +30,7 @@ SOURCES += \
     main.cpp \
     databaselist.cpp \
     rangemodel.cpp \
+    storage.cpp \
     systemutils.cpp \
     downloader.cpp \
     cachedimageprovider.cpp \
@@ -64,10 +66,10 @@ ios {
 
 # Android OpenSSL
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL/1.0.2j/arch-armeabi-v7a/lib/libcrypto.so
-    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL/1.0.2j/arch-armeabi-v7a/lib/libssl.so
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/openssl-libraries/arm/libcrypto.so
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/openssl-libraries/arm/libssl.so
 }
 contains(ANDROID_TARGET_ARCH,arm64-v8a) {
-    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL-for-Android-Prebuilt-master/openssl-1.1.1/arm64-v8a/lib/libcrypto.so
-    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/OpenSSL-for-Android-Prebuilt-master/openssl-1.1.1/arm64-v8a/lib/libssl.so
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/openssl-libraries/arm64/libcrypto.so
+    ANDROID_EXTRA_LIBS += /Users/jonathanjones-morris/Documents/Developer/openssl-libraries/arm64/libssl.so
 }

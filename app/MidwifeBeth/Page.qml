@@ -38,12 +38,15 @@ Item {
     //
     ListView {
         id: content
-        anchors.fill: parent
-        anchors.topMargin: subtitle.visible ? subtitleContainer.height + 4 : 4
+        anchors.top: subtitle.visible ? subtitleContainer.bottom : parent.top
+        anchors.left: parent.left
+        anchors.bottom: hideToolbar ? parent.bottom : toolbar.top
+        anchors.right: toolbar.right
+        anchors.topMargin: 4
         spacing: 4
         clip: true
         model: blocks
-        bottomMargin: 72
+        bottomMargin: 4
         delegate: MWB.Block {
             anchors.left: parent.left
             anchors.right: parent.right
@@ -57,13 +60,50 @@ Item {
     //
     //
     //
+    Rectangle {
+        id: toolbar
+        height: 72
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        color: Colours.midGreen
+        visible: !hideToolbar
+        Label {
+            id: addBookmark
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 8
+            font.pointSize: 18
+            color: Colours.almostWhite
+            text: "add bookmark"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    let bookmark = {
+                        title: container.title,
+                        link: 'link://pages/' + filter.page_id
+                    };
+                    bookmarks.add(bookmark);
+                    bookmarks.save();
+                    addBookmark.visible = false;
+                }
+            }
+        }
+    }
+    //
+    //
+    //
     StackView.onActivating: {
-        console.log( 'Page : filter= ' + JSON.stringify(filter));
+        console.log( 'Page : filter= ' + JSON.stringify(filter) + ' title= ' + title + ' hideToolbar= ' + hideToolbar );
+        console.log( 'subtitle.text= ' + subtitle.text + ' subtitle.visible= ' +  subtitle.visible + ' subtitleContainer.bottom= ' + ( subtitleContainer.y + subtitleContainer.height ) );
         blocks.setFilter(filter);
+        let link = 'link://pages/' + filter.page_id;
+        addBookmark.visible = bookmarks.findOne({link:link}) === undefined;
     }
     //
     //
     //
     property alias title: subtitle.text
     property var filter: ({})
+    property bool hideToolbar: false
 }

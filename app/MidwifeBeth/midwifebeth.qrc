@@ -106,5 +106,7 @@
         <file>MyFamily.qml</file>
         <file>icons/chart.png</file>
         <file>controls/DataChart.qml</file>
+        <file>Bookmarks.qml</file>
+        <file>icons/main_menu.png</file>
     </qresource>
 </RCC>
