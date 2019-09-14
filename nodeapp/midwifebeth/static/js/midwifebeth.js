@@ -242,12 +242,36 @@ const midwifebeth = (() => {
                                 file.addEventListener('change', (e) => {
                                     e.preventDefault();
                                     upload(file.files,target,form.querySelector('#progress')).then( (destination) => {
+                                        //
+                                        // get target dimensions
+                                        //
+                                        if ( target.tagName.toLowerCase() === 'video' ) {
+                                           target.addEventListener( 'loadedmetadata', () => {
+                                                let width = target.videoWidth;
+                                                let height = target.videoHeight;
+                                                if ( width && height ) {
+                                                    performAction(method,url,{ width: width, height: height },true);
+                                                }
+                                            }, {once:true});
+                                        } else {
+                                            target.addEventListener( 'load', () => {
+                                                let width = target.naturalWidth;
+                                                let height = target.naturalHeight;
+                                                if ( width && height ) {
+                                                    performAction(method,url,{ width: width, height: height },true);
+                                                }
+                                            }, {once:true});
+                                        }
+                                        //
+                                        //
+                                        //
                                         target.src = destination;
                                         let method = target.getAttribute('data-method');
                                         let url = target.getAttribute('data-url');
                                         if ( method && url ) {
                                             performAction(method,url,{ content: destination });
                                         }
+                                        
                                     }).catch( (error) => {
                                         alert( error );
                                     });

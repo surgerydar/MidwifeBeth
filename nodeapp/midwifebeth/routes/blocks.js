@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 const express 	= require('express')
 const router 	= express.Router()
+const fs        = require('fs');
 
 module.exports = function( authentication, db ) {
     //
@@ -97,8 +98,31 @@ module.exports = function( authentication, db ) {
     });
 	router.delete('/:id', authentication, (req, res) => {
         let _id = db.ObjectId(req.params.id);
-		db.removeOne('blocks', {_id:_id}, {page_id:1}).then( (result) => {
-            res.redirect(303, '/pages/' + result.value.page_id );
+		db.removeOne('blocks', {_id:_id} ).then( (result) => {
+            if ( result ) {
+                if ( result.value.type === 'image' || result.value.type === 'video' ) {
+                    // TODO: delete media
+                    db.find('blocks',{content:result.value.content}).then((results) => {
+                        if ( results.length === 0 ) {
+                            let mediaPath = './static' + result.value.content;
+                            fs.unlink( mediaPath, (err) => {
+                                if ( err ) {
+                                    console.error( 'error deleting : ' + mediaPath + ' : error : ' + err );
+                                } else {
+                                    console.log( 'deleted : ' + mediaPath);
+                                }
+                            });
+                        } else {
+                            console.log( 'found some blocks with media : ' + result.content + ' : ' + JSON.stringify(results) );
+                        }
+                    }).catch((error) => {
+                        console.log( 'reserving content used elsewhere : ' + result.value.content);
+                    });
+                }
+                res.redirect(303, '/pages/' + result.value.page_id );
+            } else {
+                res.render('error',{message:'sorry we encountered problems, please refresh your browser'});
+            }
 		}).catch((error) => {
 			res.render('error',{message:error});
 		});

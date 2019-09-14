@@ -108,6 +108,7 @@ module.exports = function( passport, config, db, mailer ) {
                         if (error) { 
                             res.render('login',{error:error,username:req.body.username});
                         } else {
+                            /*
                             var redirectTo = '/'; // Set default redirect value
                             if (req.session.reqUrl) {
                                 redirectTo = req.session.reqUrl; // if our redirect value exists in the session, use that.
@@ -115,6 +116,8 @@ module.exports = function( passport, config, db, mailer ) {
                             }
                             console.log( 'login callback : redirecting to : ' + redirectTo );
                             res.redirect(redirectTo);
+                            */
+                            res.render('homepage');
                         }
                     });
                 }

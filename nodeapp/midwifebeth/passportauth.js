@@ -31,11 +31,13 @@ module.exports = function( app, db ) {
     //
     // routes
     //
+    /*
     app.get('/login', function(req, res){
         let param = req.query;
         param.title = 'Log in to Midwife Beth';
         res.render('login', param);
     });
+    */
     app.get('/logout', function(req, res){
         console.log( 'logout user : ' + JSON.stringify(req.user) + ' : xhr : ' + req.xhr );
         delete req.session.group;
@@ -69,6 +71,7 @@ module.exports = function( app, db ) {
                     //res.status(401).json({ status : 'ERROR', message : 'you have to be logged in' });
                     res.json({ status : 'ERROR', error : 'you have to be logged in' });
                 } else {
+                    /*
                     // all others are redirected to login
                     console.log( 'redirecting to login' );
                     // store original url for redirection after successful authentication
@@ -89,6 +92,12 @@ module.exports = function( app, db ) {
                     // redirect to login
                     //
                     res.redirect('/login' + query);
+                    */
+                    let param = {
+                        title : 'Log in to Midwife Beth'
+                    };
+                    res.render('login', param);
+
                 }
             }
         }

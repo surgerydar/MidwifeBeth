@@ -8,7 +8,7 @@ mixin videoBlock(data)
     video.block( src= data.content  controls )
     
 mixin linksBlock(data)
-    .links-block( data-links= data.content )
+    .links-block( data-title= data.title data-links= data.content )
     
 mixin block(data)
     //.block( style='padding: 24px 8px;' )

@@ -40,8 +40,13 @@ form#page-form( action='/pages/' + _id method='put' enctype='application/x-www-f
                         div( id= 'move-down-' + block._id class= 'downbutton black' )
                         div( id= 'reorder-' + block._id class= 'reorderbutton black' )
                     +block(block)
-        div( style="display: flex; flex-direction: row; justify-content: flex-end;" )
-            input.form-item( type='submit' value='Update' ) 
+        div( style='display: flex; flex-direction: row; justify-content: flex-end;' )
+            input.form-item( type='submit' value='Update' )
+            
+        #page-preview( style='visibility: hidden; position: fixed; top: 0px; bottom: 0px; right: 0px; overflow: hidden;' )
+            #page-preview-content( style='position: absolute; top: 0px; bottom: 0px; right: 0px; overflow-x: hidden; overflow-y: auto;')
+            #page-preview_close( class='' )
+            
 script.
     let blockList = content.querySelector('#block-list');
     if ( blockList ) {
@@ -103,6 +108,12 @@ script.
                 //
                 let linksBlock = block.querySelector('.links-block');
                 if ( linksBlock ) {
+                    let linksTitle = linksBlock.getAttribute('data-title');
+                    if ( linksTitle ) {
+                        let title = document.createElement('h3');
+                        title.innerHTML = linksTitle;
+                        linksBlock.appendChild(title);
+                    }
                     let linksData = linksBlock.getAttribute('data-links');
                     if ( linksData ) {
                         let links = JSON.parse( linksData );

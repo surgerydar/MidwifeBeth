@@ -109,7 +109,7 @@ module.exports = function( authentication, db ) {
 	router.delete('/:id', authentication, (req, res) => {
         let _id = db.ObjectId(req.params.id);
 		db.removeOne('pages', {_id:_id}, {section_id:1}).then((result) => {
-			//renderPages(res);
+            // TODO: delete all blocks
             console.log( 'DELETE : /pages/' + req.params.id + ' : ' + JSON.stringify(result) );
             res.redirect(303,'/sections/' + result.value.section_id );
 		}).catch((error) => {
