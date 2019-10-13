@@ -75,7 +75,7 @@ Item {
                     if ( end - start > 1 ) {
                         let json = current.substring(start+1,(end - start));
                         try {
-                            //console.log('TemplatedField.parseTemplate : setting properties to : ' + json );
+                            console.log('TemplatedField.parseTemplate : setting properties to : ' + json );
                             properties = JSON.parse(json);
                         } catch( error ) {
                             console.log( 'TemplatedField.parseTemplate : error parsing : "' + json + '" : ' + error );

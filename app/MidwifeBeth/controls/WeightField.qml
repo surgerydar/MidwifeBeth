@@ -34,9 +34,15 @@ MWB.TextField {
         units: [
             {
                 label: 'kg',
-                template: '[{"inputMask":"09","maximumLength" : 2}].[{"inputMask":"99","maximumLength" : 2}]kg',
+                template: '[{"inputMask":"09","maximumLength" : 2}].[{"inputMask":"009","maximumLength" : 3}]kg',
                 fromDisplay: function() { return parseFloat(fields[0].text)+(parseFloat(fields[1].text)/Math.pow(10.,fields[1].text.length)); },
-                toDisplay: function(b) { fields[0].text = Math.floor(b); fields[1].text = Math.round((b-Math.floor(b)) * 10); }
+                toDisplay: function(b) {
+                    try {
+                        fields[0].text = Math.floor(b); fields[1].text = Math.round((b-Math.floor(b)) * Math.pow(10,3));
+                    } catch( error ) {
+                        console.log( 'WeightField.toDisplay : error = ' + error + ' b = ' + b + ' fields = ' + fields );
+                    }
+                }
             },
             {
                 label: 'lb',
@@ -65,7 +71,7 @@ MWB.TextField {
     onValueChanged: {
         switch( editor.currentUnit ) {
         case 0:
-            text = value.toFixed( 2 ) + 'kg';
+            text = value.toFixed( 3 ) + 'kg';
             break;
         case 1:
             let lb = value * 2.2046;

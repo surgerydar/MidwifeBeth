@@ -1,6 +1,37 @@
-mixin textBlockEditor( data ) 
+mixin textBlockEditor( data )
+    style(type='text/css').
+        .ql-summary:after {
+            content: 'Σ';
+            font-size: 14pt;
+        }
+        summary {
+            color: grey;
+        }
+        summary:before {
+            content: 'Σ ';
+            font-size: 9pt;
+            color: lightgrey;
+        }
+        summary:after {
+            content: ' Σ';
+            font-size: 9pt;
+            color: lightgrey;
+        }
+
     #scrolling-container( style= 'min-height: 50vh;' )
-        div#block-content( style= 'color: black; background-color: white;' data-method= 'put' data-url= '/blocks/' + data._id) !{data.content}
+        -
+            var summaryText = '';
+            var contentText = '';
+            var summaryStart = data.content.indexOf('<summary>');
+            var summaryEnd = data.content.indexOf('</summary>');
+            if ( summaryStart >= 0 && summaryEnd >= 0 ) {
+                summaryText = data.content.substring(summaryStart+'<summary>'.length,summaryEnd);
+                contentText = data.content.substring(summaryEnd+'</summary>'.length);
+            } else {
+                contentText = data.content;
+            }
+        div#block-summary( style= 'color: black; background-color: white;' data-method= 'put' data-url= '/blocks/' + data._id) !{summaryText}
+        div#block-content( style= 'color: black; background-color: white;' data-method= 'put' data-url= '/blocks/' + data._id) !{contentText}
     script.
         //
         // add custom link handling
@@ -16,6 +47,32 @@ mixin textBlockEditor( data )
         }
         Quill.register(LocalLink);
         //
+        // add summary tag
+        //
+        const BlockEmbed = Quill.import('blots/block/embed');
+        const Block = Quill.import('blots/block');
+        const Container = Quill.import('blots/container');
+        const Parchment = Quill.import('parchment');
+        const Break = Quill.import('blots/break');
+        const Inline = Quill.import('blots/inline');
+        const TextBlot = Quill.import('blots/text');
+        //
+        //
+        //
+        /*
+        class SummaryBlot extends Block { 
+            static create( value ) {
+                console.log( 'SummaryBlot.create(' + value + ')' );
+                let node = super.create();
+                return node;
+            }
+        }
+        SummaryBlot.blotName = 'summary';
+        SummaryBlot.tagName = 'summary';
+        SummaryBlot.allowedChildren = [Inline, Block, BlockEmbed, TextBlot, Container, Break]
+        Quill.register(SummaryBlot);
+        */
+        //
         //
         //
         let toolbarOptions = [
@@ -29,31 +86,53 @@ mixin textBlockEditor( data )
 
           [{ 'align': [] }],
 
+          /*['summary'],*/
+
           ['clean']
         ];
+        let quillSummary = new Quill('#block-summary', {
+          modules: {
+            toolbar: toolbarOptions
+          },
+          bounds: '#scrolling-container',
+          scrollingContainer: '#scrolling-container', 
+          placeholder: 'Block summary...',
+          theme: 'snow'
+        }); 
         let quill = new Quill('#block-content', {
           modules: {
             toolbar: toolbarOptions
           },
           bounds: '#scrolling-container',
           scrollingContainer: '#scrolling-container', 
-          placeholder: 'Compose page content...',
+          placeholder: 'Block content...',
           theme: 'snow'
         }); 
-        quill.on( 'text-change', () => {
+        let saveContent  = () => {
             let blockContent = document.querySelector('#block-content');
             if ( blockContent ) {
                 let method = blockContent.getAttribute('data-method');
                 let url = blockContent.getAttribute('data-url');
                 if ( url && method ) {
+                    let content;
+                    if ( quillSummary.getLength() > 1 ) {
+                        let summary = quillSummary.container.firstChild.innerHTML;
+                        if ( summary.startsWith('<p>') && summary.endsWith('</p>') ) {
+                            summary = summary.substring('<p>'.length,summary.length-('<p>'.length+'</p>'.length));
+                        }
+                        content = '<details open="open"><summary>' + summary + '</summary>' + quill.container.firstChild.innerHTML + '</details>';
+                    } else {
+                        content = quill.container.firstChild.innerHTML;
+                    }
                     let payload = {
-                        content: quill.container.firstChild.innerHTML
+                        content: content
                     };
                     performAction( method, url, payload, true );
                 }
             }
-            
-        });
+        }
+        quillSummary.on( 'text-change', saveContent);
+        quill.on( 'text-change', saveContent);
         //
         // hook quill tooltip
         //

@@ -1,5 +1,7 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.5
+import QtQuick.Dialogs 1.3
+import SodaControls 1.0
 
 import "../colours.js" as Colours
 import "../controls" as MWB
@@ -29,7 +31,7 @@ Item {
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
             color: Colours.almostWhite
-            text: "Growth"
+            text: "Nappy"
         }
     }
     //
@@ -45,40 +47,51 @@ Item {
     //
     //
     //
-    Column {
-        id: content
+    MWB.TimePicker {
+        id: nappyTime
+        height: 128
         anchors.top: subtitleContainer.bottom
         anchors.left: parent.left
-        anchors.bottom: toolbar.top
         anchors.right: parent.right
+        dateModel: nappyTimeModel
+    }
+    //
+    //
+    //
+    Row {
+        id: nappyContent
+        height: 64
+        anchors.top: nappyTime.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
         padding: 8
         spacing: 4
-        MWB.LengthField {
-            id: length
-            width: parent.width - 16
-            labelText: "Length"
-            placeholderText: "Length"
-            onValueChanged: {
-                growth.length = value;
+        //
+        //
+        //
+        CheckBox {
+            id: wet
+            text: "wet"
+            onCheckedChanged: {
+                nappy.wet = checked;
             }
         }
-        MWB.WeightField {
-            id: weight
-            width: parent.width - 16
-            labelText: "Weight"
-            placeholderText: "Weight"
-            onValueChanged: {
-                growth.weight = value;
+        CheckBox {
+            id: poo
+            text: "poo"
+            onCheckedChanged: {
+                nappy.poo = checked;
             }
         }
-        MWB.LengthField {
-            id: headCircumference
-            width: parent.width - 16
-            labelText: "Head Circumference"
-            placeholderText: "Circumference"
-            onValueChanged: {
-                growth.headCircumference = value;
-            }
+    }
+    MWB.TextArea {
+        id: description
+        anchors.top: nappyContent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: toolbar.top
+        labelText: "Notes"
+        onTextChanged: {
+            nappy.description = text;
         }
     }
     //
@@ -120,7 +133,7 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     if ( save ) {
-                        save( growth );
+                        save( nappy );
                     } else {
                         stack.pop();
                     }
@@ -131,15 +144,26 @@ Item {
     //
     //
     //
-    onGrowthChanged: {
-        if ( growth.length ) length.value = growth.length;
-        if ( growth.weight ) weight.value = growth.weight;
-        if ( growth.headCircumference ) headCircumference.value = growth.headCircumference;
+    onNappyChanged: {
+        console.log( "nappy=" + nappy );
+        wet.checked = nappy.wet || false;
+        poo.checked = nappy.poo || false;
+        description.text = nappy.description || "";
+        nappyTimeModel.date = nappy.time ? new Date( nappy.time ) : new Date();
+    }
+    //
+    //
+    //
+    DateModel {
+        id: nappyTimeModel
+        onDateChanged: {
+            nappy.time = nappyTimeModel.date.getTime();
+        }
     }
     //
     //
     //
     property var save: null
     property var cancel: null
-    property var growth: ({})
+    property var nappy: ({})
 }

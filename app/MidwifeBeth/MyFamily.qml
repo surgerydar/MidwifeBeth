@@ -42,6 +42,7 @@ Item {
         spacing: 4
         clip: true
         model: babies
+        toolbar: true
         delegate: MWB.EditableListItem {
             id: delegateContainer
             width: parent.width

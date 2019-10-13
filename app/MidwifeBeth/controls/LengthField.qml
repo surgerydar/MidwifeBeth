@@ -35,15 +35,15 @@ MWB.TextField {
         units: [
             {
                 label: 'cm',
-                template: '[{"inputMask":"09","maximumLength" : 2}].[{"inputMask":"99","maximumLength" : 2}]cm',
+                template: '[{"inputMask":"09","maximumLength" : 2}].[{"inputMask":"009","maximumLength" : 3}]cm',
                 fromDisplay: function() { return parseFloat(fields[0].text)+(parseFloat(fields[1].text)/Math.pow(10.,fields[1].text.length)); },
-                toDisplay: function(b) { fields[0].text = Math.floor(b); fields[1].text = Math.round((b-Math.floor(b)) * 10); }
+                toDisplay: function(b) { if ( b === undefined ) return; fields[0].text = Math.floor(b); fields[1].text = Math.round((b-Math.floor(b)) * Math.pow(10,3)); }
             },
             {
                 label: 'inches',
-                template: '[{"inputMask":"09","maximumLength" : 2}].[{"inputMask":"09","maximumLength" : 2}]"',
+                template: '[{"inputMask":"09","maximumLength" : 2}].[{"inputMask":"009","maximumLength" : 3}]"',
                 fromDisplay: function() {  return (parseFloat(fields[0].text)+(parseFloat(fields[1].text)/Math.pow(10.,fields[1].text.length))) * 2.54; },
-                toDisplay: function(b) { let inches = b / 2.54; fields[0].text = Math.floor(inches); fields[1].text = Math.round((inches-Math.floor(inches)) * 10); }
+                toDisplay: function(b) { let inches = b / 2.54; fields[0].text = Math.floor(inches); fields[1].text = Math.round((inches-Math.floor(inches)) * Math.pow(10,3)); }
             }
         ]
         onFieldFocusChanged: function(hasFocus) {
@@ -66,10 +66,10 @@ MWB.TextField {
     onValueChanged: {
         switch( editor.currentUnit ) {
         case 0:
-            text = value.toFixed( 2 ) + 'cm';
+            text = value.toFixed( 3 ) + 'cm';
             break;
         case 1:
-            text = ( value / 2.54 ).toFixed( 2 ) + '"';
+            text = ( value / 2.54 ).toFixed( 3 ) + '"';
             break;
         }
     }

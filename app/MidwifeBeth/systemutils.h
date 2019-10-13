@@ -44,6 +44,10 @@ public slots:
     //
     qreal pointToPixel( qreal point );
     qreal pixelToPoint( qreal pixel );
+    //
+    //
+    //
+    int textHeight( const QString &text, const QFont &font, const int maxWidth );
 };
 
 #endif // SYSTEMUTILS_H

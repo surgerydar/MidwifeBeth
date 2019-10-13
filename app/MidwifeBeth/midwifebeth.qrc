@@ -108,5 +108,7 @@
         <file>controls/DataChart.qml</file>
         <file>Bookmarks.qml</file>
         <file>icons/main_menu.png</file>
+        <file>controls/NappyEditor.qml</file>
+        <file>controls/NappyBlock.qml</file>
     </qresource>
 </RCC>

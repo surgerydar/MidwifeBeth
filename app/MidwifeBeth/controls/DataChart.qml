@@ -54,6 +54,7 @@ Item {
 
         Shape {
             id: chart
+            clip: true
             Layout.fillHeight: true
             Layout.fillWidth: true
         }
@@ -88,6 +89,7 @@ Item {
             fillColor: "transparent"
             strokeColor: Colours.almostBlack
             strokeWidth: 3
+            capStyle: ShapePath.RoundCap
         }
     }
     Component {
@@ -117,7 +119,7 @@ Item {
                         horizontalAlignment: Label.AlignRight
                         verticalAlignment: Label.AlignVCenter
                         color: container.colour
-                        text: Math.round( ( ( index / container.tickCount ) * ( container.maxValue - container.minValue ) + container.minValue ) ) + container.units
+                        text: Math.round( container.maxValue - ( ( ( ( index + 1 ) / container.tickCount ) * ( container.maxValue - container.minValue ) ) ) )+ container.units
                         Component.onCompleted: {
                             container.implicitWidth = Math.max(container.implicitWidth,contentWidth+8);
                         }

@@ -108,7 +108,7 @@ void CachedTee::processInput() {
     //
     qint64 bytesAvailable = m_input->bytesAvailable();
     if ( bytesAvailable > 0 ) {
-        qDebug() << "CachedTee::processInput : " << bytesAvailable << " bytes";
+        //qDebug() << "CachedTee::processInput : " << bytesAvailable << " bytes";
 
         QByteArray buffer(static_cast<int>(bytesAvailable),0);
         qint64 bytesRead = m_input->read( buffer.data(), bytesAvailable );
@@ -125,7 +125,7 @@ void CachedTee::processInput() {
         m_bufferGuard.lock();
         m_buffer.append(buffer);
         m_bufferGuard.unlock();
-        qDebug() << "CachedTee::processInput : buffer size : " << m_buffer.size();
+        //qDebug() << "CachedTee::processInput : buffer size : " << m_buffer.size();
         //
         //
         //

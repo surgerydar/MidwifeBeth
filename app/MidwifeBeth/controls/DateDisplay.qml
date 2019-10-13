@@ -69,7 +69,7 @@ Item {
         fontSizeMode: Label.Fit
         verticalAlignment: Label.AlignVCenter
         horizontalAlignment: Label.AlignLeft
-        text: Qt.formatTime(dateModel.date,'hh:mm ap');
+        text: Qt.formatTime(dateModel.date,displayType === TimePicker.DisplayType.TwelveHour ? 'hh:mm ap' : 'hh:mm' );
         MouseArea {
             anchors.fill: parent
             onClicked: {
@@ -86,4 +86,5 @@ Item {
     }
     property int selected: DateDisplay.Field.Date
     property DateModel dateModel: DateModel {}
+    property int displayType: TimePicker.DisplayType.TwentyFourHour
 }

@@ -7,6 +7,7 @@
 #include <QMimeType>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QFontMetrics>
 
 #include "systemutils.h"
 
@@ -125,3 +126,9 @@ qreal SystemUtils::pixelToPoint( qreal pixel ) {
     qreal dpi = QGuiApplication::primaryScreen()->physicalDotsPerInch();
     return pixel*72/dpi;
 }
+
+int SystemUtils::textHeight( const QString &text, const QFont &font, const int maxWidth ) {
+    QFontMetrics metrics(font);
+    return metrics.boundingRect(0,0,maxWidth,10000, Qt::TextWordWrap, text).height();
+}
+

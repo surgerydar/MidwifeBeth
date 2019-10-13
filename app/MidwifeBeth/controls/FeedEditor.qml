@@ -120,7 +120,7 @@ Item {
             id: breastOptions
             Column {
                 anchors.fill: parent
-                padding: 8
+                //padding: 8
                 spacing: 4
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter

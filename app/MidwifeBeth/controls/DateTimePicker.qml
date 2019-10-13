@@ -17,6 +17,7 @@ Rectangle {
         anchors.right: parent.right
         height: ( container.height - footer.height ) / 3
         dateModel: dateModel
+        displayType: container.displayType
         onSelectedChanged: {
             switch( selected ) {
             case DateDisplay.Field.Date:
@@ -95,6 +96,7 @@ Rectangle {
                 id: timePicker
                 anchors.fill: parent
                 dateModel: dateModel
+                displayType: container.displayType
             }
         }
     }
@@ -158,7 +160,19 @@ Rectangle {
     DateModel {
         id: dateModel
     }
+    //
+    //
+    //
+    enum ActivePicker {
+        Date,
+        Time
+    }
+    //
+    //
+    //
     property alias date: dateModel.date
     property var save: null
     property var cancel: null
+    property int displayType: TimePicker.DisplayType.TwentyFourHour
+    property alias activePicker: editorSelect.currentIndex
 }

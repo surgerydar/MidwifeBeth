@@ -92,7 +92,7 @@ MWB.HorizontalListView {
                 onClicked: {
                     stack.push("qrc:///controls/DataChart.qml", {
                                    title: "Growth",
-                                   dataSets: [ {key:"height",label:"Height", units: "cm", min: 44.0, max: 84.0 }, {key:"weight",label:"Weight", units: "kg", min: 0.5, max: 14.0 }, {key:"headDiameter",label:"Head Diameter", units: "cm", min: 31.0, max: 50.0 } ], // TODO: the min/max values derived from centiles for age range
+                                   dataSets: [ {key:"length",label:"Length", units: "cm", min: 44.0, max: 84.0 }, {key:"weight",label:"Weight", units: "kg", min: 0.5, max: 14.0 }, {key:"headCircumference",label:"Head Circumference", units: "cm", min: 31.0, max: 50.0 } ], // TODO: the min/max values derived from centiles for age range
                                    chartData: media.growth
                                });
                 }

@@ -30,9 +30,9 @@ Item {
         spacing: 4
         Tumbler {
             id: hourPicker
-            width: ( parent.width - 8 ) / 3
+            width: displayType === TimePicker.DisplayType.TwelveHour ? ( parent.width - 8 ) / 3 : ( parent.width - 4 ) / 2
             height: parent.height
-            model: [12,1,2,3,4,5,6,7,8,9,10,11]
+            model: displayType === TimePicker.DisplayType.TwelveHour ? [12,1,2,3,4,5,6,7,8,9,10,11] : 24
             //
             //
             //
@@ -43,12 +43,19 @@ Item {
             delegate: numberDelegate
             onCurrentIndexChanged: {
                 if ( !moving ) return;
-                dateModel.hour = currentIndex + ( ampmPicker.currentIndex === 1 ? 12 : 0 );
+                switch ( displayType ) {
+                case TimePicker.DisplayType.TwelveHour:
+                    dateModel.hour = currentIndex + ( ampmPicker.currentIndex === 1 ? 12 : 0 );
+                    break;
+                case TimePicker.DisplayType.TwentyFourHour:
+                    dateModel.hour = currentIndex;
+                    break;
+                }
             }
         }
         Tumbler {
             id: minutePicker
-            width: ( parent.width - 8 ) / 3
+            width: displayType === TimePicker.DisplayType.TwelveHour ? ( parent.width - 8 ) / 3 : ( parent.width - 4 ) / 2
             height: parent.height
             model: 60
             //
@@ -69,6 +76,7 @@ Item {
             width: ( parent.width - 8 ) / 3
             height: parent.height
             model: ["AM","PM"]
+            visible: displayType === TimePicker.DisplayType.TwelveHour
             //
             //
             //
@@ -95,17 +103,39 @@ Item {
     //
     //
     function resetDisplay() {
-        hourPicker.currentIndex = dateModel.hour >= 11 ? dateModel.hour - 12 : dateModel.hour;
-        minutePicker.currentIndex = dateModel.minute;
-        ampmPicker.currentIndex = dateModel.hour >= 11 ? 1 : 0
-    }
+        switch ( displayType ) {
+        case TimePicker.DisplayType.TwelveHour:
+            hourPicker.currentIndex = dateModel.hour >= 11 ? dateModel.hour - 12 : dateModel.hour;
+            minutePicker.currentIndex = dateModel.minute;
+            ampmPicker.currentIndex = dateModel.hour >= 11 ? 1 : 0
+            break;
+        case TimePicker.DisplayType.TwentyFourHour:
+            hourPicker.currentIndex = dateModel.hour;
+            minutePicker.currentIndex = dateModel.minute;
+            break;
+        }
 
+    }
+    //
+    //
+    //
     onDateModelChanged: {
         resetDisplay();
     }
     Component.onCompleted: {
         resetDisplay();
     }
+    //
+    //
+    //
+    enum DisplayType {
+        TwelveHour,
+        TwentyFourHour
+    }
+    //
+    //
+    //
     property bool blockUpdate: false
     property DateModel dateModel: DateModel {}
+    property int displayType: TimePicker.DisplayType.TwentyFourHour
 }

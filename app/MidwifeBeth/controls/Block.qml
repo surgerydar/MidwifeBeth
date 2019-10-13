@@ -59,23 +59,16 @@ Item {
             }
         }
     }
-
     //
     //
     //
     Component.onCompleted: {
-        /*
-        blockLoader.sourceComponent = type === "video" ? video : type === "image" ? image : type === "links" ? links : text;
-        */
         blockLoader.source = blockSource();
     }
     //
     //
     //
     onTypeChanged: {
-        /*
-        blockLoader.sourceComponent = type === "video" ? video : type === "image" ? image : type === "links" ? links : text;
-        */
         blockLoader.source = blockSource();
     }
     onMediaChanged: {
@@ -101,13 +94,11 @@ Item {
     }
 
     function calculateHeight() {
-        //console.log( 'Block : calculating height using width/height=' + ( contentHeight && contentWidth ) );
         if ( contentHeight && contentWidth ) {
             return width * ( contentHeight / contentWidth ) + 16;
         }
         return blockLoader.item ? Math.max(64,blockLoader.item.height) : 64
     }
-
     function editContent() {
         if ( blockLoader.status === Loader.Ready && blockLoader.item.editContent ) {
             blockLoader.item.editContent();
@@ -115,7 +106,6 @@ Item {
         }
         return false;
     }
-
     //
     //
     //

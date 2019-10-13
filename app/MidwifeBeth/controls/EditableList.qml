@@ -14,9 +14,10 @@ Item {
         anchors.fill: parent
         clip: true
         spacing: 4
-        /*
+        bottomMargin: container.toolbar ? 76. : 0.
         footerPositioning: ListView.OverlayFooter
         footer: MWB.EditableListToolbar {
+            visible: container.toolbar
             editable: container.editable
             onAdd: {
                 addItem();
@@ -30,7 +31,7 @@ Item {
                 }
             }
         }
-        */
+
     }
     //
     //
@@ -65,5 +66,6 @@ Item {
     property alias section: listView.section
     property alias emptyPrompt: emptyPromptLabel.text
     property bool editable: listView.count > 0
+    property bool toolbar: false
 }
 

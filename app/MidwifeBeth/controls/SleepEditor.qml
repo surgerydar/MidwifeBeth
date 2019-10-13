@@ -67,7 +67,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    stack.push("qrc:///controls/DateTimePicker.qml", { date: startTime.value, cancel: ()=>{stack.pop();}, save: (date)=>{startTime.value=date; stack.pop();} } );
+                    stack.push("qrc:///controls/DateTimePicker.qml", { date: startTime.value, activePicker: DateTimePicker.ActivePicker.Time, cancel: ()=>{stack.pop();}, save: (date)=>{startTime.value=date; stack.pop();} } );
                 }
             }
             onValueChanged: {
@@ -85,7 +85,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    stack.push("qrc:///controls/DateTimePicker.qml", { date: endTime.value, cancel: ()=>{stack.pop();}, save: (date)=>{endTime.value=date; stack.pop();} } );
+                    stack.push("qrc:///controls/DateTimePicker.qml", { date: endTime.value, activePicker: DateTimePicker.ActivePicker.Time, cancel: ()=>{stack.pop();}, save: (date)=>{endTime.value=date; stack.pop();} } );
                 }
             }
             onValueChanged: {
