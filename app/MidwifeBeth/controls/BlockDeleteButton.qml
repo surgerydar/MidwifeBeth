@@ -6,7 +6,7 @@ import "../controls" as MWB
 
 MWB.TitleBox {
     id: container
-    text: "x"
+    text: "X"
     z: 2
     MouseArea {
         anchors.fill: parent

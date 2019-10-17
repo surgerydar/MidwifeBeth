@@ -65,6 +65,10 @@ MWB.TemplatedField {
             units[currentUnit].toDisplay(value);
         }
     }
+    onUnitsChanged: {
+        if ( currentUnit >= units.length ) currentUnit = 0;
+        initialiseUnitDisplay();
+    }
     //
     //
     //

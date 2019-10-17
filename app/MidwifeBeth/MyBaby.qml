@@ -184,8 +184,9 @@ Item {
         for ( let i = 0; i < contentView.model.count; i++ ) {
             if ( contentView.model.get(i).type === type ) {
                 // add entry
-                contentView.itemAtIndex(i).editContent();
+                //contentView.itemAtIndex(i).editContent();
                 contentView.positionViewAtIndex(i,ListView.Beginning);
+                Qt.callLater(()=>{contentView.itemAtIndex(i).editContent();});
                 return;
             }
         }

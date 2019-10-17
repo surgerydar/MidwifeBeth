@@ -77,38 +77,4 @@ MWB.TextField {
     //
     //
     property alias value: editor.value
-    //
-    //
-    //
-    /*
-    function convertValue() {
-        let majorValue = parseFloat(major.text);
-        if ( !isNaN(majorValue) ) {
-            switch( field.displayUnits ) {
-            case 'inches' :
-                field.value = majorValue / 2.54;
-                break;
-            case 'cm' :
-                field.value = majorValue;
-                break;
-            }
-        }
-        visible = false;
-    }
-    function formatDisplay() {
-        if ( value > 0. ) {
-            switch ( displayUnits ) {
-            case 'inches' :
-                let inches = value * 2.54;
-                text = inches.toFixed(2) + '"';
-                break;
-            case 'cm' :
-                text = value.toFixed(2) + 'cm'
-                break;
-            }
-        } else {
-            text = "";
-        }
-    }
-    */
 }

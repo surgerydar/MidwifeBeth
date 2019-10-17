@@ -110,5 +110,8 @@
         <file>icons/main_menu.png</file>
         <file>controls/NappyEditor.qml</file>
         <file>controls/NappyBlock.qml</file>
+        <file>controls/MedicationEditor.qml</file>
+        <file>controls/MedicationBlock.qml</file>
+        <file>icons/medication.png</file>
     </qresource>
 </RCC>

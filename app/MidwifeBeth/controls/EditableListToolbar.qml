@@ -17,6 +17,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         radius: 32
         color: Colours.darkOrange
+        opacity: .8
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter

@@ -29,7 +29,7 @@ Item {
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
             color: Colours.almostWhite
-            text: "Appointment"
+            text: "Medication"
         }
     }
     //
@@ -57,10 +57,19 @@ Item {
         //
         //
         MWB.TextField {
+            id: name
+            width: parent.width
+            placeholderText: "Name of medicine"
+            labelText: "Name"
+            onTextChanged: {
+                medication.name = text;
+            }
+        }
+        MWB.TextField {
             id: time
             width: parent.width
-            placeholderText: "Appointment date"
-            labelText: "Date"
+            placeholderText: "Date / time"
+            labelText: "Start date"
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -69,26 +78,33 @@ Item {
             }
             onValueChanged: {
                 text = Qt.formatDateTime(value,'MMMM dd yyyy hh:mm ap')
-                appointment.time = value.getTime();
+                medication.time = value.getTime();
             }
             property var value: null
         }
         MWB.TextField {
-            id: location
+            id: dose
             width: parent.width
-            placeholderText: "Appointment location"
-            labelText: "Location"
+            placeholderText: "Dosage e.g. 20mg, 20ml, 2 tablets"
             onTextChanged: {
-                appointment.location = text;
+                medication.dose = text;
+            }
+        }
+        MWB.TextField {
+            id: repeats
+            width: parent.width
+            placeholderText: "Repeats e.g. twice a day, when required"
+            onTextChanged: {
+                medication.repeats = text;
             }
         }
         MWB.TextArea {
-            id: description
+            id: notes
             width: parent.width
             height: 256
-            labelText: "Description"
+            labelText: "Notes"
             onTextChanged: {
-                appointment.description = text;
+                medication.notes = text;
             }
         }
     }
@@ -131,7 +147,7 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     if ( save ) {
-                        save( appointment );
+                        save( medication );
                     } else {
                         stack.pop();
                     }
@@ -142,15 +158,17 @@ Item {
     //
     //
     //
-    onAppointmentChanged: {
-        description.text = appointment.description || "";
-        location.text = appointment.location || "";
-        time.value = appointment.time ? new Date(appointment.time) : new Date();
+    onMedicationChanged: {
+        notes.text = medication.notes || "";
+        repeats.text = medication.repeats || "";
+        dose.text = medication.dose || "";
+        name.text = medication.name || "";
+        time.value = medication.time ? new Date(medication.time) : new Date();
     }
     //
     //
     //
     property var save: null
     property var cancel: null
-    property var appointment: ({})
+    property var medication: ({})
 }
