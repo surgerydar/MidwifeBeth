@@ -14,10 +14,15 @@ MWB.HorizontalListView {
     delegate: Item {
         height: parent.height
         width: height
+        Rectangle {
+            anchors.fill: parent
+            color: Colours.almostWhite
+        }
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectFit
-            source: feedIcon(model.type);
+            opacity: .25
+            source: "/icons/FEED ICON 96 BOX.png";
         }
         MWB.TitleBox {
             anchors.bottom: parent.bottom

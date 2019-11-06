@@ -107,9 +107,7 @@ Item {
         color: Colours.midGreen
         Label {
             id: addBookmark
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: 8
+            anchors.centerIn: parent
             font.pointSize: 18
             color: Colours.almostWhite
             text: editing ? "done" : "edit"

@@ -7,7 +7,7 @@ import "../styles.js" as Styles
 Label {
     id: control
     height: 48
-    color: Colours.veryDarkSlate
+    color: Colours.almostBlack
     padding: 8
     verticalAlignment: Label.AlignVCenter
     horizontalAlignment: Label.AlignHCenter

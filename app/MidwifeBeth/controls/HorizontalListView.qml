@@ -35,23 +35,14 @@ Item {
         anchors.top: background.top
         anchors.bottom: background.bottom
         anchors.right: background.right
-        Rectangle {
+        MWB.RoundButton {
             width: 32
             height: width
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            radius: width / 2
-            color: Colours.darkOrange
-            Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                source: "../icons/add.png"
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    add();
-                }
+            image: "/icons/PLUS ICON 96 BOX.png"
+            onClicked: {
+                add();
             }
         }
     }

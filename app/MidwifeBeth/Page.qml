@@ -68,25 +68,20 @@ Item {
         anchors.right: parent.right
         color: Colours.midGreen
         visible: !hideToolbar
-        Label {
-            id: addBookmark
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: 8
-            font.pointSize: 18
-            color: Colours.almostWhite
-            text: "add bookmark"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    let bookmark = {
-                        title: container.title,
-                        link: 'link://pages/' + filter.page_id
-                    };
-                    bookmarks.add(bookmark);
-                    bookmarks.save();
-                    addBookmark.visible = false;
-                }
+        MWB.RoundButton {
+            id: bookmarkButton
+            width: 64
+            height: width
+            anchors.centerIn: parent
+            image: "/icons/BOOKMARK ICON 96 BOX.png"
+            onClicked: {
+                let bookmark = {
+                    title: container.title,
+                    link: 'link://pages/' + filter.page_id
+                };
+                bookmarks.add(bookmark);
+                bookmarks.save();
+                addBookmark.visible = false;
             }
         }
     }
@@ -98,7 +93,7 @@ Item {
         console.log( 'subtitle.text= ' + subtitle.text + ' subtitle.visible= ' +  subtitle.visible + ' subtitleContainer.bottom= ' + ( subtitleContainer.y + subtitleContainer.height ) );
         blocks.setFilter(filter);
         let link = 'link://pages/' + filter.page_id;
-        addBookmark.visible = bookmarks.findOne({link:link}) === undefined;
+        bookmarkButton.visible = bookmarks.findOne({link:link}) === undefined;
     }
     //
     //

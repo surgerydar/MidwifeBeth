@@ -14,10 +14,15 @@ MWB.HorizontalListView {
     delegate: Item {
         height: parent.height
         width: height
+        Rectangle {
+            anchors.fill: parent
+            color: Colours.almostWhite
+        }
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectFit
-            source: "/icons/growth.png"
+            opacity: .25
+            source: "/icons/GRAPH ICON 96 BOX.png";
         }
         Column {
             anchors.fill: parent
@@ -73,48 +78,19 @@ MWB.HorizontalListView {
         }
     }
     tools: [
-        Rectangle {
+        MWB.RoundButton {
             width: 32
             height: width
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 8
-            radius: width / 2
-            color: Colours.darkOrange
-            Image {
-                anchors.fill: parent
-                anchors.margins: 4
-                fillMode: Image.PreserveAspectFit
-                source: "../icons/chart.png"
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    stack.push("qrc:///controls/DataChart.qml", {
-                                   title: "Growth",
-                                   dataSets: [ {key:"length",label:"Length", units: "cm", min: 44.0, max: 84.0 }, {key:"weight",label:"Weight", units: "kg", min: 0.5, max: 14.0 }, {key:"headCircumference",label:"Head Circumference", units: "cm", min: 31.0, max: 50.0 } ], // TODO: the min/max values derived from centiles for age range
-                                   chartData: media.growth
-                               });
-                }
-            }
-        },
-        Rectangle {
-            width: 32
-            height: width
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            radius: width / 2
-            color: Colours.darkOrange
-            Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                source: "../icons/add.png"
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    add();
-                }
+            image: "/icons/GRAPH ICON 96 BOX.png"
+            onClicked: {
+                stack.push("qrc:///controls/DataChart.qml", {
+                               title: "Growth",
+                               dataSets: [ {key:"length",label:"Length", units: "cm", min: 44.0, max: 84.0 }, {key:"weight",label:"Weight", units: "kg", min: 0.5, max: 14.0 }, {key:"headCircumference",label:"Head Circumference", units: "cm", min: 31.0, max: 50.0 } ], // TODO: the min/max values derived from centiles for age range
+                               chartData: media.growth
+                           });
             }
         }
     ]

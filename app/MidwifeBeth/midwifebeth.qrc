@@ -113,5 +113,59 @@
         <file>controls/MedicationEditor.qml</file>
         <file>controls/MedicationBlock.qml</file>
         <file>icons/medication.png</file>
+        <file>controls/ScheduleEditor.qml</file>
+        <file>controls/RoundButton.qml</file>
+        <file>icons/BACK ARROW ICON 96 BOX.png</file>
+        <file>icons/BACK ARROW ICON 96 BOX@2x.png</file>
+        <file>icons/BOOKMARK ICON 70% TRANSPARENT 96 BOX.png</file>
+        <file>icons/BOOKMARK ICON 70% TRANSPARENT 96 BOX@2x.png</file>
+        <file>icons/BOOKMARK ICON 96 BOX.png</file>
+        <file>icons/BOOKMARK ICON 96 BOX@2x.png</file>
+        <file>icons/CAMERA ICON 96 BOX.png</file>
+        <file>icons/CAMERA ICON 96 BOX@2x.png</file>
+        <file>icons/EDIT ICON 96 BOX.png</file>
+        <file>icons/EDIT ICON 96 BOX@2x.png</file>
+        <file>icons/GALLERY ICON 96 BOX.png</file>
+        <file>icons/GALLERY ICON 96 BOX@2x.png</file>
+        <file>icons/INFO ICON 96 BOX.png</file>
+        <file>icons/INFO ICON 96 BOX@2x.png</file>
+        <file>icons/LESS ICON 96 BOX.png</file>
+        <file>icons/LESS ICON 96 BOX@2x.png</file>
+        <file>icons/MENU ICON 96 BOX.png</file>
+        <file>icons/MENU ICON 96 BOX @2x.png</file>
+        <file>icons/MORE ICON 96 BOX.png</file>
+        <file>icons/MORE ICON 96 BOX@2x.png</file>
+        <file>icons/MY FAMILY ICON 96 BOX.png</file>
+        <file>icons/MY FAMILY ICON 96 BOX@2x.png</file>
+        <file>icons/PLUS ICON 96 BOX.png</file>
+        <file>icons/PLUS ICON 96 BOX@2x.png</file>
+        <file>icons/SETTINGS ICON 96 BOX.png</file>
+        <file>icons/SETTINGS ICON 96 BOX@2x.png</file>
+        <file>icons/FLASH AUTO ICON 96 BOX.png</file>
+        <file>icons/FLASH AUTO ICON 96 BOX @2x.png</file>
+        <file>icons/FLASH OFF ICON 96 BOX.png</file>
+        <file>icons/FLASH OFF ICON 96 BOX @2x.png</file>
+        <file>icons/FLASH ON ICON 96 BOX.png</file>
+        <file>icons/FLASH ON ICON 96 BOX @2x.png</file>
+        <file>icons/APPOINTMENT ICON 96 BOX.png</file>
+        <file>icons/APPOINTMENT ICON 96 BOX @2x.png</file>
+        <file>icons/TOILET ICON 96 BOX.png</file>
+        <file>icons/TOILET ICON 96 BOX @2x.png</file>
+        <file>icons/TIMER ICON 96 BOX.png</file>
+        <file>icons/TIMER ICON 96 BOX @2x.png</file>
+        <file>icons/SLEEP ICON 96 BOX.png</file>
+        <file>icons/SLEEP ICON 96 BOX @2x.png</file>
+        <file>icons/MILESTONE ICON 96 BOX.png</file>
+        <file>icons/MILESTONE ICON 96 BOX @2x.png</file>
+        <file>icons/GRAPH ICON 96 BOX.png</file>
+        <file>icons/GRAPH ICON 96 BOX@2x.png</file>
+        <file>icons/FEED ICON 96 BOX.png</file>
+        <file>icons/FEED ICON 96 BOX @2x.png</file>
+        <file>icons/MEDICATION ICON 96 BOX.png</file>
+        <file>icons/MEDICATION ICON 96 BOX@2x.png</file>
+        <file>icons/CAMERA SHOOT ICON 96 BOX.png</file>
+        <file>icons/CAMERA SHOOT ICON 96 BOX @2x.png</file>
+        <file>icons/CAMERA SWITCH ICON 96 BOX.png</file>
+        <file>icons/CAMERA SWITCH ICON 96 BOX @2x.png</file>
     </qresource>
 </RCC>

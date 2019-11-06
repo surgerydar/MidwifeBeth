@@ -62,6 +62,52 @@ function getEndOfWeek( start ) {
     return temp;
 }
 
+function getDateSpan(firstDate, secondDate) {
+    console.log( 'getDateSpan : ' + firstDate.toString() + ' >> ' + secondDate.toString() );
+    var diff_year  = parseInt(secondDate.getFullYear() - firstDate.getFullYear());
+    var diff_month = parseInt(secondDate.getMonth() - firstDate.getMonth());
+    var diff_day   = parseInt(secondDate.getDate() - firstDate.getDate());
+
+    var span = {};
+
+    while(true) {
+        span = {};
+        span["y"] = diff_year;
+
+        if(diff_month < 0) {
+            diff_year -= 1;
+            diff_month += 12;
+            continue;
+        }
+        span["m"] = diff_month;
+
+        if(diff_day < 0) {
+            diff_month -= 1;
+            diff_day += monthLength(secondDate.getFullYear(), secondDate.getMonth());
+            continue;
+        }
+        span["d"] = diff_day;
+        break;
+    }
+
+    return span;
+}
+
+function monthLength(year, month) {
+    var hour = 1000 * 60 * 60;
+    var day = hour * 24;
+    var this_month = new Date(year, month, 1);
+    var next_month = new Date(year, month + 1, 1);
+    var length = Math.ceil((next_month.getTime() - this_month.getTime() - hour)/day);
+
+    return length;
+}
+
+function formatDateSpan(firstDate, secondDate) {
+    let span = getDateSpan(firstDate,secondDate);
+    return ( span['y'] && span['y'] > 0 ? span['y'] + ' years ' : '' ) + ( span['m'] && span['m'] > 0 ? span['m'] + ' months ' : '' ) + ( span['d'] && span['d'] > 0 ? span['d'] + ' days' : '' );
+}
+
 function formatDuration( start, end ) {
     if ( start && end && start < end ) {
         let ms  = ( end - start );
@@ -73,35 +119,6 @@ function formatDuration( start, end ) {
     return '';
 }
 
-function formatAgeAndGender( profile ) {
-    console.log( 'Utils.formatAgeAndGender(' + JSON.stringify(profile) + ')' );
-    return ( profile.age ?  profile.age + ' ' : '' ) + ( profile.gender === 'male' || profile.gender === 'female' ? profile.gender : '' );
-}
-
-function formatChallengeDescription( activity, repeats, frequency ) {
-    return activity + '<p><b>' + 'repeat ' + repeats + ' time' + ( repeats > 1 ? 's ' : ' ' ) + ', ' + challengeFrequencyLabel( frequency ) + '</b></p>';
-}
-
-function challengeFrequencyLabel( canonical, capitalise ) {
-    var labels = {
-        hourly : "hourly",
-        fourtimesdaily : "four times daily",
-        morningandevening : "morning and evening",
-        daily : "daily",
-        weekly : "weekly"
-    };
-    if ( labels[ canonical ] ) {
-        if ( capitalise ) {
-            return labels[ canonical ].charAt(0).toUpperCase() + labels[ canonical ].slice(1);
-        }
-        return labels[ canonical ];
-    }
-    return canonical;
-}
-
-function challengeFrequencyCanonical( label ) {
-    return label.replace(/\s+/g, '').toLowerCase();
-}
 
 function map( value, valueMin, valueMax, targetMin, targetMax ) {
     return ( ( value - valueMin ) / ( valueMax - valueMin ) ) * ( targetMax - targetMin ) + targetMin;

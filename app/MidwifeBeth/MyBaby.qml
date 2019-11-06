@@ -72,12 +72,22 @@ Item {
         //
         //
         header: MyBabyInfo {
-            profilePhoto: baby.profilePhoto ? baby.profilePhoto : "/icons/profile.png"
+            profilePhoto: baby.profilePhoto ? 'file://' + SystemUtils.documentPath(baby.profilePhoto) : "/icons/profile.png"
             firstName: baby.firstName ? baby.firstName : ""
             middleNames: baby.middleNames ? baby.middleNames : ""
             surname: baby.surname ? baby.surname : ""
             birthDateTime: baby.birthDate ? new Date(baby.birthDate) : new Date()
             birthWeight: baby.birthWeight ? baby.birthWeight : 0.
+            onProfilePhotoChanged: {
+                let newProfilePhoto    = profilePhoto.toString();
+                if ( newProfilePhoto.length > 0 ) {
+                    newProfilePhoto = newProfilePhoto.substring(newProfilePhoto.lastIndexOf('/')+1);
+                    if ( newProfilePhoto !== baby.profilePhoto ) {
+                        baby.profilePhoto   = newProfilePhoto.substring(newProfilePhoto.lastIndexOf('/')+1);
+                        container.save();
+                    }
+                }
+            }
         }
         //
         //
@@ -91,26 +101,15 @@ Item {
             //
             //
             //
-            Rectangle {
+            MWB.RoundButton {
                 id: addButton
                 width: 64
                 height: 64
-                anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                radius: 32
-                color: Colours.darkOrange
-                opacity: .8
-                Image {
-                    anchors.fill: parent
-                    anchors.margins: 8
-                    fillMode: Image.PreserveAspectFit
-                    source:  'icons/add.png'
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        addPopup.openPinned(Qt.point(container.width/2,container.height-80),MWB.PinnedPopup.PinEdge.Bottom);
-                    }
+                anchors.verticalCenter: parent.verticalCenter
+                image: "../icons/PLUS ICON 96 BOX.png"
+                onClicked: {
+                    addPopup.openPinned(Qt.point(container.width/2,container.height-80),MWB.PinnedPopup.PinEdge.Bottom);
                 }
             }
         }
@@ -204,12 +203,15 @@ Item {
         //
         // save birth info
         //
-        baby.profilePhoto   = info.profilePhoto; // TODO: convert to document path ???
-        baby.firstName      = info.firstName;
-        baby.middleNames    = info.middleNames;
-        baby.surname        = info.surname;
-        baby.birthDate      = info.birthDateTime.getTime();
-        baby.birthWeight    = info.birthWeight;
+        if ( info ) {
+            let profilePhoto    = info.profilePhoto.toString();
+            baby.profilePhoto   = profilePhoto.substring(profilePhoto.lastIndexOf('/')+1);
+            baby.firstName      = info.firstName;
+            baby.middleNames    = info.middleNames;
+            baby.surname        = info.surname;
+            baby.birthDate      = info.birthDateTime.getTime();
+            baby.birthWeight    = info.birthWeight;
+        }
         //
         // save diary
         //

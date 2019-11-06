@@ -19,7 +19,7 @@ MWB.HorizontalListView {
             id: image
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            source: model.image
+            source: 'file://' + SystemUtils.documentPath(model.image)
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -43,7 +43,7 @@ MWB.HorizontalListView {
             anchors.right: parent.right
             anchors.margins: 4
             action: function() {
-                SystemUtils.removeFile(model.image.substring('file://'.length));
+                SystemUtils.removeFile(SystemUtils.documentPath(model.image));
                 container.media.photos.splice(index,1);
                 container.updateContent();
             }
@@ -63,13 +63,15 @@ MWB.HorizontalListView {
     function editContent() {
         stack.push("qrc:///controls/PhotoChooser.qml", {
                        save: function ( source ) {
+                           /*
                            console.log( 'adding photo : ' + source );
                            let sourceFile = source.toString().substring('file://'.length);
                            let targetFile = SystemUtils.documentDirectory() + '/' + Date.now() + sourceFile.substring(sourceFile.lastIndexOf('.'));
                            console.log('PhotoBlock : moving photo from : ' + sourceFile + ' to : ' + targetFile );
                            SystemUtils.copyFile(sourceFile,targetFile);
+                           */
                            let date = new Date();
-                           let image = {image:'file://' + targetFile,caption:"", date: Qt.formatDate(date,'yyyy-MMM-dd'), time: date.getTime()};
+                           let image = {image:source.substring(source.lastIndexOf('/')+1),caption:"", date: Qt.formatDate(date,'yyyy-MMM-dd'), time: date.getTime()};
                            model.append(image);
                            media.photos.push(image);
                            console.log( 'PhotoBlock.media=' + JSON.stringify(media));

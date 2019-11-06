@@ -15,10 +15,16 @@ MWB.HorizontalListView {
     delegate: Item {
         height: parent.height
         width: height
+        Rectangle {
+            anchors.fill: parent
+            color: Colours.almostWhite
+        }
+
         Image {
             anchors.fill: parent
+            opacity: .25
             fillMode: Image.PreserveAspectFit
-            source: "/icons/sleep.png"
+            source: "/icons/SLEEP ICON 96 BOX.png"
         }
         MouseArea {
             anchors.fill: parent
@@ -41,17 +47,15 @@ MWB.HorizontalListView {
                 color: Colours.almostBlack
                 text: Utils.formatDuration(model.startTime,model.endTime)
             }
-            Image {
-                anchors.right: parent.right
-                source: "/icons/timer.png"
+            MWB.RoundButton {
+                width: 32
+                height: width
                 visible: !( model.startTime && model.endTime && model.startTime < model.endTime )
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        media.sleep[ index ].endTime = Date.now();
-                        container.model.set(index,media.sleep[ index ]);
-                        container.updateContent();
-                    }
+                image: "/icons/TIMER ICON 96 BOX.png"
+                onClicked: {
+                    media.sleep[ index ].endTime = Date.now();
+                    container.model.set(index,media.sleep[ index ]);
+                    container.updateContent();
                 }
             }
         }

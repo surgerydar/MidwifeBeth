@@ -19,6 +19,12 @@ MWB.HorizontalListView {
             anchors.fill: parent
             color: Colours.almostWhite
         }
+        Image {
+            anchors.fill: parent
+            opacity: .25
+            fillMode: Image.PreserveAspectFit
+            source: "/icons/MILESTONE ICON 96 BOX.png"
+        }
         Text {
             anchors.fill: parent
             padding: 4

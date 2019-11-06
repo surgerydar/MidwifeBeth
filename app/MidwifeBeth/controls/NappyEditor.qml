@@ -105,26 +105,7 @@ Item {
         anchors.right: parent.right
         color: Colours.midGreen
         Label {
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 8
-            font.pointSize: 18
-            color: Colours.almostWhite
-            text: "cancel"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if ( cancel ) {
-                        cancel();
-                    } else {
-                        stack.pop();
-                    }
-                }
-            }
-        }
-        Label {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.centerIn: parent
             anchors.rightMargin: 8
             font.pointSize: 18
             color: Colours.almostWhite

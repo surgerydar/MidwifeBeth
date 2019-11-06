@@ -6,6 +6,7 @@ import "colours.js" as Colours
 import "controls" as MWB
 
 Rectangle {
+    id: container
     width: parent.width
     height: childrenRect.y + childrenRect.height
     color: Colours.midGreen
@@ -24,31 +25,29 @@ Rectangle {
             height: width
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
-            Row {
+            onStatusChanged: {
+                if( status === Image.Error ) {
+                    console.log('MyBabyInfo : unable to load ' + source );
+                    source = '/icons/profile.png'
+                }
+            }
+
+            MWB.RoundButton {
+                width: 48
+                height: width
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 4
-                Button {
-                    text: "Gallery"
-                    onClicked: {
-                        imageChooser.selectImage( function ( source ) {
-                            profilePhotoDisplay.source = source;
-                        });
-                    }
-                }
-                Button {
-                    text: "Camera"
-                    onClicked: {
-                        stack.push("qrc:///controls/CameraInput.qml", {
-                                       save: function ( source ) {
-                                           profilePhotoDisplay.source = source;
-                                           stack.pop();
-                                       },
-                                       cancel: function() {
-                                           stack.pop();
-                                       }
-                                   });
-                    }
+                image: "/icons/EDIT ICON 96 BOX.png"
+                onClicked: {
+                    stack.push("qrc:///controls/PhotoChooser.qml", {
+                                   save: function ( source ) {
+                                       profilePhotoDisplay.source = 'file://' + source;
+                                       stack.pop();
+                                   },
+                                   cancel: function() {
+                                       stack.pop();
+                                   }
+                               });
                 }
             }
         }
@@ -114,11 +113,15 @@ Rectangle {
             if ( save ) {
                 save( fileUrl );
                 save = null;
+                container.profilePhotoChanged(fileUrl);
             }
         }
 
         property var save: null
     }
+    //
+    //
+    //
     property alias profilePhoto: profilePhotoDisplay.source
     property alias firstName: firstNameField.text
     property alias middleNames: middleNamesField.text

@@ -90,12 +90,19 @@ Item {
                 medication.dose = text;
             }
         }
-        MWB.TextField {
-            id: repeats
+        MWB.ScheduleEditor {
+            id: schedule
             width: parent.width
-            placeholderText: "Repeats e.g. twice a day, when required"
-            onTextChanged: {
-                medication.repeats = text;
+            height: 96
+            labelText: "Schedule"
+            onPatternElementChanged: {
+                medication.schedule = pattern;
+            }
+            onRepeatChanged: {
+                medication.repeat = repeat;
+            }
+            onNotifyChanged: {
+                medication.notify = notify;
             }
         }
         MWB.TextArea {
@@ -119,27 +126,7 @@ Item {
         anchors.right: parent.right
         color: Colours.midGreen
         Label {
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 8
-            font.pointSize: 18
-            color: Colours.almostWhite
-            text: "cancel"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if ( cancel ) {
-                        cancel();
-                    } else {
-                        stack.pop();
-                    }
-                }
-            }
-        }
-        Label {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: 8
+            anchors.centerIn: parent
             font.pointSize: 18
             color: Colours.almostWhite
             text: "save"
@@ -160,10 +147,16 @@ Item {
     //
     onMedicationChanged: {
         notes.text = medication.notes || "";
-        repeats.text = medication.repeats || "";
+        if ( medication.schedule ) {
+            schedule.pattern = medication.schedule;
+        } else {
+            medication.schedule = schedule.pattern;
+        }
         dose.text = medication.dose || "";
         name.text = medication.name || "";
         time.value = medication.time ? new Date(medication.time) : new Date();
+        schedule.repeat = medication.repeat || false;
+        schedule.notify = medication.notify || false;
     }
     //
     //

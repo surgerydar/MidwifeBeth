@@ -15,10 +15,15 @@ MWB.HorizontalListView {
     delegate: Item {
         height: parent.height
         width: height
+        Rectangle {
+            anchors.fill: parent
+            color: Colours.almostWhite
+        }
         Image {
             anchors.fill: parent
             fillMode: Image.PreserveAspectFit
-            source: "/icons/nappy.png";
+            opacity: .25
+            source: "/icons/TOILET ICON 96 BOX.png";
         }
         MWB.TitleBox {
             id: time

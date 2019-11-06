@@ -23,15 +23,9 @@ Item {
                 addItem();
             }
             onEditingChanged: {
-                for ( var i = 0; i < listView.count; i++ ) {
-                    var item = listView.itemAtIndex(i);
-                    if ( item ) {
-                        item.swipeEnabled = editing;
-                    }
-                }
+                container.editing = editing;
             }
         }
-
     }
     //
     //
@@ -66,6 +60,7 @@ Item {
     property alias section: listView.section
     property alias emptyPrompt: emptyPromptLabel.text
     property bool editable: listView.count > 0
+    property bool editing: false
     property bool toolbar: false
 }
 

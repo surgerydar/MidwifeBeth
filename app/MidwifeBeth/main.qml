@@ -14,7 +14,7 @@ ApplicationWindow {
     title: qsTr("Midwife Beth")
     color: Colours.lightGreen
     //
-    //
+    // datasources
     //
     DatabaseList {
         id: sections
@@ -52,7 +52,7 @@ ApplicationWindow {
     DatabaseList {
         id: babies
         collection: 'babies'
-        roles: [ '_id', 'firstName', 'middleNames', 'lastName', 'dob', 'tob', 'birthweight', 'gender', 'profilePhoto', 'photos', 'notes', 'data' ]
+        roles: [ '_id', 'firstName', 'middleNames', 'lastName', 'birthWeight', 'birthDate', 'gender', 'profilePhoto', 'photos', 'notes', 'data' ]
         sort: { "name": 1 }
     }
     DatabaseList {
@@ -68,7 +68,7 @@ ApplicationWindow {
         id: stack
         anchors.top: title.bottom
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
+        anchors.bottom: navigationBar.top
         anchors.right: parent.right
     }
     //
@@ -76,9 +76,9 @@ ApplicationWindow {
     //
     Rectangle {
         id: title
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: parent.top
         height: stack.depth <= 1 ? 64 : 0
         color: Colours.lightGreen
         clip: true
@@ -94,8 +94,23 @@ ApplicationWindow {
         //
         //
         //
+        MWB.RoundButton {
+            id: settingsButton
+            width: height
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.margins: 4
+            image: "/icons/SETTINGS ICON 96 BOX.png"
+        }
+        //
+        //
+        //
         Label {
-            anchors.fill: parent
+            anchors.top: parent.top
+            anchors.left: settingsButton.right
+            anchors.bottom: parent.bottom
+            anchors.right: infoButton.left
             anchors.margins: 4
             font.pixelSize: 64
             font.weight: Font.Bold
@@ -105,20 +120,74 @@ ApplicationWindow {
             color: Colours.almostWhite
             text: "Midwife Beth"
         }
+        //
+        //
+        //
+        MWB.RoundButton {
+            id: infoButton
+            width: height
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.margins: 4
+            image: "/icons/INFO ICON 96 BOX.png"
+        }
     }
     //
     //
     //
-    /*
-    Item {
-        id: toolBar
-        height: 64
+    //
+    //
+    //
+    Rectangle {
+        id: navigationBar
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-
+        height: stack.depth <= 1 ? 64 : 0
+        color: Colours.midGreen
+        clip: true
+        //
+        //
+        //
+        Behavior on height {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.InCubic
+            }
+        }
+        //
+        //
+        //
+        MWB.RoundButton {
+            id: myFamilyButton
+            width: height
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.margins: 4
+            image: "/icons/MY FAMILY ICON 96 BOX.png"
+            onClicked: {
+                stack.push("qrc:///MyFamily.qml");
+            }
+        }
+        //
+        //
+        //
+        MWB.RoundButton {
+            id: bookmarksButton
+            width: height
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.margins: 4
+            image: "/icons/BOOKMARK ICON 96 BOX.png"
+            onClicked: {
+                stack.push("qrc:///Bookmarks.qml");
+            }
+        }
     }
-    */
+    /*
     Rectangle {
         id: home
         width: 64
@@ -171,29 +240,46 @@ ApplicationWindow {
             console.log( "home.state= " + state );
         }
     }
-
-    Rectangle {
+    */
+    MWB.RoundButton {
         id: back
-        width: 64
-        height: 64
+        width: stack.depth > 1 ? 64 : 0
+        height: width
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.margins: 4
-        radius: 32
-        color: Colours.darkOrange
-        opacity: .8
         visible: stack.depth > 1
-        Image {
-            anchors.fill: parent
-            anchors.margins: 8
-            fillMode: Image.PreserveAspectFit
-            source:  'icons/left_arrow.png'
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                stack.pop();
+        image: "/icons/BACK ARROW ICON 96 BOX.png"
+        //
+        //
+        //
+        Behavior on width {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.InCubic
             }
+        }
+        onClicked: {
+            stack.pop();
+        }
+    }
+    MWB.RoundButton {
+        id: home
+        width: stack.depth > 1 ? 64 : 0
+        height: width
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: 4
+        visible: stack.depth > 1
+        image:  '/icons/MENU ICON 96 BOX.png'
+        Behavior on width {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.InCubic
+            }
+        }
+        onClicked: {
+            stack.pop(null);
         }
     }
     /*
@@ -266,6 +352,9 @@ ApplicationWindow {
     //
     MWB.ConfirmDialog {
         id: confirmDialog
+    }
+    MWB.ErrorDialog {
+        id: errorDialog
     }
     //
     //

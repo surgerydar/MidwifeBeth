@@ -8,6 +8,10 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QFontMetrics>
+#include <QImage>
+#include <QMatrix>
+#include <QUrl>
+#include <QUuid>
 
 #include "systemutils.h"
 
@@ -70,6 +74,12 @@ QString SystemUtils::documentPath( const QString& filename ) {
 QString SystemUtils::mediaPath( const QString& filename ) {
     return documentDirectory().append("/media/").append(filename);
 }
+
+QString SystemUtils::toLocalPath( const QString& path ) {
+    QUrl url( path );
+    return url.toLocalFile();
+}
+
 //
 //
 //
@@ -106,6 +116,42 @@ bool SystemUtils::removeFile( const QString& path ) {
 //
 //
 //
+QString SystemUtils::urlFilename( const QUrl& url ) {
+    return url.fileName();
+}
+QString SystemUtils::urlPath( const QUrl& url ) {
+    return url.path();
+}
+QString SystemUtils::urlHost( const QUrl& url ) {
+    return url.host();
+}
+QString SystemUtils::urlProtocol( const QUrl& url ) {
+    return url.scheme();
+}
+//
+//
+//
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
+extern bool _copyImageFromGallery(const QString& source, const QString& target );
+#endif
+QString SystemUtils::copyImageFromGallery( const QString& url ) {
+    QString targetFile = QString("%1.jpg").arg(QUuid::createUuid().toString());
+    QString targetPath = documentPath(targetFile);
+    qDebug() << "SystemUtils::copyImageFromGallery : " << url << " >> " << targetPath;
+#if defined(Q_OS_IOS)
+    if( !_copyImageFromGallery(url, targetPath) ) {
+        return "";
+    }
+#elif defined(Q_OS_ANDROID)
+    if( !_copyImageFromGallery(url, targetPath) ) {
+        return "";
+    }
+#endif
+    return targetPath;
+}
+//
+//
+//
 QString SystemUtils::mimeTypeForFile( QString filename ) {
     QMimeDatabase mimeDb;
     QMimeType mimeType = mimeDb.mimeTypeForFile(filename);
@@ -131,4 +177,20 @@ int SystemUtils::textHeight( const QString &text, const QFont &font, const int m
     QFontMetrics metrics(font);
     return metrics.boundingRect(0,0,maxWidth,10000, Qt::TextWordWrap, text).height();
 }
-
+//
+//
+//
+bool SystemUtils::rotateImage(const QString& path, const qreal& rotation ) {
+    QImage image( path );
+    if ( !image.isNull() ) {
+        QPoint center = image.rect().center();
+        QMatrix transform;
+        transform.translate(center.x(),center.y());
+        transform.rotate(rotation);
+        QImage rotated = image.transformed(transform);
+        if ( !rotated.isNull() ) {
+            return rotated.save(path);
+        }
+    }
+    return false;
+}

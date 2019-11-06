@@ -19,6 +19,12 @@ MWB.HorizontalListView {
             anchors.fill: parent
             color: Colours.almostWhite
         }
+        Image {
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+            opacity: .25
+            source: "/icons/APPOINTMENT ICON 96 BOX.png";
+        }
         Text {
             anchors.fill: parent
             padding: 4
@@ -32,6 +38,7 @@ MWB.HorizontalListView {
         MWB.TitleBox {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
+            anchors.margins: 4
             text: formatTime(model.time)
         }
 

@@ -28,6 +28,7 @@ public slots:
     //
     QString documentPath( const QString& filename );
     QString mediaPath( const QString& filename );
+    QString toLocalPath( const QString& path );
     //
     //
     //
@@ -35,6 +36,17 @@ public slots:
     bool copyFile( const QString& from, const QString& to, bool force = false );
     bool moveFile( const QString& from, const QString& to, bool force = false );
     bool removeFile( const QString& path );
+    //
+    //
+    //
+    QString urlFilename( const QUrl& url );
+    QString urlPath( const QUrl& url );
+    QString urlHost( const QUrl& url );
+    QString urlProtocol( const QUrl& url );
+    //
+    //
+    //
+    QString copyImageFromGallery( const QString& url );
     //
     //
     //
@@ -48,6 +60,10 @@ public slots:
     //
     //
     int textHeight( const QString &text, const QFont &font, const int maxWidth );
+    //
+    //
+    //
+    bool rotateImage( const QString& path, const qreal& rotation );
 };
 
 #endif // SYSTEMUTILS_H

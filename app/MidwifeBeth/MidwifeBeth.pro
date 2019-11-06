@@ -27,6 +27,7 @@ HEADERS += \
 
 SOURCES += \
     datemodel.cpp \
+    ios/galleryutils.mm \
     main.cpp \
     databaselist.cpp \
     rangemodel.cpp \
@@ -54,16 +55,16 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 ios {
     QMAKE_TARGET_BUNDLE_PREFIX = uk.co.soda
-
     QMAKE_INFO_PLIST = ios/Info.plist
-
     ios_icon.files = $$files($$PWD/ios/icons/Icon-App*.png)
     QMAKE_BUNDLE_DATA += ios_icon
-
     ios_launch.files = $$PWD/ios/Launch.storyboard $$PWD/ios/LaunchBackground.png $$PWD/ios/LaunchLogo.png
     QMAKE_BUNDLE_DATA += ios_launch
-
     QMAKE_ASSET_CATALOGS += ios/Images.xcassets
+
+    OBJECTIVE_SOURCES += ios/galleryutils.mm
+    LIBS += -framework Foundation -framework UIKit -framework AssetsLibrary -framework Photos
+
 }
 
 # Android OpenSSL

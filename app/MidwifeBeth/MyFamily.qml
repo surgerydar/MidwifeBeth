@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 
 import "colours.js" as Colours
 import "controls" as MWB
+import "utils.js" as Utils
 
 Item {
     id: container
@@ -46,32 +47,73 @@ Item {
         delegate: MWB.EditableListItem {
             id: delegateContainer
             width: parent.width
-            swipeEnabled: false
+            height: content.model.count === 1 ? content.height - 80 : 64
+            swipeEnabled: content.editing
             contentItem: Rectangle {
-                width: parent.width
+                width: delegateContainer.width
+                height: delegateContainer.height
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 color: Colours.midGreen
                 Image {
                     id: icon
-                    width: height
+                    /*
+                    width: content.model.count === 1 ? Math.min( ( sourceSize.width / sourceSize.height ) * ( delegateContainer.availableHeight - 72 ), delegateContainer.availableWidth - 16 ) : height
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: content.model.count === 1 ? undefined : parent.left
+                    anchors.horizontalCenter: content.model.count === 1 ? parent.horizontalCenter : undefined
+                    //anchors.margins: 8
+                    fillMode: content.model.count === 1 ? Image.PreserveAspectFit : Image.PreserveAspectCrop
+                    */
+                    width: content.model.count === 1 ? parent.width : height
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
-                    anchors.margins: 4
-                    source: model.profilePhoto ? model.profilePhoto : "/icons/profile.png"
+                    fillMode: Image.PreserveAspectCrop
+                    source: model.profilePhoto ? 'file://' + SystemUtils.documentPath(model.profilePhoto) : "/icons/profile.png"
                     onStatusChanged: {
-                        if ( status === Image.Error ) source = "/icons/profile.png";
+                        if ( status === Image.Error ) {
+                            console.log( 'document path= ' + SystemUtils.documentDirectory());
+                            source = "/icons/profile.png";
+                        }
                     }
                 }
-                Label {
+                Column {
+                    anchors.bottom: icon.bottom
+                    anchors.right: icon.right
+                    anchors.margins: 8
+                    visible: content.model.count === 1
+                    spacing: 4
+                    MWB.TitleBox {
+                        font.pointSize: 24
+                        text: model.firstName ? model.firstName : ""
+                    }
+                    MWB.TitleBox {
+                        font.pointSize: 18
+                        text: Utils.formatDateSpan(new Date(model.birthDate),new Date())
+                    }
+                }
+                Column {
+                    visible: content.model.count > 1
                     anchors.left: icon.right
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: 16
-                    font.pointSize: 24
-                    color: Colours.almostWhite
-                    text: model.firstName ? model.firstName : ""
+                    anchors.top: icon.top
+                    anchors.leftMargin: 8
+                    spacing: 4
+                    Label {
+                        id: name
+                        font.pointSize: 24
+                        verticalAlignment: Label.AlignTop
+                        color: Colours.almostWhite
+                        text: model.firstName ? model.firstName : ""
+                    }
+                    Label {
+                        id: age
+                        font.pointSize: 18
+                        verticalAlignment: Label.AlignTop
+                        color: Colours.almostWhite
+                        text: Utils.formatDateSpan(new Date(model.birthDate),new Date())
+                    }
                 }
                 MouseArea {
                     anchors.fill: parent
@@ -85,8 +127,14 @@ Item {
                 select();
             }
             onRemove: {
-                babies.remove( {_id: model._id} );
+                console.log('removing baby : ' + model._id );
+                Qt.callLater(babies.save);
+                babies.remove({_id:model._id});
+                //Qt.callLater(removeBaby,model._id);
             }
+            //
+            //
+            //
             function select() {
                 var baby = babies.findOne({_id: model._id});
                 if ( baby ) {
@@ -95,7 +143,6 @@ Item {
                     console.log( 'MyFamily : unable to find child : ' + model._id );
                 }
             }
-
         }
         //
         //

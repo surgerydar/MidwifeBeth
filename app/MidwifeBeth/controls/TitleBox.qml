@@ -7,6 +7,7 @@ Rectangle {
     id: background
     width: Math.max(height,label.contentWidth + radius)
     height: label.contentHeight + 4
+    anchors.leftMargin: radius
     radius: height / 2
     visible: label.text.length > 0
     color: Colours.almostBlack

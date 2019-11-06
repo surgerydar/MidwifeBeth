@@ -3,6 +3,7 @@
 var midGreen    = "#8FC0A9";
 var lightGreen  = "#D3E1B5";
 var darkGrey    = "#696D7D";
+var lightGrey   = "#364958";
 var almostWhite = "#E9F3EE";
 var almostBlack = "#425561";
 var darkOrange  = "#EB5E28";

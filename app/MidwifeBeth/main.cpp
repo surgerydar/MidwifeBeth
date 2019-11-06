@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QDebug>
+#include <QStandardPaths>
+#include <QDir>
 
 #include "systemutils.h"
 #include "downloader.h"
@@ -17,7 +19,22 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     //
-    // register custon controls
+    //
+    //
+    QStringList standardLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+    qDebug() << "Photo locations";
+    for ( auto location : standardLocations ) {
+        qDebug() << location;
+        QDir dir(location);
+        if ( !dir.exists() ) {
+            qDebug() << "Creating directory : " << location;
+            if (!dir.mkpath(".")){
+                qDebug() << "Unable to create directory : " << location;
+            }
+        }
+    }
+    //
+    // register custom controls
     //
     qmlRegisterType<DatabaseList>("SodaControls", 1, 0, "DatabaseList");
     qmlRegisterType<RangeModel>("SodaControls", 1, 0, "RangeModel");

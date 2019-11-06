@@ -1,5 +1,6 @@
 import QtQuick 2.13
 import QtMultimedia 5.13
+import QtQuick.Window 2.2
 
 import "../colours.js" as Colours
 import "../controls" as MWB
@@ -20,19 +21,39 @@ Item {
         }
         */
         imageCapture {
-            /*
-            onImageCaptured: {
-                console.log('Camera.imageCapture.onImageCaptured : ' + preview );
-                photoPreview.source = preview  // Show the preview in an Image
-            }
-            */
             onImageSaved: {
                 console.log('Camera.imageCapture.onImageSaved : ' + path );
-                photoPreview.source = 'file://' + path  // Show the saved file in an Image
+                //photoPreview.source = 'file://' + path  // Show the saved file in an Image
+                if ( save ) {
+                    //
+                    // ensure image is in documents directory
+                    //
+                    let documentPath = SystemUtils.documentPath(path.substring(path.lastIndexOf('/')+1));
+                    if ( documentPath !== path ) { // not in documents
+                        let extension = path.substring(path.lastIndexOf('.'));
+                        let targetFile = Date.now() + extension;
+                        documentPath = SystemUtils.documentPath(targetFile);
+                        SystemUtils.copyFile(path,documentPath);
+                    }
+                    //
+                    // correct orientation ( possibly iOS only )
+                    //
+                    let rotation = 360 - ( camera.position === Camera.BackFace ? viewfinder.orientation : viewfinder.orientation + 180 );
+                    if ( rotation > 0 && rotation < 360 ) {
+                        if ( SystemUtils.rotateImage(documentPath,rotation) ) {
+                            console.log( 'Camera.onImageSaved : image rotated' );
+                        } else {
+                            console.log( 'Camera.onImageSaved : unable to rotate image' );
+                        }
+                    }
+                    let url = 'file://' + documentPath;
+                    save(url);
+                }
             }
         }
         onOrientationChanged: {
             console.log( 'Camera.orientation: ' + orientation );
+            orient.text = 'input: ' + camera.orientation + ' output: ' + viewfinder.orientation + ' screen: ' + Screen.orientation;
         }
     }
 
@@ -43,27 +64,36 @@ Item {
         anchors.left: parent.left
         anchors.bottom: toolbar.top
         anchors.right: parent.right
-        autoOrientation: true
+        //autoOrientation: true
+        orientation: Screen.orientation === 1 ? ( camera.position === Camera.BackFace ? 270 : 90 ) : ( Screen.orientation === 2 ? ( camera.position === Camera.BackFace ? 0 : 180 ) :  ( camera.position === Camera.BackFace ? 180 : 0 ) )
         onOrientationChanged: {
             console.log( 'VideoOutput.orientation: ' + orientation );
+            orient.text = 'input: ' + camera.orientation + ' output: ' + viewfinder.orientation  + ' screen: ' + Screen.orientation;
         }
     }
+    Label {
+        id: orient
+        visible: false
+        anchors.top: viewfinder.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        horizontalAlignment: Label.AlignHCenter
+        text: 'input: ' + camera.orientation + ' output: ' + viewfinder.orientation + ' screen: ' + Screen.orientation
+    }
 
-    Image {
+    MWB.RoundButton {
         id: cameraSelector
-        visible: ( Qt.platform.os === 'ios' || Qt.platform.os === 'android' ) && camera.position !== Camera.UnspecifiedPosition
-        source: camera.position === Camera.FrontFace ? "../icons/camera_front.png" : camera.position === Camera.BackFace ? "../icons/camera_rear.png" : ""
+        width: 64
+        height: width
         anchors.bottom: viewfinder.bottom
         anchors.right: viewfinder.right
         anchors.margins: 8
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                if ( camera.position === Camera.FrontFace ) {
-                    camera.position = Camera.BackFace;
-                } else if ( camera.position === Camera.BackFace ) {
-                    camera.position = Camera.FrontFace;
-                }
+        visible: ( Qt.platform.os === 'ios' || Qt.platform.os === 'android' ) && camera.position !== Camera.UnspecifiedPosition
+        image: "/icons/CAMERA SWITCH ICON 96 BOX.png"
+        onClicked: {
+            if ( camera.position === Camera.FrontFace ) {
+                camera.position = Camera.BackFace;
+            } else if ( camera.position === Camera.BackFace ) {
+                camera.position = Camera.FrontFace;
             }
         }
     }
@@ -72,32 +102,33 @@ Item {
         id: flashMode
         anchors.top: viewfinder.top
         anchors.right: viewfinder.right
+        anchors.margins: 8
+        spacing: 4
         //visible: camera.flash.supportedModes.length > 1
         Repeater {
             model: ListModel {
                 ListElement {
                     mode: Camera.FlashOn
-                    icon: "../icons/flash_on.png"
+                    icon: "/icons/FLASH ON ICON 96 BOX.png"
                 }
                 ListElement {
                     mode: Camera.FlashAuto
-                    icon: "../icons/flash_auto.png"
+                    icon: "/icons/FLASH AUTO ICON 96 BOX.png"
                 }
                 ListElement {
                     mode: Camera.FlashOff
-                    icon: "../icons/flash_off.png"
+                    icon: "/icons/FLASH OFF ICON 96 BOX.png"
                 }
             }
-            delegate: Image {
-                source: model.icon
-                //visible: camera.flash.supportedModes.indexOf( model.mode )
+            delegate: MWB.RoundButton {
+                width: 32
+                height: width
                 anchors.horizontalCenter: parent.horizontalCenter
                 opacity: camera.flash.mode === model.mode ? 1.0 : 0.5
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked : {
-                        camera.flash.mode = model.mode
-                    }
+                image: model.icon
+                //visible: camera.flash.supportedModes.indexOf( model.mode )
+                onClicked : {
+                    camera.flash.mode = model.mode
                 }
             }
         }
@@ -113,78 +144,14 @@ Item {
         //
         //
         //
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.margins: 8
-            font.pointSize: 18
-            color: Colours.almostWhite
-            text: "cancel"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if ( cancel ) {
-                        cancel();
-                    }
-                }
-            }
-        }
-        //
-        //
-        //
-        Rectangle {
+        MWB.RoundButton {
             id: capture
             width: 64
             height: width
-            radius: width / 2
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            color: Colours.darkOrange
-
-            Rectangle {
-                anchors.fill: parent
-                anchors.margins: 8
-                radius: width / 2
-                color: Colours.almostWhite
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    camera.imageCapture.capture()
-                }
-            }
-        }
-        //
-        //
-        //
-        Image {
-            id: photoPreview
-            width: height
-            anchors.top: parent.top
-            anchors.left: capture.right
-            anchors.bottom: parent.bottom
-            anchors.margins: 4
-            fillMode: Image.PreserveAspectFit
-        }
-        //
-        //
-        //
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.margins: 8
-            visible: photoPreview.source
-            font.pointSize: 18
-            color: Colours.almostWhite
-            text: "save"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if ( save ) {
-                        save(photoPreview.source)
-                    }
-                }
+            anchors.centerIn: parent
+            image: "/icons/CAMERA SHOOT ICON 96 BOX.png"
+            onClicked: {
+                camera.imageCapture.capture()
             }
         }
     }
