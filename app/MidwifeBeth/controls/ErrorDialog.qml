@@ -28,7 +28,6 @@ Popup {
             width: container.width - 32
             wrapMode: Text.WordWrap
             font.weight: Font.Bold
-            font.family: fonts.light
             font.pixelSize: 24
             color: Colours.almostWhite
         }
@@ -45,14 +44,12 @@ Popup {
                     width: label.contentWidth + 16
                     Background {
                         anchors.fill: parent
-                        fill: Colours.almostWhite
+                        fill: Colours.almostBlack
                         opacity: .25
                     }
                     Text {
                         id: label
                         anchors.fill: parent
-                        font.family: fonts.light
-                        font.weight: Font.Bold
                         font.pixelSize: 18
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter

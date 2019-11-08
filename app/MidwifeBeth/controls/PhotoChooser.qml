@@ -65,7 +65,7 @@ Item {
         color: Colours.midGreen
         Label {
             anchors.centerIn: parent
-            font.pointSize: 18
+            font.pointSize: 24
             visible: preview.status === Image.Ready
             color: Colours.almostWhite
             text: "save"

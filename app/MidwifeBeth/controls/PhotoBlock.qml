@@ -42,7 +42,7 @@ MWB.HorizontalListView {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.margins: 4
-            action: function() {
+            deleteAction: function() {
                 SystemUtils.removeFile(SystemUtils.documentPath(model.image));
                 container.media.photos.splice(index,1);
                 container.updateContent();

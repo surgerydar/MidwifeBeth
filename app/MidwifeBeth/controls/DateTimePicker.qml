@@ -105,7 +105,7 @@ Rectangle {
     //
     Rectangle {
         id: footer
-        height: 64
+        height: 72
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -115,27 +115,8 @@ Rectangle {
         //
         Label {
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.margins: 8
-            font.pointSize: 18
-            color: Colours.almostWhite
-            text: "cancel"
-            visible: cancel !== null
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if ( cancel ) cancel();
-                }
-            }
-        }
-        //
-        //
-        //
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.margins: 8
-            font.pointSize: 18
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pointSize: 24
             color: Colours.almostWhite
             text: "save"
             visible: save !== null

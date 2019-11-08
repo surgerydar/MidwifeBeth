@@ -107,7 +107,7 @@ Item {
         Label {
             anchors.centerIn: parent
             anchors.rightMargin: 8
-            font.pointSize: 18
+            font.pointSize: 24
             color: Colours.almostWhite
             text: "save"
             MouseArea {

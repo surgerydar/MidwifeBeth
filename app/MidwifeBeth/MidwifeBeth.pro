@@ -27,7 +27,6 @@ HEADERS += \
 
 SOURCES += \
     datemodel.cpp \
-    ios/galleryutils.mm \
     main.cpp \
     databaselist.cpp \
     rangemodel.cpp \

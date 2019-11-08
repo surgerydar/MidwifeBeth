@@ -27,9 +27,9 @@ Rectangle {
     Label {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: addButton.right
-        anchors.margins: 8
+        anchors.margins: 16
         visible: editable
-        font.pointSize: 18
+        font.pointSize: 24
         color: Colours.almostWhite
         text: editing ? "done" : "edit"
         MouseArea {

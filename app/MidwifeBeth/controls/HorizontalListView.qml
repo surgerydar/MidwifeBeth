@@ -13,7 +13,7 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        anchors.topMargin: labelBackground.visible ? labelBackground.height / 2 : 0
+        anchors.topMargin: label.visible ? label.height / 2 : 0
         color: Colours.midGreen
     }
     //
@@ -49,22 +49,11 @@ Item {
     //
     //
     //
-    Rectangle {
-        id: labelBackground
-        width: label.contentWidth + radius
-        height: label.contentHeight + 4
+    MWB.TitleBox {
+        id: label
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: background.radius
-        radius: height / 2
-        visible: label.text.length > 0
-        color: Colours.almostBlack
-        Label {
-            id: label
-            anchors.centerIn: parent
-            color: Colours.almostWhite
-            font.pointSize: 14
-        }
+        anchors.leftMargin: radius / 2
     }
     //
     //

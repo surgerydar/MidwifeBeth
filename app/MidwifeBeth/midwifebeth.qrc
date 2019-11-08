@@ -167,5 +167,7 @@
         <file>icons/CAMERA SHOOT ICON 96 BOX @2x.png</file>
         <file>icons/CAMERA SWITCH ICON 96 BOX.png</file>
         <file>icons/CAMERA SWITCH ICON 96 BOX @2x.png</file>
+        <file>icons/DELETE ICON 96 BOX@2x.png</file>
+        <file>icons/DELETE ICON 96 BOX.png</file>
     </qresource>
 </RCC>

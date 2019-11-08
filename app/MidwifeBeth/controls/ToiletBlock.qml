@@ -40,7 +40,7 @@ MWB.HorizontalListView {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.margins: 4
-            action: function() {
+            deleteAction: function() {
                 container.media.toilet.splice(index,1);
                 container.updateContent();
             }
